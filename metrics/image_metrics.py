@@ -28,4 +28,4 @@ def image_array_cosine_similarity(image_array_0, image_array_1):
     cos_sim_list = []
     for img_0, img_1 in zip(image_array_0, image_array_1):
         cos_sim_list.append(image_cosine_similarity(img_0, img_1))
-    return torch.mean(cos_sim_list), cos_sim_list
+    return torch.mean(torch.stack(cos_sim_list)), cos_sim_list
