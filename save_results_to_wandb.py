@@ -24,7 +24,7 @@ def load_images(path: str, type: str):
     for filename in glob.glob(folder):
         im=Image.open(filename)
         image_list.append(im)
-    return load_images
+    return image_list
 
 
 def main():
