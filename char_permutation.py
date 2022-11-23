@@ -4,6 +4,7 @@ import torch
 from torch import Tensor
 from torch.nn.functional import cosine_similarity
 import wandb
+import subprocess
 
 
 tokenizer = CLIPTokenizer.from_pretrained("openai/clip-vit-large-patch14")
@@ -42,16 +43,35 @@ def save_image(image_array):
     wandb.log({"examples": images})
 
 
+def save_list_to_file(list, file_path):
+    with open(file_path, 'w') as fp:
+        fp.write('\n'.join(list))
+
+
+
+def calc_permutations(file_name: str):
+    with open('captions_10000.txt') as f:
+        samples_original = f.readlines()
+    
+    return [calc_best_permuation(sample) for sample in samples_original]
+
+
+
 
 def main():
     rtpt = RTPT('LS', 'Decoder', 1)
     rtpt.start()
 
-    with open('captions_10000.txt') as f:
-        samples_original = f.readlines()
-    
-    samples_permutation = [calc_best_permuation(sample) for sample in samples_original]
-    # save_image([samples_permutation])
+    samples_permutation = calc_permutations('captions_10000.txt')[:10] # only first ten results 
+    save_list_to_file(samples_permutation, './prompts.txt')
+
+    result = subprocess.run(['python3', 'generate_images.py', '-f prompts.txt', '-o ./adv_outputs', '-t 11bf9a08a076e274602d50dc24aa53859c25f0cb'])
+
+    save_image([samples_permutation])
+
+
+if __name__ == '__main__':
+    main()
 
 
 
