@@ -2,17 +2,13 @@ from transformers import CLIPTextModel, CLIPTokenizer
 from rtpt import RTPT
 import torch
 from torch.nn.functional import cosine_similarity
-import wandb
-import subprocess
+import utils.file_utils as f
+from utils.file_utils import read_list_from_file, save_list_to_file
 
 
 tokenizer = CLIPTokenizer.from_pretrained("openai/clip-vit-large-patch14")
 text_encoder = CLIPTextModel.from_pretrained(
             "openai/clip-vit-large-patch14").cuda()
-
-
-wandb.init(project="stable-diffusion")
-
 
 
 def calc_best_permuation(promt: str) -> str:
@@ -39,45 +35,22 @@ def calc_best_permuation(promt: str) -> str:
     return batch[ind + 1]
 
 
-def save_image(image_array):
-    images = wandb.Image(image_array, caption="image")
-          
-    wandb.log({"examples": images})
-
-
-def save_list_to_file(list, file_path):
-    with open(file_path, 'w') as fp:
-        fp.write('\n'.join(list))
-
-
-
-def calc_permutations(file_name: str):
-    with open('captions_10000.txt') as f:
-        samples_original = f.readlines()
-    
-    return [calc_best_permuation(sample) for sample in samples_original]
-
-
+def calc_permutations(promt_list):
+    return [calc_best_permuation(sample) for sample in promt_list]
 
 
 def main():
     rtpt = RTPT('LS', 'Decoder', 1)
     rtpt.start()
 
-    samples_permutation = calc_permutations('captions_10000.txt')[:10] # only first ten results 
-    save_list_to_file(samples_permutation, './prompts.txt')
+    original_prompts = read_list_from_file('captions_10000.txt')
+    permutation_primpts = calc_permutations(original_prompts) # only first ten results 
+    save_list_to_file(permutation_primpts[:10] , './permuation_prompts.txt')
+    save_list_to_file(original_prompts[:10], './original_prompts.txt')
 
-    result = subprocess.run(['python3', 'generate_images.py', '-f prompts.txt', '-o ./adv_outputs', '-t 11bf9a08a076e274602d50dc24aa53859c25f0cb'])
-
-    save_image([samples_permutation])
+    # result = subprocess.run(['python3', 'generate_images.py', '-f prompts.txt', '-o ./original_image_outputs', '-t 11bf9a08a076e274602d50dc24aa53859c25f0cb'])
+    # python3 generate_images.py -f prompts.txt -o ./original_image_outputs -t 11bf9a08a076e274602d50dc24aa53859c25f0cb
 
 
 if __name__ == '__main__':
     main()
-
-
-
-wandb.finish()
-
-
-
