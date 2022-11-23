@@ -9,6 +9,8 @@ wandb.init(project="stable-diffusion")
 
 def save_image(original_images, permuation_images, original_prompts, permutation_prompts, title):
     logs = []
+    print(type(original_images))
+    print(type(original_prompts))
     for img_o, img_p, prmt_o, prmt_p in zip(original_images, permuation_images, original_prompts, permutation_prompts):
         logs.append(wandb.Image(img_o, caption=prmt_o))
         logs.append(wandb.Image(img_p, caption=prmt_p))
