@@ -27,11 +27,11 @@ def calc_best_permuation(promt: str) -> str:
     input = torch.flatten(text_embeddings[0].unsqueeze(0), start_dim=1)
     manipulated = torch.flatten(text_embeddings[1:], start_dim=1)
 
-    print(batch)
+    # print(batch)
     cos = cosine_similarity(input, manipulated)
-    print(cos)
+    # print(cos)
     ind = torch.argmin(cos)
-    print(torch.argmin(cos))
+    # print(torch.argmin(cos))
     return batch[ind + 1]
 
 
@@ -44,6 +44,7 @@ def main():
     rtpt.start()
 
     original_prompts = read_list_from_file('./metrics/captions_10000.txt')[:10]
+    print("promts: ", original_prompts)
     permutation_primpts = calc_permutations(original_prompts) # only first ten results 
     save_list_to_file(permutation_primpts[:10] , './permuation_prompts.txt')
     save_list_to_file(original_prompts[:10], './original_prompts.txt')
