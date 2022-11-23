@@ -17,14 +17,13 @@ def save_image(original_images, permuation_images, original_prompts, permutation
     wandb.log({title: logs})
 
 
-
 def load_images(path: str, type: str):
     folder = path + "*" + type
     image_list = []
-    for filename in glob.iglob(folder):
+    for filename in sorted(glob.iglob(folder)):
         im=Image.open(filename)
         image_list.append(im)
-    return image_list.sort()
+    return image_list
 
 
 def main():
@@ -33,9 +32,6 @@ def main():
     original_images = load_images('./original_image_outputs/', '.png')
     permutation_images = load_images('./permutation_image_outputs/', '.png')
     save_image(original_images, permutation_images, original_prompts, permutation_prompts, 'naive char permuation')
-
-
-    
 
 
 if __name__ == '__main__':
