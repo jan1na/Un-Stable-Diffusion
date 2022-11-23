@@ -26,7 +26,7 @@ def load_images(path: str):
 
 def main():
     original_prompts = read_list_from_file('./original_prompts.txt')
-    permutation_prompts = read_list_from_file('./permuation_prompts.txt')
+    permutation_prompts = read_list_from_file('./permutation_prompts.txt')
     original_images = load_images('./original_image_outputs')
     permutation_images = load_images('./permutation_image_outputs')
     save_image(original_images, permutation_images, original_prompts, permutation_prompts, 'naive char permuation')
