@@ -35,8 +35,8 @@ def main():
     mean_cos_sim , cos_sim_list = image_array_cosine_similarity(original_images, permutation_images)
     wandb.log({"Mean cosine similarity of the whole dataset.": mean_cos_sim })
     data = [[s] for s in cos_sim_list]
-    table = wandb.Table(data=data, columns=["cosine similartiy"])
-    wandb.log({"Cosine similarity between the both images created out of the original prompt and the permuted prompt.": wandb.plot.histogram(table, "cosine similarity")})
+    table = wandb.Table(data=data, columns=["scores"])
+    wandb.log({"histogram": wandb.plot.histogram(table, "scores", title="Cosine similarity between the both images created out of the original prompt and the permuted prompt.")})
         
 
 
