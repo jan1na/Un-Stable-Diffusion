@@ -43,7 +43,7 @@ def main():
     rtpt = RTPT('LS', 'Decoder', 1)
     rtpt.start()
 
-    original_prompts = read_list_from_file('captions_10000.txt')
+    original_prompts = read_list_from_file('./metrics/captions_10000.txt')
     permutation_primpts = calc_permutations(original_prompts) # only first ten results 
     save_list_to_file(permutation_primpts[:10] , './permuation_prompts.txt')
     save_list_to_file(original_prompts[:10], './original_prompts.txt')
