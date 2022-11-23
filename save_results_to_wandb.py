@@ -32,9 +32,9 @@ def main():
     original_images = load_images('./original_image_outputs/')
     permutation_images = load_images('./permutation_image_outputs/')
     save_image(original_images, permutation_images, original_prompts, permutation_prompts, 'naive char permuation')
-    cos_sim = image_array_cosine_similarity(original_images, permutation_images)
-    print(cos_sim)
-
+    mean_cos_sim , cos_sim_list = image_array_cosine_similarity(original_images, permutation_images)
+    wandb.log({"mean cosine similarity": mean_cos_sim})
+    
 
 if __name__ == '__main__':
     main()
