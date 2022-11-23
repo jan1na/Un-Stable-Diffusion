@@ -2,7 +2,7 @@ import wandb
 from PIL import Image
 import glob
 from utils.file_utils import read_list_from_file
-
+from metrics.image_metrics import image_cosine_similarity
 
 
 wandb.init(project="stable-diffusion")
@@ -32,6 +32,7 @@ def main():
     original_images = load_images('./original_image_outputs/')
     permutation_images = load_images('./permutation_image_outputs/')
     save_image(original_images, permutation_images, original_prompts, permutation_prompts, 'naive char permuation')
+    image_cosine_similarity(original_images, permutation_images)
 
 
 if __name__ == '__main__':
