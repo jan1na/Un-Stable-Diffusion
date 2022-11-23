@@ -1,4 +1,5 @@
 def save_list_to_file(list, file_path):
+    print(list)
     with open(file_path, 'w') as fp:
         fp.write('\n'.join(list))
 
