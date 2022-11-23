@@ -1,7 +1,6 @@
 from transformers import CLIPTextModel, CLIPTokenizer
 from rtpt import RTPT
 import torch
-from torch import Tensor
 from torch.nn.functional import cosine_similarity
 import wandb
 import subprocess
@@ -10,6 +9,9 @@ import subprocess
 tokenizer = CLIPTokenizer.from_pretrained("openai/clip-vit-large-patch14")
 text_encoder = CLIPTextModel.from_pretrained(
             "openai/clip-vit-large-patch14").cuda()
+
+
+wandb.init(project="stable-diffusion")
 
 
 
@@ -32,8 +34,8 @@ def calc_best_permuation(promt: str) -> str:
     print(batch)
     cos = cosine_similarity(input, manipulated)
     print(cos)
-    ind = Tensor.argmin(cos)
-    print(Tensor.argmin(cos))
+    ind = torch.argmin(cos)
+    print(torch.argmin(cos))
     return batch[ind + 1]
 
 
@@ -75,7 +77,7 @@ if __name__ == '__main__':
 
 
 
-
+wandb.finish()
 
 
 
