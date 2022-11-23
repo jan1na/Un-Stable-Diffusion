@@ -20,7 +20,7 @@ def image_cosine_similarity(image_0, image_1) -> float:
     return cosine_similarity
 
 
-def image_array_cosine_similarity(image_array_0: list, image_array_1: list) -> list(float):
+def image_array_cosine_similarity(image_array_0, image_array_1):
     cos_sim = []
     for img_0, img_1 in zip(image_array_0, image_array_1):
         cos_sim.append(image_cosine_similarity(img_0, img_1))
