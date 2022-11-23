@@ -33,8 +33,12 @@ def main():
     permutation_images = load_images('./permutation_image_outputs/')
     save_image(original_images, permutation_images, original_prompts, permutation_prompts, 'naive char permuation')
     mean_cos_sim , cos_sim_list = image_array_cosine_similarity(original_images, permutation_images)
-    wandb.log({"mean cosine similarity": mean_cos_sim})
-    
+    wandb.log({"Mean cosine similarity of the whole dataset.": mean_cos_sim })
+    data = [[s] for s in cos_sim_list]
+    table = wandb.Table(data=data, columns=["cosine similartiy"])
+    wandb.log({"Cosine similarity between the both images created out of the original prompt and the permuted prompt.": wandb.plot.histogram(table, "cosine similarity")})
+        
+
 
 if __name__ == '__main__':
     main()
