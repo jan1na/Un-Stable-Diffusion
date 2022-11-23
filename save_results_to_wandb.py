@@ -16,9 +16,10 @@ def save_image(original_images, permuation_images, original_prompts, permutation
 
 
 
-def load_images(path: str):
+def load_images(path: str, type: str):
+    folder = path + "*" + type
     image_list = []
-    for filename in glob.glob(path):
+    for filename in glob.glob(folder):
         im=Image.open(filename)
         image_list.append(im)
     return load_images
@@ -27,8 +28,8 @@ def load_images(path: str):
 def main():
     original_prompts = read_list_from_file('./original_prompts.txt')
     permutation_prompts = read_list_from_file('./permutation_prompts.txt')
-    original_images = load_images('./original_image_outputs')
-    permutation_images = load_images('./permutation_image_outputs')
+    original_images = load_images('./original_image_outputs/', '.png')
+    permutation_images = load_images('./permutation_image_outputs/', '.png')
     save_image(original_images, permutation_images, original_prompts, permutation_prompts, 'naive char permuation')
 
 
