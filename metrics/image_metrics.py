@@ -15,6 +15,6 @@ def image_cosine_similarity(image_array_0, image_array_1):
     
     image_features_0 /= image_features_0.norm(dim=-1, keepdim=True)
     image_features_1 /= image_features_1.norm(dim=-1, keepdim=True)
-    cosine_similarity = 100.0 * image_features @ text_features.T
+    cosine_similarity = 100.0 * image_features_0 @ image_features_1.T
     print("consine similarity:", cosine_similarity)
     return cosine_similarity
