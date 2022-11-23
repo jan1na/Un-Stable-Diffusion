@@ -21,10 +21,10 @@ def save_image(original_images, permuation_images, original_prompts, permutation
 def load_images(path: str, type: str):
     folder = path + "*" + type
     image_list = []
-    for filename in glob.glob(folder):
+    for filename in glob.iglob(folder):
         im=Image.open(filename)
         image_list.append(im)
-    return image_list
+    return image_list.sort()
 
 
 def main():
