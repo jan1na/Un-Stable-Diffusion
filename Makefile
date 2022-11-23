@@ -12,8 +12,8 @@ create_adv_attacks:
 
 generate_images:
 	@echo "Generate images for the original and permuation prompts"
-	./run_original_generate_images.sh
-	./run_permutation_generate_images.sh
+	python3 generate_images.py -f original_prompts.txt -o ./original_image_outputs -t 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
+	python3 generate_images.py -f permutation_prompts.txt -o ./permutation_image_outputs -t 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
 
 save_to_wandb:
 	@echo "Save images to wandb"
