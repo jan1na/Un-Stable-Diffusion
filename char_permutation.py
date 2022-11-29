@@ -5,7 +5,7 @@ from torch.nn.functional import cosine_similarity
 import utils.file_utils as f
 from utils.file_utils import read_list_from_file, save_list_to_file
 
-PROMPT_NUMBER = 100
+PROMPT_NUMBER = 10000
 
 
 tokenizer = CLIPTokenizer.from_pretrained("openai/clip-vit-large-patch14")
