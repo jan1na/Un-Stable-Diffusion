@@ -27,6 +27,17 @@ def load_images(path: str):
     return image_list
 
 
+def create_histogram(data):
+    hist = []
+    for i in range(10):
+        hist.append([])
+    for d in data:
+        hist[d * 100 // 10].append(d)
+    print(hist)
+    return hist
+
+
+
 def main():
     original_prompts = read_list_from_file('./original_prompts.txt')
     permutation_prompts = read_list_from_file('./permutation_prompts.txt')
@@ -46,7 +57,7 @@ def main():
     wandb.log({"Cosine Similarity": wandb.plot.scatter(table,
                                                        "", "score", 
                                                        title="Cosine similarity between the both images created out of the original prompt and the permuted prompt.")})
-    data = [[s] for s in range(6)]
+    data = [[s] for s in create_histogram(cos_sim_list)]
     table = wandb.Table(data=data, columns=["bird_scores"])
     wandb.log({'my_histogram': wandb.plot.histogram(table, "bird_scores",
             title="Bird Confidence Scores")})
