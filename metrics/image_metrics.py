@@ -2,6 +2,7 @@ import os
 import clip
 import torch
 from typing import List
+import numpy as np
 
 # Load the model
 device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -27,5 +28,5 @@ def image_cosine_similarity(image_0, image_1) -> float:
 def image_array_cosine_similarity(image_array_0, image_array_1):
     cos_sim_list = []
     for img_0, img_1 in zip(image_array_0, image_array_1):
-        cos_sim_list.append(image_cosine_similarity(img_0, img_1))
-    return torch.mean(torch.stack(cos_sim_list)), cos_sim_list
+        cos_sim_list.append(image_cosine_similarity(img_0, img_1)[0][0].item())
+    return np.mean(cos_sim_list), cos_sim_list

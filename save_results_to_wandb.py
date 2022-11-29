@@ -5,9 +5,6 @@ from utils.file_utils import read_list_from_file
 from metrics.image_metrics import image_cosine_similarity, image_array_cosine_similarity
 
 
-wandb.init(project="stable-diffusion", name="naive-char-permutation")
-
-
 def save_image(original_images, permuation_images, original_prompts, permutation_prompts, title):
     logs = []
     print(type(original_images))
@@ -27,32 +24,41 @@ def load_images(path: str):
     return image_list
 
 
+def create_wandb_doc(name: str, original_prompts, permutation_prompts, original_images, permutation_images):
+    wandb.init(project="stable-diffusion", name=name)
+
+    original_prompts = read_list_from_file('./original_prompts.txt')
+    permutation_prompts = read_list_from_file('./permutation_prompts.txt')
+
+    original_images = load_images('./original_image_outputs/')
+    permutation_images = load_images('./permutation_image_outputs/')
+
+    # save images
+    save_image(original_images, permutation_images, original_prompts,
+               permutation_prompts, 'Naive Char Permuation')
+
+    # cosine similarity
+    mean_cos_sim, cos_sim_list = image_array_cosine_similarity(original_images, permutation_images)
+
+    wandb.log({"Mean Cosine Similarity": mean_cos_sim})
+
+    data = [[i] for i in cos_sim_list]
+    table = wandb.Table(data=data, columns=["cosine similarty"])
+    wandb.log({'my_histogram': wandb.plot.histogram(table, "cosine similarty", title="Image Cosine Similarity")})
+
+    wandb.finish()
+
+
+
 def main():
     original_prompts = read_list_from_file('./original_prompts.txt')
     permutation_prompts = read_list_from_file('./permutation_prompts.txt')
     original_images = load_images('./original_image_outputs/')
     permutation_images = load_images('./permutation_image_outputs/')
 
-    save_image(original_images, permutation_images, original_prompts,
-               permutation_prompts, 'Naive Char Permuation')
-    mean_cos_sim, cos_sim_list = image_array_cosine_similarity(
-        original_images, permutation_images)
-    wandb.log({"Mean Cosine Similarity": mean_cos_sim})
-    # data = [[s] for s in cos_sim_list]
-    # table = wandb.Table(data=cos_sim_list, columns=["scores"])
-    #wandb.log({"histogram": wandb.plot.histogram(table, "scores", title="Cosine similarity between the both images created out of the original prompt and the permuted prompt.")})
-
-    data = [[i[0][0].item()] for i in cos_sim_list]
-    table = wandb.Table(data=data, columns=["bird_scores"])
-    wandb.log({'my_histogram': wandb.plot.histogram(table, "bird_scores",
-            title="Image Cosine Similarity")})
-
-
+    create_wandb_doc("captions_10000", original_prompts, permutation_prompts, original_images, permutation_images)
 
 
 
 if __name__ == '__main__':
     main()
-
-
-wandb.finish()
