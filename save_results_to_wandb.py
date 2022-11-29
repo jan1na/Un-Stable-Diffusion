@@ -5,7 +5,7 @@ from utils.file_utils import read_list_from_file
 from metrics.image_metrics import image_cosine_similarity, image_array_cosine_similarity
 
 
-wandb.init(project="stable-diffusion", group="naive-char-permutation")
+wandb.init(project="stable-diffusion", name="naive-char-permutation")
 
 
 def save_image(original_images, permuation_images, original_prompts, permutation_prompts, title):
