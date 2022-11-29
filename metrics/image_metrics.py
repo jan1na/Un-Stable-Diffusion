@@ -4,7 +4,7 @@ import torch
 from typing import List
 import numpy as np
 
-# Load the model
+# Load the model for cosine similarity
 device = "cuda" if torch.cuda.is_available() else "cpu"
 model, preprocess = clip.load('ViT-B/32', device)
 
@@ -30,3 +30,21 @@ def image_array_cosine_similarity(image_array_0, image_array_1):
     for img_0, img_1 in zip(image_array_0, image_array_1):
         cos_sim_list.append(image_cosine_similarity(img_0, img_1)[0][0].item())
     return np.mean(cos_sim_list), cos_sim_list
+
+
+def clean_fid_score(image_folder_0, image_folder_1):
+    from cleanfid import fid
+    score = fid.compute_fid(image_folder_0, image_folder_1)
+
+
+def perceptual_similarity():
+    import lpips
+    loss_fn_alex = lpips.LPIPS(net='alex') # best forward scores
+    loss_fn_vgg = lpips.LPIPS(net='vgg') # closer to "traditional" perceptual loss, when used for optimization
+
+    # TODO: convert PNG to RGB 
+
+    import torch
+    img0 = torch.zeros(1,3,64,64) # image should be RGB, IMPORTANT: normalized to [-1,1]
+    img1 = torch.zeros(1,3,64,64)
+    d = loss_fn_alex(img0, img1)

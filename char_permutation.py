@@ -5,6 +5,8 @@ from torch.nn.functional import cosine_similarity
 import utils.file_utils as f
 from utils.file_utils import read_list_from_file, save_list_to_file
 
+PROMPT_NUMBER = 100
+
 
 tokenizer = CLIPTokenizer.from_pretrained("openai/clip-vit-large-patch14")
 text_encoder = CLIPTextModel.from_pretrained(
@@ -43,11 +45,11 @@ def main():
     rtpt = RTPT('LS', 'Decoder', 1)
     rtpt.start()
 
-    original_prompts = read_list_from_file('./metrics/captions_10000.txt')[:100]
+    original_prompts = read_list_from_file('./metrics/captions_10000.txt')[:PROMPT_NUMBER]
     print("promts: ", original_prompts)
-    permutation_primpts = calc_permutations(original_prompts) # only first ten results 
-    save_list_to_file(permutation_primpts[:10] , './permutation_prompts.txt')
-    save_list_to_file(original_prompts[:10], './original_prompts.txt')
+    permutation_prompts = calc_permutations(original_prompts) # only first ten results 
+    save_list_to_file(permutation_prompts, './permutation_prompts.txt')
+    save_list_to_file(original_prompts, './original_prompts.txt')
 
     # result = subprocess.run(['python3', 'generate_images.py', '-f prompts.txt', '-o ./original_image_outputs', '-t 11bf9a08a076e274602d50dc24aa53859c25f0cb'])
     # python3 generate_images.py -f prompts.txt -o ./original_image_outputs -t 11bf9a08a076e274602d50dc24aa53859c25f0cb
