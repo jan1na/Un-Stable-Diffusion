@@ -49,7 +49,7 @@ def create_wandb_doc(name: str, original_prompts, permutation_prompts, original_
     wandb.log({'my_histogram': wandb.plot.histogram(table, "cosine similarty", title="Image Cosine Similarity")})
 
     # clean fid
-    wandb.log({"Clean FID Score": clean_fid_score(original_images, permutation_images)})
+    # wandb.log({"Clean FID Score": clean_fid_score(original_images, permutation_images)})
 
 
     wandb.finish()
