@@ -2,7 +2,9 @@ import wandb
 from PIL import Image
 import glob
 from utils.file_utils import read_list_from_file
-from metrics.image_metrics import image_cosine_similarity, image_array_cosine_similarity
+from metrics.image_metrics import image_array_cosine_similarity
+
+IMAGES_SAVED = 4
 
 
 def save_image(original_images, permuation_images, original_prompts, permutation_prompts, title):
@@ -34,8 +36,8 @@ def create_wandb_doc(name: str, original_prompts, permutation_prompts, original_
     permutation_images = load_images('./permutation_image_outputs/')
 
     # save images
-    save_image(original_images, permutation_images, original_prompts,
-               permutation_prompts, 'Naive Char Permuation')
+    save_image(original_images[:IMAGES_SAVED], permutation_images[:IMAGES_SAVED], original_prompts[:IMAGES_SAVED],
+               permutation_prompts[:IMAGES_SAVED], 'Naive Char Permuation')
 
     # cosine similarity
     mean_cos_sim, cos_sim_list = image_array_cosine_similarity(original_images, permutation_images)
