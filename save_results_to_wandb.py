@@ -32,7 +32,10 @@ def create_histogram(data):
     for i in range(10):
         hist.append([])
     for d in data:
-        hist[d * 100 // 10].append(d)
+        print(d)
+        print(type(d))
+        print(d.value)
+        hist[d.value * 100 // 10].append(d)
     print(hist)
     return hist
 
