@@ -13,6 +13,9 @@ text_encoder = CLIPTextModel.from_pretrained(
             "openai/clip-vit-large-patch14").cuda()
 
 
+# TODO: char permutation without whitespace
+
+
 def calc_best_permuation(promt: str) -> str:
     batch = [promt]
     for i in range(len(promt) - 1):
