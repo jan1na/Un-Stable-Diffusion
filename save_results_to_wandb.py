@@ -2,7 +2,7 @@ import wandb
 from PIL import Image
 import glob
 from utils.file_utils import read_list_from_file
-from metrics.image_metrics import image_array_cosine_similarity
+from metrics.image_metrics import image_array_cosine_similarity, clean_fid_score
 
 IMAGES_SAVED = 4
 
@@ -47,6 +47,10 @@ def create_wandb_doc(name: str, original_prompts, permutation_prompts, original_
     data = [[i] for i in cos_sim_list]
     table = wandb.Table(data=data, columns=["cosine similarty"])
     wandb.log({'my_histogram': wandb.plot.histogram(table, "cosine similarty", title="Image Cosine Similarity")})
+
+    # clean fid
+    wandb.log({"Clean FID Score": clean_fid_score(original_images, permutation_images)})
+
 
     wandb.finish()
 
