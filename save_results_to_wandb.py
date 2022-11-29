@@ -54,12 +54,7 @@ def main():
     # table = wandb.Table(data=cos_sim_list, columns=["scores"])
     #wandb.log({"histogram": wandb.plot.histogram(table, "scores", title="Cosine similarity between the both images created out of the original prompt and the permuted prompt.")})
 
-    data = [[x, y] for (x, y) in zip(range(len(cos_sim_list)), cos_sim_list)]
-    table = wandb.Table(data=data, columns=["", "score"])
-    wandb.log({"Cosine Similarity": wandb.plot.scatter(table,
-                                                       "", "score", 
-                                                       title="Cosine similarity between the both images created out of the original prompt and the permuted prompt.")})
-    data = [[len(i)] for i in create_histogram(cos_sim_list)]
+    data = [[i[0][0].item()] for i in cos_sim_list]
     table = wandb.Table(data=data, columns=["bird_scores"])
     wandb.log({'my_histogram': wandb.plot.histogram(table, "bird_scores",
             title="Bird Confidence Scores")})
