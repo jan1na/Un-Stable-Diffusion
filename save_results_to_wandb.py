@@ -65,7 +65,7 @@ def main():
             title="Bird Confidence Scores")})
 
 
-    data = [[i, random.random() + math.sin(i / 10)] for i in range(100)]
+    data = [[i, i/100] for i in range(100)]
     table = wandb.Table(data=data, columns=["step", "height"])
     wandb.log({'histogram-plot1': wandb.plot.histogram(table, "height")})
 
