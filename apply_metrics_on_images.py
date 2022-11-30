@@ -88,8 +88,8 @@ def main():
     original_images = load_images_from_path('./original_image_outputs/')
     original_control_images = load_images_from_path('./original_control_image_outputs')
 
-    create_wandb_doc("naive-char-permutation", 'Naive Char Permutation', original_prompts, original_images,
-                     original_control_images)
+    create_wandb_doc("naive-char-permutation", "naive_char_permutation", 'Naive Char Permutation', original_prompts,
+                     original_images, original_control_images)
 
 
 if __name__ == '__main__':
