@@ -70,7 +70,7 @@ def create_wandb_doc(attack_name: str, attack_file_name, image_title: str, origi
                                                                    title="Image Cosine Similarity")})
     """
     upload_histogram("Image Cosine Similarity", "cosine similarity", cos_sim_list)
-    upload_histogram("Control: Image Cosine Similarity", "cosine similarity", cos_sim_list_control)
+    upload_histogram("Control: Image Cosine Similarity", "cosine similarity control", cos_sim_list_control)
 
     # clean fid
     upload_value("Clean FID Score", clean_fid_score('./original_image_outputs',
