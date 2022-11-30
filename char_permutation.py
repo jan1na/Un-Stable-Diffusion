@@ -14,7 +14,7 @@ text_encoder = CLIPTextModel.from_pretrained("openai/clip-vit-large-patch14").cu
 
 # TODO: char permutation without whitespace
 
-def calc_best_permuation(promt: str) -> str:
+def calc_best_naive_char_permutation(promt: str) -> str:
     batch = [promt]
     for i in range(len(promt) - 1):
         batch.append(promt[:i] + promt[i:i+2][::-1] + promt[i+2:])
@@ -34,8 +34,8 @@ def calc_best_permuation(promt: str) -> str:
     return batch[ind + 1]
 
 
-def calc_permutations(promt_list):
-    return [calc_best_permuation(sample) for sample in promt_list]
+def calc_naive_char_permutations(promt_list):
+    return [calc_best_naive_char_permutation(sample) for sample in promt_list]
 
 
 def main():
@@ -44,8 +44,8 @@ def main():
 
     original_prompts = load_list_from_file('./metrics/captions_10000.txt')[:PROMPT_NUMBER]
     print("promts: ", original_prompts)
-    permutation_prompts = calc_permutations(original_prompts)
-    save_list_to_file(permutation_prompts, './permutation_prompts.txt')
+    permutation_prompts = calc_naive_char_permutations(original_prompts)
+    save_list_to_file(permutation_prompts, './naive_char_permutation_prompts.txt')
     save_list_to_file(original_prompts, './original_prompts.txt')
 
 
