@@ -41,6 +41,8 @@ def unite_lists(list_of_lists: List[List]) -> List:
     :return: united list of alternating values
     """
     assembled_list = []
+    for i in list_of_lists:
+        print(len(i))
     for i in range(len(list_of_lists[0])):
         for j in range(len(list_of_lists)):
             assembled_list.append(list_of_lists[j][i])
