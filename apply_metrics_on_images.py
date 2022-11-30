@@ -36,6 +36,13 @@ def create_wandb_doc(attack_name: str, attack_file_name, image_title: str, origi
     permutation_prompts = load_list_from_file('./' + attack_file_name + '_permutation_prompts.txt')
     permutation_images = load_images_from_path('./' + attack_file_name + '_permutation_image_outputs/')
 
+    list1 = unite_lists([original_images[:IMAGES_SAVED],
+                               original_control_images[:IMAGES_SAVED],
+                               permutation_images[:IMAGES_SAVED]])
+    list2 = unite_lists([original_prompts[:IMAGES_SAVED],
+                               original_prompts[:IMAGES_SAVED],
+                               permutation_prompts[:IMAGES_SAVED]])
+    print(list2)
     # save images
     upload_images(image_title,
                   unite_lists([original_images[:IMAGES_SAVED],
