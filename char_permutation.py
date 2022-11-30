@@ -9,8 +9,7 @@ PROMPT_NUMBER = 10000
 
 
 tokenizer = CLIPTokenizer.from_pretrained("openai/clip-vit-large-patch14")
-text_encoder = CLIPTextModel.from_pretrained(
-            "openai/clip-vit-large-patch14").cuda()
+text_encoder = CLIPTextModel.from_pretrained("openai/clip-vit-large-patch14").cuda()
 
 
 # TODO: char permutation without whitespace
