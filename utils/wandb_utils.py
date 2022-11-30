@@ -1,4 +1,5 @@
 import wandb
+from typing import List
 
 
 def start(name: str):
@@ -18,7 +19,7 @@ def end():
     wandb.finish()
 
 
-def upload_images(title: str, images: list, prompts: list[str]):
+def upload_images(title: str, images: List, prompts: List[str]):
     """
     Upload images with prompt to wandb.
 
@@ -32,7 +33,7 @@ def upload_images(title: str, images: list, prompts: list[str]):
     wandb.log({title: logs})
 
 
-def unite_lists(list_of_lists: list[list]) -> list:
+def unite_lists(list_of_lists: List[List]) -> List:
     """
     Create a new list with alternating values form the lists in list_of_lists.
 
@@ -56,7 +57,7 @@ def upload_value(title: str, value: float):
     wandb.summary[title] = value
 
 
-def upload_histogram(title: str, columns_name: str, values: list):
+def upload_histogram(title: str, columns_name: str, values: List):
     """
     Create histogram from the values.
 
