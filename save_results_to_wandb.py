@@ -26,7 +26,8 @@ def load_images_from_path(path: str):
     return image_list
 
 
-def create_wandb_doc(init_name: str, image_title: str, original_prompts, permutation_prompts, original_images, permutation_images):
+def create_wandb_doc(init_name: str, image_title: str, original_prompts, permutation_prompts, original_images,
+                     permutation_images):
     wandb.init(project="stable-diffusion", name=init_name)
 
     original_prompts = read_list_from_file('./original_prompts.txt')
@@ -36,8 +37,9 @@ def create_wandb_doc(init_name: str, image_title: str, original_prompts, permuta
     permutation_images = load_images_from_path('./permutation_image_outputs/')
 
     # save images
-    upload_image_to_wandb(original_images[:IMAGES_SAVED], permutation_images[:IMAGES_SAVED], original_prompts[:IMAGES_SAVED],
-               permutation_prompts[:IMAGES_SAVED], image_title)
+    upload_image_to_wandb(original_images[:IMAGES_SAVED], permutation_images[:IMAGES_SAVED],
+                          original_prompts[:IMAGES_SAVED],
+                          permutation_prompts[:IMAGES_SAVED], image_title)
 
     # cosine similarity
     mean_cos_sim, cos_sim_list = image_array_cosine_similarity(original_images, permutation_images)
@@ -46,15 +48,14 @@ def create_wandb_doc(init_name: str, image_title: str, original_prompts, permuta
 
     data = [[i] for i in cos_sim_list]
     table = wandb.Table(data=data, columns=["cosine similarty"])
-    wandb.log({'cosine_similarity_histogram': wandb.plot.histogram(table, "cosine similarty", title="Image Cosine Similarity")})
+    wandb.log({'cosine_similarity_histogram': wandb.plot.histogram(table, "cosine similarty",
+                                                                   title="Image Cosine Similarity")})
 
     # clean fid
-    wandb.log({"Clean FID Score": clean_fid_score('/home/ml-jfritzke/Stable-Diffusion-BA/original_image_outputs', 
-    '/home/ml-jfritzke/Stable-Diffusion-BA/permutation_image_outputs')})
-
+    wandb.log({"Clean FID Score": clean_fid_score('/home/ml-jfritzke/Stable-Diffusion-BA/original_image_outputs',
+                                                  '/home/ml-jfritzke/Stable-Diffusion-BA/permutation_image_outputs')})
 
     wandb.finish()
-
 
 
 def main():
@@ -63,8 +64,8 @@ def main():
     original_images = load_images_from_path('./original_image_outputs/')
     permutation_images = load_images_from_path('./permutation_image_outputs/')
 
-    create_wandb_doc("naive-char-permutation", 'Naive Char Permutation' original_prompts, permutation_prompts, original_images, permutation_images)
-
+    create_wandb_doc("naive-char-permutation", 'Naive Char Permutation', original_prompts, permutation_prompts,
+                     original_images, permutation_images)
 
 
 if __name__ == '__main__':

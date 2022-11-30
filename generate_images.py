@@ -46,6 +46,8 @@ def main():
         model_path = f'CompVis/stable-diffusion-{args.version}'
     elif args.version in ['v1-5']:
         model_path = f'runwayml/stable-diffusion-{args.version}'
+    elif args.version in ['v2']:
+        model_path = f'stabilityai/stable-diffusion-2-base'
     else:
         raise ValueError(
             f'{args.version} is no valid Stable Diffusion version. ' +
