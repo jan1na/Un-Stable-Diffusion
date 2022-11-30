@@ -56,7 +56,7 @@ def upload_value(title: str, value: float):
     :param value: value to upload
     :param title: title describing the value
     """
-    wandb.summary({title: value})
+    wandb.log({title: value})
 
 
 def upload_histogram(title: str, columns_name: str, values: List):
