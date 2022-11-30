@@ -81,7 +81,7 @@ def main():
                               beta_schedule="scaled_linear",
                               trained_betas=None,
                               clip_sample=False,
-                              sel_alpha_to_one=True,
+                              set_alpha_to_one=True,
                               steps_offset=1,
                               prediction_type="v_prediction")
 
