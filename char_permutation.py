@@ -3,7 +3,7 @@ from rtpt import RTPT
 import torch
 from torch.nn.functional import cosine_similarity
 import utils.file_utils as f
-from utils.file_utils import read_list_from_file, save_list_to_file
+from utils.file_utils import load_list_from_file, save_list_to_file
 
 PROMPT_NUMBER = 10000
 
@@ -13,7 +13,6 @@ text_encoder = CLIPTextModel.from_pretrained("openai/clip-vit-large-patch14").cu
 
 
 # TODO: char permutation without whitespace
-
 
 def calc_best_permuation(promt: str) -> str:
     batch = [promt]
@@ -30,12 +29,8 @@ def calc_best_permuation(promt: str) -> str:
 
     input = torch.flatten(text_embeddings[0].unsqueeze(0), start_dim=1)
     manipulated = torch.flatten(text_embeddings[1:], start_dim=1)
-
-    # print(batch)
     cos = cosine_similarity(input, manipulated)
-    # print(cos)
     ind = torch.argmin(cos)
-    # print(torch.argmin(cos))
     return batch[ind + 1]
 
 
@@ -47,14 +42,11 @@ def main():
     rtpt = RTPT('LS', 'Decoder', 1)
     rtpt.start()
 
-    original_prompts = read_list_from_file('./metrics/captions_10000.txt')[:PROMPT_NUMBER]
+    original_prompts = load_list_from_file('./metrics/captions_10000.txt')[:PROMPT_NUMBER]
     print("promts: ", original_prompts)
-    permutation_prompts = calc_permutations(original_prompts) # only first ten results 
+    permutation_prompts = calc_permutations(original_prompts)
     save_list_to_file(permutation_prompts, './permutation_prompts.txt')
     save_list_to_file(original_prompts, './original_prompts.txt')
-
-    # result = subprocess.run(['python3', 'generate_images.py', '-f prompts.txt', '-o ./original_image_outputs', '-t 11bf9a08a076e274602d50dc24aa53859c25f0cb'])
-    # python3 generate_images.py -f prompts.txt -o ./original_image_outputs -t 11bf9a08a076e274602d50dc24aa53859c25f0cb
 
 
 if __name__ == '__main__':

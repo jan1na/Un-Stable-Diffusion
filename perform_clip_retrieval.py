@@ -10,8 +10,6 @@ from PIL import Image
 from rtpt import RTPT
 from transformers import CLIPModel, CLIPTextModel, CLIPTokenizer
 
-import wandb
-
 
 def main():
     args = create_parser()

@@ -4,7 +4,7 @@ import glob
 from utils.file_utils import read_list_from_file
 from metrics.image_metrics import image_array_cosine_similarity, clean_fid_score
 
-IMAGES_SAVED = 5
+IMAGES_SAVED = 10
 
 
 def upload_image_to_wandb(original_images, permuation_images, original_prompts, permutation_prompts, title):

@@ -14,9 +14,6 @@ from torch import autocast
 from tqdm.auto import tqdm
 from transformers import CLIPTextModel, CLIPTokenizer
 
-import wandb
-from utils.stable_diffusion_utils import generate
-
 
 def main():
     args = create_parser()

@@ -3,11 +3,8 @@ import os
 from datetime import datetime
 
 import torch
-from PIL import Image
 from torch.utils.data import DataLoader
-from tqdm.auto import tqdm
 
-import wandb
 from metrics import metrics
 from utils.attack_utils import inject_attribute_backdoor
 from utils.config_parser import ConfigParser
