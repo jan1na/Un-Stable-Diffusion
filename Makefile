@@ -13,10 +13,11 @@ create_adv_attacks:
 generate_images:
 	@echo "Generate images for the original and permuation prompts"
 	python3 generate_images.py -f original_prompts.txt -o ./original_image_outputs -t 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 -u jf -v v2
+	python3 generate_images.py -f original_prompts.txt -o ./original_control_image_outputs -t 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 -u jf -v v2 -s 2
 	python3 generate_images.py -f permutation_prompts.txt -o ./permutation_image_outputs -t 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 -u jf -v v2
 
 save_to_wandb:
 	@echo "Save images to wandb"
-	python3 save_results_to_wandb.py
+	python3 apply_metrics_on_images.py
 
 
