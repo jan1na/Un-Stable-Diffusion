@@ -7,7 +7,7 @@ import pathlib
 from datetime import datetime
 
 import torch
-from diffusers import AutoencoderKL, LMSDiscreteScheduler, UNet2DConditionModel
+from diffusers import AutoencoderKL, LMSDiscreteScheduler, UNet2DConditionModel, DDIMScheduler
 from PIL import Image
 from rtpt import RTPT
 from torch import autocast
@@ -75,6 +75,15 @@ def main():
                                      beta_end=0.012,
                                      beta_schedule="scaled_linear",
                                      num_train_timesteps=1000)
+
+    scheduler = DDIMScheduler(beta_start=0.00085,
+                              beta_end=0.012,
+                              beta_schedule="scaled_linear",
+                              trained_betas=None,
+                              clip_sample=False,
+                              sel_alpha_to_one=True,
+                              steps_offset=1,
+                              prediction_type="v_prediction")
 
     # move everything to GPU
     torch_device = "cuda"
