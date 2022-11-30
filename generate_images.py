@@ -76,6 +76,7 @@ def main():
                                      beta_schedule="scaled_linear",
                                      num_train_timesteps=1000)
 
+    """
     scheduler = DDIMScheduler(beta_start=0.00085,
                               beta_end=0.012,
                               beta_schedule="scaled_linear",
@@ -84,6 +85,7 @@ def main():
                               set_alpha_to_one=True,
                               steps_offset=1,
                               prediction_type="v_prediction")
+    """
 
     # move everything to GPU
     torch_device = "cuda"
