@@ -84,7 +84,7 @@ def create_wandb_doc(attack_name: str, attack_file_name, image_title: str, origi
 def main():
     original_prompts = load_list_from_file('./original_prompts.txt')
     original_images = load_images_from_path('./original_image_outputs/')
-    original_control_images = load_images_from_path('./original_control_image_outputs')
+    original_control_images = load_images_from_path('./original_control_image_outputs/')
     print("control_images", original_control_images)
 
     create_wandb_doc("naive-char-permutation", "naive_char", 'Naive Char Permutation', original_prompts,
