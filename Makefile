@@ -16,7 +16,7 @@ create_adv_attacks:
 generate_images:
 	@echo "Generate images for the original and permutation prompts"
 	python3 generate_images.py -f original_prompts.txt -o ./original_image_outputs -t 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
-	python3 generate_images.py -f original_prompts.txt -o ./original_control_image_outputs -t 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  -s 2
+	python3 generate_images.py -f original_prompts.txt -o ./original_control_image_outputs -t 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  -s 1
 	python3 generate_images.py -f $(ATTACK_NAME)_permutation_prompts.txt -o ./$(ATTACK_NAME)_permutation_image_outputs -t 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
 
 save_to_wandb:

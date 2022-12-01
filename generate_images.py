@@ -95,7 +95,6 @@ def main():
 
     # define denoising parameters
     num_inference_steps = args.num_steps
-    # generator = torch.manual_seed(0)
     generator = torch.manual_seed(args.seed)
 
     # define output folder
@@ -220,7 +219,7 @@ def create_parser():
                         default=0,
                         type=int,
                         dest="seed",
-                        help='seed for generated images (default: 1')
+                        help='seed for generated images (default: 0')
     parser.add_argument(
         '-n',
         '--num_samples',
