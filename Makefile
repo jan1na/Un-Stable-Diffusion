@@ -19,7 +19,7 @@ generate_images:
 	python3 generate_images.py -f original_prompts.txt -o ./original_image_outputs -t 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
 	python3 generate_images.py -f original_prompts.txt -o ./original_control_image_outputs -t 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  -s 1
 	for i in $(ATTACK_NAMES); do \
-	    python3 generate_images.py -f permutations/$(i)_prompts.txt -o ./image_outputs/$(i)_images -t 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
+	    python3 generate_images.py -f permutations/$(i)_prompts.txt -o ./image_outputs/$(i)_images -t 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\
     done
 
 save_to_wandb:
