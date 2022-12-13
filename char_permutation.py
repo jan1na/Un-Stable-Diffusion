@@ -62,10 +62,10 @@ def apply_permutation(prompt_list: List[str], permutation: Callable) -> List[str
     :return: list of permutations of the prompts
     """
     prompts = []
-    printProgressBar(0, len(prompt_list), prefix='Naive Char Permutation:', suffix='Complete', length=100)
+    printProgressBar(0, len(prompt_list), prefix='Naive Char Permutation:')
     for i in range(len(prompt_list)):
         prompts.append(permutation(prompt_list[i]))
-        printProgressBar(i + 1, len(prompt_list), prefix='Naive Char Permutation:', suffix='Complete', length=100)
+        printProgressBar(i + 1, len(prompt_list), prefix='Naive Char Permutation:')
     return prompts
 
 
