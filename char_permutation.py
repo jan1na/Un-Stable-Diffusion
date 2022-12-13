@@ -35,7 +35,7 @@ def char(prompt: str) -> str:
     """
     prompts = [prompt]
     for i in range(len(prompt) - 1):
-        if prompt[i] != " " and prompt[i+1] != " ":
+        if prompt[i].isalpha() and prompt[i+1].isalpha():
             prompts.append(prompt[:i] + prompt[i:i + 2][::-1] + prompt[i + 2:])
     print("char", prompts)
     return get_best_permutation(prompts)
