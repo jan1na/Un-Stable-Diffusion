@@ -12,8 +12,6 @@ tokenizer = CLIPTokenizer.from_pretrained("openai/clip-vit-large-patch14")
 text_encoder = CLIPTextModel.from_pretrained("openai/clip-vit-large-patch14").cuda()
 
 
-# TODO: char permutation without whitespace
-
 def naive_char(prompt: str) -> str:
     """
     Create a naive char permutation from the prompt, by changing only 2 chars next to each other.
@@ -24,6 +22,20 @@ def naive_char(prompt: str) -> str:
     prompts = [prompt]
     for i in range(len(prompt) - 1):
         prompts.append(prompt[:i] + prompt[i:i + 2][::-1] + prompt[i + 2:])
+    return get_best_permutation(prompts)
+
+
+def char(prompt: str) -> str:
+    """
+    Create a char permutation from the prompt, by changing 2 chars next to each other if none of them are whitespace.
+
+    :param prompt: input string that gets permuted
+    :return: permutation of the prompt that has the lowest cosine similarity to the prompt
+    """
+    prompts = [prompt]
+    for i in range(len(prompt) - 1):
+        if prompt[i] != " " and prompt[i+1] != " ":
+            prompts.append(prompt[:i] + prompt[i:i + 2][::-1] + prompt[i + 2:])
     return get_best_permutation(prompts)
 
 
@@ -52,20 +64,21 @@ def get_best_permutation(prompts: List[str]) -> str:
     return prompts[ind + 1]
 
 
-def apply_permutation(prompt_list: List[str], permutation: Callable) -> List[str]:
+def apply_permutation(prompt_list: List[str], permutation: Callable, progress_bar_prefix: str) -> List[str]:
     """
     Apply the permutation on every element in the prompt list. While calculation of the permutations a progress bar is
     printed to the console.
 
     :param prompt_list: list of original prompts
     :param permutation: function that creates a permutation out of a prompt
+    :param progress_bar_prefix: name of the permutation
     :return: list of permutations of the prompts
     """
     prompts = []
-    printProgressBar(0, len(prompt_list), prefix='Naive Char Permutation:')
+    printProgressBar(0, len(prompt_list), prefix=progress_bar_prefix+':')
     for i in range(len(prompt_list)):
         prompts.append(permutation(prompt_list[i]))
-        printProgressBar(i + 1, len(prompt_list), prefix='Naive Char Permutation:')
+        printProgressBar(i + 1, len(prompt_list), prefix=progress_bar_prefix+':')
     return prompts
 
 
@@ -74,10 +87,14 @@ def main():
     rtpt.start()
 
     original_prompts = load_list_from_file('./metrics/captions_10000.txt')[:PROMPT_NUMBER]
-    print(1)
-    print("promts: ", original_prompts)
-    permutation_prompts = apply_permutation(original_prompts, naive_char)
-    save_list_to_file(permutation_prompts, './naive_char_permutation_prompts.txt')
+
+    # Naive Char Permutation
+    naive_char_prompts = apply_permutation(original_prompts, naive_char, "Naive Char Permutation")
+    save_list_to_file(naive_char_prompts, './naive_char_permutation_prompts.txt')
+
+    char_prompts = apply_permutation(original_prompts, char, "Char Permutation")
+    save_list_to_file(char_prompts, './char_permutation_prompts.txt')
+
     save_list_to_file(original_prompts, './original_prompts.txt')
 
 
