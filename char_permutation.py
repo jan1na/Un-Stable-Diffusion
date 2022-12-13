@@ -6,7 +6,7 @@ from utils.file_utils import load_list_from_file, save_list_to_file
 from utils.progress_bar_utils import printProgressBar
 from typing import List, Callable
 
-PROMPT_NUMBER = 2
+PROMPT_NUMBER = 5
 
 tokenizer = CLIPTokenizer.from_pretrained("openai/clip-vit-large-patch14")
 text_encoder = CLIPTextModel.from_pretrained("openai/clip-vit-large-patch14").cuda()
@@ -121,19 +121,19 @@ def main():
 
     # Naive Char Permutation
     naive_char_prompts = apply_permutation(original_prompts, naive_char, "Naive Char Permutation")
-    save_list_to_file(naive_char_prompts, './permutations/naive_char_permutation_prompts.txt')
+    save_list_to_file(naive_char_prompts, './permutations/naive_char_prompts.txt')
 
     # Char Permutation
     char_prompts = apply_permutation(original_prompts, char, "Char Permutation")
-    save_list_to_file(char_prompts, './permutations/char_permutation_prompts.txt')
+    save_list_to_file(char_prompts, './permutations/char_prompts.txt')
 
     # Delete Char Permutation
     delete_char_prompts = apply_permutation(original_prompts, delete_char, "Delete Char Permutation")
-    save_list_to_file(delete_char_prompts, './permutations/delete_char_permutation_prompts.txt')
+    save_list_to_file(delete_char_prompts, './permutations/delete_char_prompts.txt')
 
     # Duplicate Char Permutation
     duplicate_char_prompts = apply_permutation(original_prompts, duplicate_char, "Duplicate Char Permutation")
-    save_list_to_file(duplicate_char_prompts, './permutations/duplicate_char_permutation_prompts.txt')
+    save_list_to_file(duplicate_char_prompts, './permutations/duplicate_char_prompts.txt')
 
     save_list_to_file(original_prompts, './original_prompts.txt')
 
