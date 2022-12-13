@@ -11,7 +11,7 @@ def save_list_to_file(values: List, file_path: str):
     :param file_path: path to the file
     """
     with open(file_path, 'w') as fp:
-        fp.write(''.join(values))
+        fp.write('\n'.join(values))
 
 
 def load_list_from_file(path: str) -> List[str]:
@@ -21,6 +21,7 @@ def load_list_from_file(path: str) -> List[str]:
     :param path: path to the file
     :return: list of strings
     """
+    # TODO: some chapters have a dot at the end, some not. Some have whitespace at the end too. Maybe delete
     with open(path) as f:
         values = f.read().splitlines()
     return values
