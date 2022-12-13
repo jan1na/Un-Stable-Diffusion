@@ -22,7 +22,7 @@ def load_list_from_file(path: str) -> List[str]:
     :return: list of strings
     """
     with open(path) as f:
-        values = f.readlines()
+        values = f.read().splitlines()
     return values
 
 
