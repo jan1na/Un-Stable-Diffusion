@@ -4,7 +4,7 @@ from utils.file_utils import load_list_from_file, load_images_from_path
 from metrics.image_metrics import image_array_cosine_similarity, clean_fid_score
 from utils.wandb_utils import *
 
-IMAGES_SAVED = 10
+IMAGES_SAVED = 5
 
 
 """
