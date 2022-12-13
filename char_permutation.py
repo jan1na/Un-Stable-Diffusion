@@ -4,9 +4,9 @@ import torch
 from torch.nn.functional import cosine_similarity
 from utils.file_utils import load_list_from_file, save_list_to_file
 from utils.progress_bar_utils import printProgressBar
+from typing import List, Callable
 
 PROMPT_NUMBER = 5
-
 
 tokenizer = CLIPTokenizer.from_pretrained("openai/clip-vit-large-patch14")
 text_encoder = CLIPTextModel.from_pretrained("openai/clip-vit-large-patch14").cuda()
@@ -14,15 +14,33 @@ text_encoder = CLIPTextModel.from_pretrained("openai/clip-vit-large-patch14").cu
 
 # TODO: char permutation without whitespace
 
-def calc_best_naive_char_permutation(promt: str) -> str:
-    batch = [promt]
-    for i in range(len(promt) - 1):
-        batch.append(promt[:i] + promt[i:i+2][::-1] + promt[i+2:])
-    text_input = tokenizer(batch,
-                        padding="max_length",
-                        max_length=tokenizer.model_max_length,
-                        truncation=True,
-                        return_tensors="pt")
+def naive_char(prompt: str) -> str:
+    """
+    Create a naive char permutation from the prompt, by changing only 2 chars next to each other.
+
+    :param prompt: input string that gets permuted
+    :return: permutation of the prompt that has the lowest cosine similarity to the prompt
+    """
+    prompts = [prompt]
+    for i in range(len(prompt) - 1):
+        prompts.append(prompt[:i] + prompt[i:i + 2][::-1] + prompt[i + 2:])
+    return get_best_permutation(prompts)
+
+
+def get_best_permutation(prompts: List[str]) -> str:
+    """
+    Create the text embeddings of the input strings using the CLIP encoder and calculate the string
+    with the lowest cosine similarity between the first string (original prompt) and the rest of the strings.
+
+    :param prompts: list of prompts, where the first prompt is the original prompts and the rest are the altered
+    prompts
+    :return: prompt with the lowest cosine similarity to the original prompt
+    """
+    text_input = tokenizer(prompts,
+                           padding="max_length",
+                           max_length=tokenizer.model_max_length,
+                           truncation=True,
+                           return_tensors="pt")
 
     text_embeddings = text_encoder(
         text_input.input_ids.to('cuda'))[0]
@@ -31,15 +49,23 @@ def calc_best_naive_char_permutation(promt: str) -> str:
     manipulated = torch.flatten(text_embeddings[1:], start_dim=1)
     cos = cosine_similarity(input, manipulated)
     ind = torch.argmin(cos)
-    return batch[ind + 1]
+    return prompts[ind + 1]
 
 
-def calc_naive_char_permutations(prompt_list):
+def apply_permutation(prompt_list: List[str], permutation: Callable) -> List[str]:
+    """
+    Apply the permutation on every element in the prompt list. While calculation of the permutations a progress bar is
+    printed to the console.
+
+    :param prompt_list: list of original prompts
+    :param permutation: function that creates a permutation out of a prompt
+    :return: list of permutations of the prompts
+    """
     prompts = []
-    printProgressBar(0, len(prompt_list), prefix='Progress:', suffix='Complete', length=50)
+    printProgressBar(0, len(prompt_list), prefix='Naive Char Permutation:', suffix='Complete', length=100)
     for i in range(len(prompt_list)):
-        prompts.append(calc_best_naive_char_permutation(prompt_list[i]))
-        printProgressBar(i + 1, len(prompt_list), prefix='Progress:', suffix='Complete', length=50)
+        prompts.append(permutation(prompt_list[i]))
+        printProgressBar(i + 1, len(prompt_list), prefix='Naive Char Permutation:', suffix='Complete', length=100)
     return prompts
 
 
@@ -50,7 +76,7 @@ def main():
     original_prompts = load_list_from_file('./metrics/captions_10000.txt')[:PROMPT_NUMBER]
     print(1)
     print("promts: ", original_prompts)
-    permutation_prompts = calc_naive_char_permutations(original_prompts)
+    permutation_prompts = apply_permutation(original_prompts, naive_char)
     save_list_to_file(permutation_prompts, './naive_char_permutation_prompts.txt')
     save_list_to_file(original_prompts, './original_prompts.txt')
 
