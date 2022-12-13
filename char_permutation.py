@@ -6,7 +6,7 @@ from utils.file_utils import load_list_from_file, save_list_to_file
 from utils.progress_bar_utils import printProgressBar
 from typing import List, Callable
 
-PROMPT_NUMBER = 1
+PROMPT_NUMBER = 5
 
 tokenizer = CLIPTokenizer.from_pretrained("openai/clip-vit-large-patch14")
 text_encoder = CLIPTextModel.from_pretrained("openai/clip-vit-large-patch14").cuda()
@@ -22,7 +22,7 @@ def naive_char(prompt: str) -> str:
     prompts = [prompt]
     for i in range(len(prompt) - 1):
         prompts.append(prompt[:i] + prompt[i:i + 2][::-1] + prompt[i + 2:])
-    print("naive", prompts)
+    #print("naive", prompts)
     return get_best_permutation(prompts)
 
 
@@ -37,7 +37,7 @@ def char(prompt: str) -> str:
     for i in range(len(prompt) - 1):
         if prompt[i] != " " and prompt[i+1] != " ":
             prompts.append(prompt[:i] + prompt[i:i + 2][::-1] + prompt[i + 2:])
-    print("char", prompts)
+    #print("char", prompts)
     return get_best_permutation(prompts)
 
 
@@ -49,9 +49,9 @@ def delete_char(prompt: str) -> str:
     :return: permutation of the prompt that has the lowest cosine similarity to the prompt
     """
     prompts = [prompt]
-    for i in range(len(prompt) - 1):
+    for i in range(len(prompt)):
         prompts.append(prompt[:i] + prompt[i + 1:])
-    print("delete", prompts)
+    #print("delete", prompts)
     return get_best_permutation(prompts)
 
 
@@ -63,9 +63,9 @@ def duplicate_char(prompt: str) -> str:
     :return: permutation of the prompt that has the lowest cosine similarity to the prompt
     """
     prompts = [prompt]
-    for i in range(len(prompt) - 1):
+    for i in range(len(prompt)):
         prompts.append(prompt[:i] + prompt[i] + prompt[i] + prompt[i + 1:])
-    print("duplicate", prompts)
+    #print("duplicate", prompts)
     return get_best_permutation(prompts)
 
 
