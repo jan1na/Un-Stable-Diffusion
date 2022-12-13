@@ -122,14 +122,17 @@ def main():
     naive_char_prompts = apply_permutation(original_prompts, naive_char, "Naive Char Permutation")
     save_list_to_file(naive_char_prompts, './naive_char_permutation_prompts.txt')
 
+    # Char Permutation
     char_prompts = apply_permutation(original_prompts, char, "Char Permutation")
     save_list_to_file(char_prompts, './char_permutation_prompts.txt')
 
-    delete_char_prompts = apply_permutation(original_prompts, delete_char, "Char Permutation")
-    save_list_to_file(delete_char_prompts, './char_permutation_prompts.txt')
+    # Delete Char Permutation
+    delete_char_prompts = apply_permutation(original_prompts, delete_char, "Delete Char Permutation")
+    save_list_to_file(delete_char_prompts, './delete_char_permutation_prompts.txt')
 
-    duplicate_char_prompts = apply_permutation(original_prompts, duplicate_char, "Char Permutation")
-    save_list_to_file(duplicate_char_prompts, './char_permutation_prompts.txt')
+    # Duplicate Char Permutation
+    duplicate_char_prompts = apply_permutation(original_prompts, duplicate_char, "Duplicate Char Permutation")
+    save_list_to_file(duplicate_char_prompts, './duplicate_char_permutation_prompts.txt')
 
     save_list_to_file(original_prompts, './original_prompts.txt')
 
