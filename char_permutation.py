@@ -6,7 +6,7 @@ from utils.file_utils import load_list_from_file, save_list_to_file
 from utils.progress_bar_utils import printProgressBar
 from typing import List, Callable
 
-PROMPT_NUMBER = 5
+PROMPT_NUMBER = 2
 
 tokenizer = CLIPTokenizer.from_pretrained("openai/clip-vit-large-patch14")
 text_encoder = CLIPTextModel.from_pretrained("openai/clip-vit-large-patch14").cuda()
@@ -64,7 +64,8 @@ def duplicate_char(prompt: str) -> str:
     """
     prompts = [prompt]
     for i in range(len(prompt)):
-        prompts.append(prompt[:i] + prompt[i] + prompt[i] + prompt[i + 1:])
+        if prompt[i].isalpha():
+            prompts.append(prompt[:i] + prompt[i] + prompt[i] + prompt[i + 1:])
     print("duplicate", prompts)
     return get_best_permutation(prompts)
 
