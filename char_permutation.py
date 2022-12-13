@@ -48,6 +48,7 @@ def main():
     rtpt.start()
 
     original_prompts = load_list_from_file('./metrics/captions_10000.txt')[:PROMPT_NUMBER]
+    print(1)
     print("promts: ", original_prompts)
     permutation_prompts = calc_naive_char_permutations(original_prompts)
     save_list_to_file(permutation_prompts, './naive_char_permutation_prompts.txt')
