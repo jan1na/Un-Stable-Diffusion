@@ -6,7 +6,7 @@ from utils.file_utils import load_list_from_file, save_list_to_file
 from utils.progress_bar_utils import printProgressBar
 from typing import List, Callable
 
-PROMPT_NUMBER = 5
+PROMPT_NUMBER = 1
 
 tokenizer = CLIPTokenizer.from_pretrained("openai/clip-vit-large-patch14")
 text_encoder = CLIPTextModel.from_pretrained("openai/clip-vit-large-patch14").cuda()
@@ -22,6 +22,7 @@ def naive_char(prompt: str) -> str:
     prompts = [prompt]
     for i in range(len(prompt) - 1):
         prompts.append(prompt[:i] + prompt[i:i + 2][::-1] + prompt[i + 2:])
+    print("naive", prompts)
     return get_best_permutation(prompts)
 
 
@@ -36,6 +37,35 @@ def char(prompt: str) -> str:
     for i in range(len(prompt) - 1):
         if prompt[i] != " " and prompt[i+1] != " ":
             prompts.append(prompt[:i] + prompt[i:i + 2][::-1] + prompt[i + 2:])
+    print("char", prompts)
+    return get_best_permutation(prompts)
+
+
+def delete_char(prompt: str) -> str:
+    """
+    Create a char permutation from the prompt, by deleting one char.
+
+    :param prompt: input string that gets permuted
+    :return: permutation of the prompt that has the lowest cosine similarity to the prompt
+    """
+    prompts = [prompt]
+    for i in range(len(prompt) - 1):
+        prompts.append(prompt[:i] + prompt[i + 1:])
+    print("delete", prompts)
+    return get_best_permutation(prompts)
+
+
+def duplicate_char(prompt: str) -> str:
+    """
+    Create a char permutation from the prompt, by duplicating one char.
+
+    :param prompt: input string that gets permuted
+    :return: permutation of the prompt that has the lowest cosine similarity to the prompt
+    """
+    prompts = [prompt]
+    for i in range(len(prompt) - 1):
+        prompts.append(prompt[:i] + prompt[i] + prompt[i] + prompt[i + 1:])
+    print("duplicate", prompts)
     return get_best_permutation(prompts)
 
 
@@ -94,6 +124,12 @@ def main():
 
     char_prompts = apply_permutation(original_prompts, char, "Char Permutation")
     save_list_to_file(char_prompts, './char_permutation_prompts.txt')
+
+    delete_char_prompts = apply_permutation(original_prompts, delete_char, "Char Permutation")
+    save_list_to_file(delete_char_prompts, './char_permutation_prompts.txt')
+
+    duplicate_char_prompts = apply_permutation(original_prompts, duplicate_char, "Char Permutation")
+    save_list_to_file(duplicate_char_prompts, './char_permutation_prompts.txt')
 
     save_list_to_file(original_prompts, './original_prompts.txt')
 
