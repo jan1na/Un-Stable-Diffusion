@@ -11,7 +11,7 @@ clean_img:
 
 create_adv_attacks:
 	@echo "Creating permutation files"
-	mkdir permutations
+	mkdir -p permutations
 	python3 char_permutation.py
 
 generate_images:
