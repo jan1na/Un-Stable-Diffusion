@@ -2,8 +2,8 @@ from transformers import CLIPTextModel, CLIPTokenizer
 from rtpt import RTPT
 import torch
 from torch.nn.functional import cosine_similarity
-import utils.file_utils as f
 from utils.file_utils import load_list_from_file, save_list_to_file
+from utils.progress_bar_utils import printProgressBar
 
 PROMPT_NUMBER = 5
 
@@ -34,8 +34,13 @@ def calc_best_naive_char_permutation(promt: str) -> str:
     return batch[ind + 1]
 
 
-def calc_naive_char_permutations(promt_list):
-    return [calc_best_naive_char_permutation(sample) for sample in promt_list]
+def calc_naive_char_permutations(prompt_list):
+    prompts = []
+    printProgressBar(0, len(prompt_list), prefix='Progress:', suffix='Complete', length=50)
+    for i in range(len(prompt_list)):
+        prompts.append(calc_best_naive_char_permutation(prompt_list[i]))
+        printProgressBar(i + 1, len(prompt_list), prefix='Progress:', suffix='Complete', length=50)
+    return prompts
 
 
 def main():
