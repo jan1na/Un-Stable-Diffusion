@@ -46,7 +46,7 @@ def create_wandb_doc(attack_names: str, attack_file_names: List[str], image_titl
     upload_histogram("Control: Image Cosine Similarity", "cosine similarity control", cos_sim_list_control)
 
     # Cosine Similarity
-    for perm_images, name in zip(permutation_prompts, attack_file_names):
+    for perm_images, name in zip(permutation_images, attack_file_names):
         mean_cos_sim, cos_sim_list = image_array_cosine_similarity(original_images, perm_images)
         upload_value('Mean Cosine Similarity: ' + name, mean_cos_sim)
         upload_histogram("Image Cosine Similarity: " + name, "cosine similarity", cos_sim_list)
