@@ -135,7 +135,7 @@ def main():
     duplicate_char_prompts = apply_permutation(original_prompts, duplicate_char, "Duplicate Char Permutation")
     save_list_to_file(duplicate_char_prompts, './permutations/duplicate_char_prompts.txt')
 
-    save_list_to_file(original_prompts, './original_prompts.txt')
+    save_list_to_file(original_prompts, './permutations/original_prompts.txt')
 
 
 if __name__ == '__main__':
