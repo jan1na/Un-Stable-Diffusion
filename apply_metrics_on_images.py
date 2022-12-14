@@ -14,9 +14,9 @@ def create_wandb_doc(attack_names: str, attack_file_names: List[str], image_titl
 
     start(attack_names)
 
-    permutation_prompts = [load_list_from_file(PROMPT_PATH + file_name + '_prompts.txt') for file_name in
+    permutation_prompts = [load_list_from_file(PROMPT_PATH + '/' + file_name + '_prompts.txt') for file_name in
                            attack_file_names]
-    permutation_images = [load_images_from_path(IMAGE_PATH + file_name + '_images/') for file_name in
+    permutation_images = [load_images_from_path(IMAGE_PATH + '/' + file_name + '_images/') for file_name in
                           attack_file_names]
 
     # save images
