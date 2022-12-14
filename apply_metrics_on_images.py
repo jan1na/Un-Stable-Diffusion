@@ -9,8 +9,18 @@ IMAGE_PATH = './image_outputs'
 PROMPT_PATH = './permutations'
 
 
-def create_wandb_doc(attack_name: str, attack_file_name: str, image_title: str,
-                     original_prompts: List, original_images: List):
+def create_wandb_doc(attack_name: str, attack_file_name: str, image_title: str, original_prompts: List,
+                     original_images: List):
+    """
+    Upload the metric results as single values and histograms to wandb.
+
+    :param attack_name: name of the wandb
+    :param attack_file_name:
+    :param image_title:
+    :param original_prompts:
+    :param original_images:
+    :return:
+    """
 
     start(attack_name)
 
