@@ -67,6 +67,7 @@ def upload_histogram(title: str, columns_name: str, values: List):
     :param columns_name: name of columns
     :param values: list of values for the histogram
     """
+    print(title)
     data = [[i] for i in values]
     table = wandb.Table(data=data, columns=[columns_name])
     wandb.log({columns_name + '_histogram': wandb.plot.histogram(table, columns_name, title=title)})
