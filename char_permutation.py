@@ -22,7 +22,6 @@ def naive_char(prompt: str) -> str:
     prompts = [prompt]
     for i in range(len(prompt) - 1):
         prompts.append(prompt[:i] + prompt[i:i + 2][::-1] + prompt[i + 2:])
-    print("naive", prompts)
     return get_best_permutation(prompts)
 
 
@@ -37,7 +36,6 @@ def char(prompt: str) -> str:
     for i in range(len(prompt) - 1):
         if prompt[i].isalpha() and prompt[i+1].isalpha():
             prompts.append(prompt[:i] + prompt[i:i + 2][::-1] + prompt[i + 2:])
-    print("char", prompts)
     return get_best_permutation(prompts)
 
 
@@ -51,7 +49,6 @@ def delete_char(prompt: str) -> str:
     prompts = [prompt]
     for i in range(len(prompt)):
         prompts.append(prompt[:i] + prompt[i + 1:])
-    print("delete", prompts)
     return get_best_permutation(prompts)
 
 
@@ -66,7 +63,6 @@ def duplicate_char(prompt: str) -> str:
     for i in range(len(prompt)):
         if prompt[i].isalpha():
             prompts.append(prompt[:i] + prompt[i] + prompt[i] + prompt[i + 1:])
-    print("duplicate", prompts)
     return get_best_permutation(prompts)
 
 
@@ -136,6 +132,7 @@ def main():
     save_list_to_file(duplicate_char_prompts, './permutations/duplicate_char_prompts.txt')
 
     save_list_to_file(original_prompts, './permutations/original_prompts.txt')
+    save_list_to_file(original_prompts, './permutations/original_control_prompts.txt')
 
 
 if __name__ == '__main__':
