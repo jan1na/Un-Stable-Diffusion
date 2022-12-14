@@ -14,8 +14,8 @@ create_adv_attacks:
 
 generate_images:
 	@echo "Generate images for the original and permutation prompts"
-	python3 generate_images.py -f original_prompts.txt -o ./image_outputs/original_images -t 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
-	python3 generate_images.py -f original_prompts.txt -o ./image_outputs/original_control_images -t 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  -s 1
+	python3 generate_images.py -f permutations/original_prompts.txt -o ./image_outputs/original_images -t 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
+	python3 generate_images.py -f permutations/original_prompts.txt -o ./image_outputs/original_control_images -t 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  -s 1
 	for i in $(ATTACK_NAMES); do \
 	    echo $$i | xargs -I '{}' python3 generate_images.py -f permutations/'{}'_prompts.txt -o ./image_outputs/'{}'_images -t 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 ;\
     done

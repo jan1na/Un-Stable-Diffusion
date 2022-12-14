@@ -5,6 +5,7 @@ from torch.nn.functional import cosine_similarity
 from utils.file_utils import load_list_from_file, save_list_to_file
 from utils.progress_bar_utils import printProgressBar
 from typing import List, Callable
+from PyDictionary import PyDictionary
 
 PROMPT_NUMBER = 20
 
