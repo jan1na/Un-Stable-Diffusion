@@ -33,7 +33,7 @@ def create_wandb_doc(run_name: str, attack_file_name: str, image_title: str, ori
     # Cosine Similarity
     mean_cos_sim, cos_sim_list = image_array_cosine_similarity(original_images, permutation_images)
     upload_value('Mean Cosine Similarity', mean_cos_sim)
-    upload_histogram("Image Cosine Similarity: " + attack_file_name, "cosine similarity", cos_sim_list)
+    upload_histogram("Image Cosine Similarity", "cosine similarity", cos_sim_list)
 
     # clean fid
     # upload_value("Clean FID Score", clean_fid_score('./original_image_outputs',

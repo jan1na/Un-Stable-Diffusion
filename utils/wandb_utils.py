@@ -41,8 +41,6 @@ def unite_lists(list_of_lists: List[List]) -> List:
     :return: united list of alternating values
     """
     assembled_list = []
-    for i in list_of_lists:
-        print(len(i))
     for i in range(len(list_of_lists[0])):
         for j in range(len(list_of_lists)):
             assembled_list.append(list_of_lists[j][i])
@@ -67,7 +65,6 @@ def upload_histogram(title: str, columns_name: str, values: List):
     :param columns_name: name of columns
     :param values: list of values for the histogram
     """
-    print(title)
     data = [[i] for i in values]
     table = wandb.Table(data=data, columns=[columns_name])
     wandb.log({columns_name + '_histogram': wandb.plot.histogram(table, columns_name, title=title)})
