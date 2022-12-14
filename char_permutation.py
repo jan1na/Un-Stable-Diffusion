@@ -7,7 +7,7 @@ from utils.progress_bar_utils import printProgressBar
 from typing import List, Callable
 from PyDictionary import PyDictionary
 
-PROMPT_NUMBER = 20
+PROMPT_NUMBER = 500
 
 tokenizer = CLIPTokenizer.from_pretrained("openai/clip-vit-large-patch14")
 text_encoder = CLIPTextModel.from_pretrained("openai/clip-vit-large-patch14").cuda()
