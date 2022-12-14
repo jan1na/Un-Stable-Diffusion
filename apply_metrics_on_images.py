@@ -1,5 +1,3 @@
-from PIL import Image
-import glob
 from utils.file_utils import load_list_from_file, load_images_from_path
 from metrics.image_metrics import image_array_cosine_similarity, clean_fid_score
 from utils.wandb_utils import *
@@ -9,20 +7,19 @@ IMAGE_PATH = './image_outputs'
 PROMPT_PATH = './permutations'
 
 
-def create_wandb_doc(attack_name: str, attack_file_name: str, image_title: str, original_prompts: List,
+def create_wandb_doc(run_name: str, attack_file_name: str, image_title: str, original_prompts: List[str],
                      original_images: List):
     """
-    Upload the metric results as single values and histograms to wandb.
+    Upload the images and metric results as single values and histograms to wandb.
 
-    :param attack_name: name of the wandb
-    :param attack_file_name:
-    :param image_title:
-    :param original_prompts:
-    :param original_images:
-    :return:
+    :param run_name: name of the wandb run
+    :param attack_file_name: name of file with attack prompts
+    :param image_title: title of uploaded images
+    :param original_prompts: original prompts
+    :param original_images: original images
     """
 
-    start(attack_name)
+    start(run_name)
 
     permutation_prompts = load_list_from_file(PROMPT_PATH + '/' + attack_file_name + '_prompts.txt')
     permutation_images = load_images_from_path(IMAGE_PATH + '/' + attack_file_name + '_images/')
@@ -51,15 +48,14 @@ def main():
 
     original_prompts = load_list_from_file(PROMPT_PATH + '/original_prompts.txt')
     original_images = load_images_from_path(IMAGE_PATH + '/original_images/')
-    original_control_images = load_images_from_path(IMAGE_PATH + '/original_control_images/')
 
     attack_file_names = ["original_control", "naive_char", "char", "delete_char", "duplicate_char"]
-    attack_names = ["original-control", "naive-char", "char", "delete-char", "duplicate-char"]
+    run_names = ["original-control", "naive-char", "char", "delete-char", "duplicate-char"]
     image_titles = ['Original Control', 'Naive Char Permutation', 'Char Permutation', 'Delete Char Permutation',
                     'Duplicate Char Permutation']
 
-    for file_name, attack_name, image_title in zip(attack_file_names, attack_names, image_titles):
-        create_wandb_doc(attack_name, file_name, image_title, original_prompts, original_images)
+    for file_name, run_name, image_title in zip(attack_file_names, run_names, image_titles):
+        create_wandb_doc(run_name, file_name, image_title, original_prompts, original_images)
 
 
 if __name__ == '__main__':
