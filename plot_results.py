@@ -29,6 +29,7 @@ def main():
     api = wandb.Api()
     entity, project = args.entity, args.project  # set to your entity and project
     runs = api.runs(entity + "/" + project)
+    print(runs)
 
     summary_list, config_list, name_list = [], [], []
     for run in runs:
