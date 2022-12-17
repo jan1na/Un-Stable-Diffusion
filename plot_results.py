@@ -30,6 +30,9 @@ def main():
     entity, project = args.entity, args.project  # set to your entity and project
     runs = api.runs(entity + "/" + project)
     print(runs)
+    run = api.run("janina/stable-diffusion/char")
+    print(run)
+    print(run.summary)
 
     summary_list, config_list, name_list = [], [], []
     for run in runs:
