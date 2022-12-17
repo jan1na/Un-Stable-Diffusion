@@ -26,4 +26,4 @@ save_to_wandb:
 
 load_results:
 	@echo "Load results from wandb"
-	python3 plot_results.py --entity "stable-diffusion" --project "duplicate-char"
+	python3 plot_results.py --entity "janina" --project "stable-diffusion"
