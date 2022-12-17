@@ -30,6 +30,12 @@ def main():
     entity, project = args.entity, args.project  # set to your entity and project
     runs = api.runs(entity + "/" + project)
     print(runs)
+    print(type(runs))
+
+    run = api.run("janina/stable-diffusion/run-14c2qr32-cosinesimilarity_histogram_table:v0")
+    print(run)
+    print(run.summary)
+    print(run.name)
 
     summary_list, config_list, name_list = [], [], []
     for run in runs:
