@@ -8,7 +8,15 @@ import numpy as np
 device = "cuda" if torch.cuda.is_available() else "cpu"
 model, preprocess = clip.load('ViT-B/32', device)
 
+
 def image_cosine_similarity(image_0, image_1) -> float:
+    """
+    Cosine similarity between two images.
+
+    :param image_0: first image
+    :param image_1: second image
+    :return: cosine similarity
+    """
 
     image_input_0 = preprocess(image_0).unsqueeze(0).to(device)
     image_input_1 = preprocess(image_1).unsqueeze(0).to(device)
@@ -21,13 +29,19 @@ def image_cosine_similarity(image_0, image_1) -> float:
     image_features_0 /= image_features_0.norm(dim=-1, keepdim=True)
     image_features_1 /= image_features_1.norm(dim=-1, keepdim=True)
     cosine_similarity = image_features_0 @ image_features_1.T
-    print("consine similarity:", cosine_similarity)
     return cosine_similarity
 
 
-def image_array_cosine_similarity(image_array_0, image_array_1):
+def image_array_cosine_similarity(image_list_0: List, image_list_1: List) -> List[float]:
+    """
+    Cosine similarity of two lists of images for each of the images in the two lists.
+
+    :param image_list_0: first list of images
+    :param image_list_1: second list of images
+    :return: list of cosine similarities between every element in the image lists
+    """
     cos_sim_list = []
-    for img_0, img_1 in zip(image_array_0, image_array_1):
+    for img_0, img_1 in zip(image_list_0, image_list_1):
         cos_sim_list.append(image_cosine_similarity(img_0, img_1)[0][0].item())
     return np.mean(cos_sim_list), cos_sim_list
 
