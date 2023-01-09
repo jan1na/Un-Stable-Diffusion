@@ -79,7 +79,6 @@ def synonym_word(prompt: str) -> str:
         for synonym in Dictionary(word, 10).synonyms():
             print(word, synonym)
             prompts.append(prompt.replace(word, synonym))
-    return prompts
     return get_best_permutation(prompts)
 
 
@@ -149,7 +148,7 @@ def main():
     save_list_to_file(duplicate_char_prompts, './permutations/duplicate_char_prompts.txt')
 
     # Synonym Word Replacement
-    duplicate_char_prompts = apply_permutation(original_prompts, duplicate_char, "Synonym Word Replacement")
+    duplicate_char_prompts = apply_permutation(original_prompts, synonym_word, "Synonym Word Replacement")
     for w1, w2 in zip(original_prompts, duplicate_char_prompts):
         print(w1, w2)
     save_list_to_file(duplicate_char_prompts, './permutations/synonym_word_prompts.txt')
