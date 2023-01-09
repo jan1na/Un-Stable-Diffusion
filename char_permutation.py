@@ -131,15 +131,6 @@ def main():
 
     original_prompts = load_list_from_file('./metrics/captions_10000.txt')[:PROMPT_NUMBER]
 
-    # Synonym Word Replacement
-    duplicate_char_prompts = apply_permutation(original_prompts, synonym_word, "Synonym Word Replacement")
-    for w1, w2 in zip(original_prompts, duplicate_char_prompts):
-        print(w1, w2)
-    save_list_to_file(duplicate_char_prompts, './permutations/synonym_word_prompts.txt')
-
-
-
-
     # Naive Char Permutation
     naive_char_prompts = apply_permutation(original_prompts, naive_char, "Naive Char Permutation")
     save_list_to_file(naive_char_prompts, './permutations/naive_char_prompts.txt')
