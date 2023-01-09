@@ -7,7 +7,7 @@ from utils.progress_bar_utils import printProgressBar
 from typing import List, Callable
 from pydictionary import Dictionary
 
-PROMPT_NUMBER = 5
+PROMPT_NUMBER = 1000
 
 tokenizer = CLIPTokenizer.from_pretrained("openai/clip-vit-large-patch14")
 text_encoder = CLIPTextModel.from_pretrained("openai/clip-vit-large-patch14").cuda()
@@ -77,7 +77,7 @@ def synonym_word(prompt: str) -> str:
     prompts = [prompt]
     words = prompt.split()
     for i in range(len(words)):
-        for synonym in Dictionary(words[i], 10).synonyms():
+        for synonym in Dictionary(words[i], 2).synonyms():
             prompts.append(' '.join(words[:i] + [synonym] + words[i+1:]))
     return get_best_permutation(prompts)
 
