@@ -7,7 +7,7 @@ from utils.progress_bar_utils import printProgressBar
 from typing import List, Callable
 from pydictionary import Dictionary
 
-PROMPT_NUMBER = 10
+PROMPT_NUMBER = 5
 
 tokenizer = CLIPTokenizer.from_pretrained("openai/clip-vit-large-patch14")
 text_encoder = CLIPTextModel.from_pretrained("openai/clip-vit-large-patch14").cuda()
@@ -78,7 +78,7 @@ def synonym_word(prompt: str) -> str:
     words = prompt.split()
     for i in range(len(words)):
         for synonym in Dictionary(words[i], 10).synonyms():
-            tmp = ' '.join(words[:i] + [synonym] + words[i+1:])
+            tmp = ' '.join(words[:i] + synonym + words[i+1:])
             prompts.append(tmp)
     return get_best_permutation(prompts)
 
@@ -131,6 +131,15 @@ def main():
     rtpt.start()
 
     original_prompts = load_list_from_file('./metrics/captions_10000.txt')[:PROMPT_NUMBER]
+
+    # Synonym Word Replacement
+    duplicate_char_prompts = apply_permutation(original_prompts, synonym_word, "Synonym Word Replacement")
+    for w1, w2 in zip(original_prompts, duplicate_char_prompts):
+        print(w1, w2)
+    save_list_to_file(duplicate_char_prompts, './permutations/synonym_word_prompts.txt')
+
+
+
 
     # Naive Char Permutation
     naive_char_prompts = apply_permutation(original_prompts, naive_char, "Naive Char Permutation")
