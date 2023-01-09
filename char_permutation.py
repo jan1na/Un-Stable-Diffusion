@@ -5,6 +5,7 @@ from torch.nn.functional import cosine_similarity
 from utils.file_utils import load_list_from_file, save_list_to_file
 from utils.progress_bar_utils import printProgressBar
 from typing import List, Callable
+from pydictionary import Dictionary
 
 PROMPT_NUMBER = 500
 
@@ -17,7 +18,7 @@ def naive_char(prompt: str) -> str:
     Create a naive char permutation from the prompt, by changing only 2 chars next to each other.
 
     :param prompt: input string that gets permuted
-    :return: permutation of the prompt that has the lowest cosine similarity to the prompt
+    :return: permutation of the prompt that has the lowest cosine similarity to the original prompt
     """
     prompts = [prompt]
     for i in range(len(prompt) - 1):
@@ -30,7 +31,7 @@ def char(prompt: str) -> str:
     Create a char permutation from the prompt, by changing 2 chars next to each other if none of them are whitespace.
 
     :param prompt: input string that gets permuted
-    :return: permutation of the prompt that has the lowest cosine similarity to the prompt
+    :return: permutation of the prompt that has the lowest cosine similarity to the original prompt
     """
     prompts = [prompt]
     for i in range(len(prompt) - 1):
@@ -44,7 +45,7 @@ def delete_char(prompt: str) -> str:
     Create a char permutation from the prompt, by deleting one char.
 
     :param prompt: input string that gets permuted
-    :return: permutation of the prompt that has the lowest cosine similarity to the prompt
+    :return: permutation of the prompt that has the lowest cosine similarity to the original prompt
     """
     prompts = [prompt]
     for i in range(len(prompt)):
@@ -57,12 +58,26 @@ def duplicate_char(prompt: str) -> str:
     Create a char permutation from the prompt, by duplicating one char.
 
     :param prompt: input string that gets permuted
-    :return: permutation of the prompt that has the lowest cosine similarity to the prompt
+    :return: permutation of the prompt that has the lowest cosine similarity to the original prompt
     """
     prompts = [prompt]
     for i in range(len(prompt)):
         if prompt[i].isalpha():
             prompts.append(prompt[:i] + prompt[i] + prompt[i] + prompt[i + 1:])
+    return get_best_permutation(prompts)
+
+
+def synonym_word(prompt: str) -> str:
+    """
+    Replace one word with a synonym.
+
+    :param prompt: input string that gets permuted
+    :return: permutation of the prompt that has the lowest cosine similarity to the original prompt
+    """
+    prompts = [prompt]
+    for word in prompt.split():
+        for synonym in Dictionary(word, 10).synonyms():
+            prompts.append(prompt.replace(word, synonym))
     return get_best_permutation(prompts)
 
 
@@ -130,6 +145,10 @@ def main():
     # Duplicate Char Permutation
     duplicate_char_prompts = apply_permutation(original_prompts, duplicate_char, "Duplicate Char Permutation")
     save_list_to_file(duplicate_char_prompts, './permutations/duplicate_char_prompts.txt')
+
+    # Synonym Word Replacement
+    duplicate_char_prompts = apply_permutation(original_prompts, duplicate_char, "Synonym Word Replacement")
+    save_list_to_file(duplicate_char_prompts, './permutations/synonym_word_prompts.txt')
 
     save_list_to_file(original_prompts, './permutations/original_prompts.txt')
     save_list_to_file(original_prompts, './permutations/original_control_prompts.txt')

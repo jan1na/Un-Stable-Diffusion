@@ -32,6 +32,7 @@ def main():
     print(runs)
     print(type(runs))
 
+    run = wandb.init()
     run = api.run("janina/stable-diffusion/run-14c2qr32-cosinesimilarity_histogram_table:v0")
     print(run)
     print(run.summary)
