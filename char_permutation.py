@@ -78,8 +78,7 @@ def synonym_word(prompt: str) -> str:
     words = prompt.split()
     for i in range(len(words)):
         for synonym in Dictionary(words[i], 10).synonyms():
-            tmp = ' '.join(words[:i] + synonym + words[i+1:])
-            prompts.append(tmp)
+            prompts.append(' '.join(words[:i] + [synonym] + words[i+1:]))
     return get_best_permutation(prompts)
 
 
