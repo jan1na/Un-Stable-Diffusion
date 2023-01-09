@@ -75,9 +75,10 @@ def synonym_word(prompt: str) -> str:
     :return: permutation of the prompt that has the lowest cosine similarity to the original prompt
     """
     prompts = [prompt]
-    for word in prompt.split():
-        for synonym in Dictionary(word, 10).synonyms():
-            prompts.append(prompt.replace(word, synonym))
+    words = prompt.split()
+    for i in range(len(words)):
+        for synonym in Dictionary(words[i], 10).synonyms():
+            prompts.append(words[:i] + synonym + words[i+1:])
     return get_best_permutation(prompts)
 
 
