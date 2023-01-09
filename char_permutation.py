@@ -149,6 +149,8 @@ def main():
 
     # Synonym Word Replacement
     duplicate_char_prompts = apply_permutation(original_prompts, duplicate_char, "Synonym Word Replacement")
+    for w1, w2 in zip(original_prompts, duplicate_char_prompts):
+        print(w1, w2)
     save_list_to_file(duplicate_char_prompts, './permutations/synonym_word_prompts.txt')
 
     save_list_to_file(original_prompts, './permutations/original_prompts.txt')
