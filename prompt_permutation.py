@@ -154,7 +154,7 @@ def main():
         print("AttacK", attack)
         function = locals()[attack]
         print(function)
-        prompts = apply_permutation(original_prompts, locals()[attack], title)
+        prompts = apply_permutation(original_prompts, globals()[attack], title)
         save_list_to_file(prompts, './permutations/' + attack + '_prompts.txt')
 
 
