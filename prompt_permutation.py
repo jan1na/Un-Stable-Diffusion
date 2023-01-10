@@ -108,6 +108,7 @@ def get_best_permutation(prompts: List[str]) -> str:
     prompts
     :return: prompt with the lowest cosine similarity to the original prompt
     """
+    print("prompts:", prompts)
     text_input = tokenizer(prompts,
                            padding="max_length",
                            max_length=tokenizer.model_max_length,
@@ -120,6 +121,7 @@ def get_best_permutation(prompts: List[str]) -> str:
     input = torch.flatten(text_embeddings[0].unsqueeze(0), start_dim=1)
     manipulated = torch.flatten(text_embeddings[1:], start_dim=1)
     cos = cosine_similarity(input, manipulated)
+    print(cos)
     ind = torch.argmin(cos)
     return prompts[ind + 1]
 
