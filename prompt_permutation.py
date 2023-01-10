@@ -6,6 +6,7 @@ from utils.file_utils import load_list_from_file, save_list_to_file
 from utils.progress_bar_utils import printProgressBar
 from typing import List, Callable
 from pydictionary import Dictionary
+from similar_sounding_words import index as homophone_dict
 
 PROMPT_NUMBER = 20
 
@@ -79,6 +80,22 @@ def synonym_word(prompt: str) -> str:
     for i in range(len(words)):
         for synonym in Dictionary(words[i], 2).synonyms():
             prompts.append(' '.join(words[:i] + [synonym] + words[i+1:]))
+    return get_best_permutation(prompts)
+
+
+def homophone_word(prompt: str) -> str:
+    """
+    Replace one word with a homophone.
+
+    :param prompt: input string that gets permuted
+    :return: permutation of the prompt that has the lowest cosine similarity to the original prompt
+    """
+    prompts = [prompt]
+    words = prompt.split()
+    for i in range(len(words)):
+        if words[i] in homophone_dict:
+            for homophone in homophone_dict[words[i]]:
+                prompts.append(' '.join(words[:i] + [homophone] + words[i + 1:]))
     return get_best_permutation(prompts)
 
 
