@@ -33,15 +33,18 @@ def upload_images(title: str, images: List, prompts: List[str]):
     wandb.log({title: logs})
 
 
-def unite_lists(list_of_lists: List[List]) -> List:
+def unite_lists(list_of_lists: List[List], num_of_elements: int) -> List:
     """
     Create a new list with alternating values form the lists in list_of_lists.
 
     :param list_of_lists: list of lists that needs to be combined
+    :param num_of_elements: number per list that gets added
     :return: united list of alternating values
     """
     assembled_list = []
-    for i in range(len(list_of_lists[0])):
+    if num_of_elements > len(list_of_lists[0]):
+        num_of_elements = len(list_of_lists[0])
+    for i in range(num_of_elements):
         for j in range(len(list_of_lists)):
             assembled_list.append(list_of_lists[j][i])
     return assembled_list
