@@ -81,7 +81,7 @@ def synonym_word(prompt: str) -> str:
         for synonym in Dictionary(words[i], 2).synonyms():
             prompts.append(' '.join(words[:i] + [synonym] + words[i+1:]))
 
-    return prompts[0] if len(prompt) == 1 else get_best_permutation(prompts)
+    return prompts[0] if len(prompts) == 1 else get_best_permutation(prompts)
 
 
 def homophone_word(prompt: str) -> str:
@@ -97,7 +97,7 @@ def homophone_word(prompt: str) -> str:
         if words[i] in homophone_dict:
             for homophone in homophone_dict[words[i]]:
                 prompts.append(' '.join(words[:i] + [homophone] + words[i + 1:]))
-    return prompts[0] if len(prompt) == 1 else get_best_permutation(prompts)
+    return prompts[0] if len(prompts) == 1 else get_best_permutation(prompts)
 
 
 def get_best_permutation(prompts: List[str]) -> str:
