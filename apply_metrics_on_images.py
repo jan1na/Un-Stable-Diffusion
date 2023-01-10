@@ -41,9 +41,9 @@ def create_wandb_doc(run_name: str, attack_file_name: str, image_title: str, ori
     # upload images to wandb sometimes sorted by a metric
 
     if sorted_by_cosine_similarity:
-        indexes = np.argsort(cos_sim_list)
+        indexes = list(np.argsort(cos_sim_list))
     else:
-        indexes = np.arange(len(original_prompts))
+        indexes = list(np.arange(len(original_prompts)))
 
     print(indexes)
 
