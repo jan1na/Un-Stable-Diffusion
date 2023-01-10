@@ -7,6 +7,7 @@ from utils.progress_bar_utils import printProgressBar
 from typing import List, Callable
 from pydictionary import Dictionary
 from similar_sounding_words import index as homophone_dict
+from attack_types import file_names as attack_names, title_names
 
 PROMPT_NUMBER = 200
 
@@ -149,6 +150,10 @@ def main():
 
     original_prompts = load_list_from_file('./metrics/captions_10000.txt')[:PROMPT_NUMBER]
 
+    for attack, title in zip(attack_names[1:], title_names[:1]):
+        prompts = apply_permutation(original_prompts, locals()[attack], title)
+        save_list_to_file(prompts, './permutations/' + attack + '_prompts.txt')
+    """
     # Naive Char Permutation
     naive_char_prompts = apply_permutation(original_prompts, naive_char, "Naive Char Permutation")
     save_list_to_file(naive_char_prompts, './permutations/naive_char_prompts.txt')
@@ -172,6 +177,8 @@ def main():
     # Homophone Word Replacement
     homophone_word_prompts = apply_permutation(original_prompts, homophone_word, "Homophone Word Replacement")
     save_list_to_file(homophone_word_prompts, './permutations/homophone_word_prompts.txt')
+    
+    """
 
     save_list_to_file(original_prompts, './permutations/original_prompts.txt')
     save_list_to_file(original_prompts, './permutations/original_control_prompts.txt')
