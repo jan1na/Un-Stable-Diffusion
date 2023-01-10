@@ -50,6 +50,17 @@ def unite_lists(list_of_lists: List[List], num_of_elements: int) -> List:
     return assembled_list
 
 
+def sort_list_by_index(list: List, indexes: List[int]):
+    """
+    Sort list by list of indexes.
+
+    :param list: list that gets sorted
+    :param indexes: indexes that sort the list
+    :return: sorted list
+    """
+    return [list[i] for i in indexes]
+
+
 def upload_value(title: str, value: float):
     """
     Upload value to wandb.

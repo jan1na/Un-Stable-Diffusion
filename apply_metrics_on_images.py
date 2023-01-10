@@ -47,8 +47,8 @@ def create_wandb_doc(run_name: str, attack_file_name: str, image_title: str, ori
 
     print(indexes)
 
-    image_list = [original_images[indexes], permutation_images[indexes]]
-    prompt_list = [original_prompts[indexes], permutation_prompts[indexes]]
+    image_list = [sort_list_by_index(original_images, indexes), sort_list_by_index(permutation_images, indexes)]
+    prompt_list = [sort_list_by_index(original_prompts, indexes), sort_list_by_index(permutation_prompts, indexes)]
 
     print(prompt_list)
 
