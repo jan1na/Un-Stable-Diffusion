@@ -154,6 +154,8 @@ def main():
         print("AttacK", attack)
         prompts = apply_permutation(original_prompts, locals()[attack], title)
         save_list_to_file(prompts, './permutations/' + attack + '_prompts.txt')
+
+
     """
     # Naive Char Permutation
     naive_char_prompts = apply_permutation(original_prompts, naive_char, "Naive Char Permutation")
