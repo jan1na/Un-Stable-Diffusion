@@ -151,6 +151,7 @@ def main():
     original_prompts = load_list_from_file('./metrics/captions_10000.txt')[:PROMPT_NUMBER]
 
     for attack, title in zip(attack_names[1:], title_names[:1]):
+        print("AttacK", attack)
         prompts = apply_permutation(original_prompts, locals()[attack], title)
         save_list_to_file(prompts, './permutations/' + attack + '_prompts.txt')
     """
