@@ -10,7 +10,7 @@ clean_img:
 create_adv_attacks:
 	@echo "Creating permutation files"
 	mkdir -p permutations
-	python3 char_permutation.py
+	python3 prompt_permutation.py
 
 generate_images:
 	@echo "Generate images for the original and permutation prompts"

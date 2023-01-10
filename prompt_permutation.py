@@ -148,6 +148,13 @@ def main():
 
     original_prompts = load_list_from_file('./metrics/captions_10000.txt')[:PROMPT_NUMBER]
 
+    # Homophone Word Replacement
+    homophone_word_prompts = apply_permutation(original_prompts, homophone_word, "Homophone Word Replacement")
+    for w1, w2 in zip(original_prompts, homophone_word_prompts):
+        print(w1, w2)
+    save_list_to_file(homophone_word_prompts, './permutations/homophone_word_prompts.txt')
+
+
     # Naive Char Permutation
     naive_char_prompts = apply_permutation(original_prompts, naive_char, "Naive Char Permutation")
     save_list_to_file(naive_char_prompts, './permutations/naive_char_prompts.txt')
