@@ -152,6 +152,8 @@ def main():
 
     for attack, title in zip(attack_names[1:], title_names[:1]):
         print("AttacK", attack)
+        function = locals()[attack]
+        print(function)
         prompts = apply_permutation(original_prompts, locals()[attack], title)
         save_list_to_file(prompts, './permutations/' + attack + '_prompts.txt')
 
