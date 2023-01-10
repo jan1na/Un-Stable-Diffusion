@@ -150,7 +150,7 @@ def main():
 
     original_prompts = load_list_from_file('./metrics/captions_10000.txt')[:PROMPT_NUMBER]
 
-    for attack, title in zip(attack_names[1:], title_names[:1]):
+    for attack, title in zip(attack_names[1:], title_names[1:]):
         print("AttacK", attack)
         function = globals()[attack]
         print(function)
