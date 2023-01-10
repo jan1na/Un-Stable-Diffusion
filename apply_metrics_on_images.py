@@ -45,14 +45,15 @@ def create_wandb_doc(run_name: str, attack_file_name: str, image_title: str, ori
 
 
 def main():
-
     original_prompts = load_list_from_file(PROMPT_PATH + '/original_prompts.txt')
     original_images = load_images_from_path(IMAGE_PATH + '/original_images/')
 
-    attack_file_names = ["original_control", "naive_char", "char", "delete_char", "duplicate_char"]
-    run_names = ["original-control", "naive-char", "char", "delete-char", "duplicate-char"]
+    attack_file_names = ["original_control", "naive_char", "char", "delete_char", "duplicate_char", "synonym_word",
+                         "homophone_word"]
+    run_names = ["original-control", "naive-char", "char", "delete-char", "duplicate-char", "synonym-word",
+                 "homophone-word"]
     image_titles = ['Original Control', 'Naive Char Permutation', 'Char Permutation', 'Delete Char Permutation',
-                    'Duplicate Char Permutation']
+                    'Duplicate Char Permutation', 'Synonym Word Permutation', 'Homophone Word Permutation']
 
     for file_name, run_name, image_title in zip(attack_file_names, run_names, image_titles):
         create_wandb_doc(run_name, file_name, image_title, original_prompts, original_images)

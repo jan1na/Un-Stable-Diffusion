@@ -1,6 +1,6 @@
 all: clean_img create_adv_attacks generate_images save_to_wandb
 
-ATTACK_NAMES = "naive_char" "char" "delete_char" "duplicate_char"
+ATTACK_NAMES = "naive_char" "char" "delete_char" "duplicate_char" "synonym_word" "homophone_word"
 
 clean_img:
 	@echo "Deleting image_outputs and permutations folder"
