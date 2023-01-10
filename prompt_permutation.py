@@ -109,7 +109,6 @@ def get_best_permutation(prompts: List[str]) -> str:
     prompts
     :return: prompt with the lowest cosine similarity to the original prompt
     """
-    print("prompts:", prompts)
     text_input = tokenizer(prompts,
                            padding="max_length",
                            max_length=tokenizer.model_max_length,
@@ -122,7 +121,6 @@ def get_best_permutation(prompts: List[str]) -> str:
     input = torch.flatten(text_embeddings[0].unsqueeze(0), start_dim=1)
     manipulated = torch.flatten(text_embeddings[1:], start_dim=1)
     cos = cosine_similarity(input, manipulated)
-    print(cos)
     ind = torch.argmin(cos)
     return prompts[ind + 1]
 
@@ -151,13 +149,6 @@ def main():
 
     original_prompts = load_list_from_file('./metrics/captions_10000.txt')[:PROMPT_NUMBER]
 
-    # Homophone Word Replacement
-    homophone_word_prompts = apply_permutation(original_prompts, homophone_word, "Homophone Word Replacement")
-    for w1, w2 in zip(original_prompts, homophone_word_prompts):
-        print(w1, w2)
-    save_list_to_file(homophone_word_prompts, './permutations/homophone_word_prompts.txt')
-
-
     # Naive Char Permutation
     naive_char_prompts = apply_permutation(original_prompts, naive_char, "Naive Char Permutation")
     save_list_to_file(naive_char_prompts, './permutations/naive_char_prompts.txt')
@@ -176,14 +167,10 @@ def main():
 
     # Synonym Word Replacement
     synonym_word_prompts = apply_permutation(original_prompts, synonym_word, "Synonym Word Replacement")
-    for w1, w2 in zip(original_prompts, synonym_word_prompts):
-        print(w1, w2)
     save_list_to_file(synonym_word_prompts, './permutations/synonym_word_prompts.txt')
 
     # Homophone Word Replacement
     homophone_word_prompts = apply_permutation(original_prompts, homophone_word, "Homophone Word Replacement")
-    for w1, w2 in zip(original_prompts, homophone_word_prompts):
-        print(w1, w2)
     save_list_to_file(homophone_word_prompts, './permutations/homophone_word_prompts.txt')
 
     save_list_to_file(original_prompts, './permutations/original_prompts.txt')
