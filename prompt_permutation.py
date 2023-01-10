@@ -165,10 +165,16 @@ def main():
     save_list_to_file(duplicate_char_prompts, './permutations/duplicate_char_prompts.txt')
 
     # Synonym Word Replacement
-    duplicate_char_prompts = apply_permutation(original_prompts, synonym_word, "Synonym Word Replacement")
-    for w1, w2 in zip(original_prompts, duplicate_char_prompts):
+    synonym_word_prompts = apply_permutation(original_prompts, synonym_word, "Synonym Word Replacement")
+    for w1, w2 in zip(original_prompts, synonym_word_prompts):
         print(w1, w2)
-    save_list_to_file(duplicate_char_prompts, './permutations/synonym_word_prompts.txt')
+    save_list_to_file(synonym_word_prompts, './permutations/synonym_word_prompts.txt')
+
+    # Homophone Word Replacement
+    homophone_word_prompts = apply_permutation(original_prompts, homophone_word, "Homophone Word Replacement")
+    for w1, w2 in zip(original_prompts, homophone_word_prompts):
+        print(w1, w2)
+    save_list_to_file(homophone_word_prompts, './permutations/homophone_word_prompts.txt')
 
     save_list_to_file(original_prompts, './permutations/original_prompts.txt')
     save_list_to_file(original_prompts, './permutations/original_control_prompts.txt')
