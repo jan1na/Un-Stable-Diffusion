@@ -52,9 +52,7 @@ def create_wandb_doc(run_name: str, attack_file_name: str, image_title: str, ori
 
     print(prompt_list)
 
-    upload_images(image_title,
-                  unite_lists(image_list, IMAGES_SAVED),
-                  unite_lists(prompt_list, IMAGES_SAVED))
+    upload_images(image_title, unite_lists(image_list, IMAGES_SAVED), unite_lists(prompt_list, IMAGES_SAVED))
 
     end()
 
