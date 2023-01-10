@@ -8,7 +8,7 @@ from typing import List, Callable
 from pydictionary import Dictionary
 from similar_sounding_words import index as homophone_dict
 
-PROMPT_NUMBER = 20
+PROMPT_NUMBER = 200
 
 tokenizer = CLIPTokenizer.from_pretrained("openai/clip-vit-large-patch14")
 text_encoder = CLIPTextModel.from_pretrained("openai/clip-vit-large-patch14").cuda()
@@ -78,7 +78,7 @@ def synonym_word(prompt: str) -> str:
     prompts = [prompt]
     words = prompt.split()
     for i in range(len(words)):
-        for synonym in Dictionary(words[i], 2).synonyms():
+        for synonym in Dictionary(words[i], 10).synonyms():
             prompts.append(' '.join(words[:i] + [synonym] + words[i+1:]))
 
     return prompts[0] if len(prompts) == 1 else get_best_permutation(prompts)
