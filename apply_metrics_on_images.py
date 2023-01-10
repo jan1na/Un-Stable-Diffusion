@@ -48,6 +48,8 @@ def create_wandb_doc(run_name: str, attack_file_name: str, image_title: str, ori
     image_list = [original_images[indexes], permutation_images[indexes]]
     prompt_list = [original_prompts[indexes], permutation_prompts[indexes]]
 
+    print(prompt_list)
+
     upload_images(image_title,
                   unite_lists(image_list, IMAGES_SAVED),
                   unite_lists(prompt_list, IMAGES_SAVED))
