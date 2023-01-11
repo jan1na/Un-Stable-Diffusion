@@ -11,6 +11,7 @@ def start(name: str) -> wandb.Run:
     :param name: name of wandb upload
     :return run object
     """
+    global run_obj
     run_obj = wandb.init(project="stable-diffusion", name=name)
 
 
@@ -20,6 +21,7 @@ def end():
 
     """
     wandb.finish()
+    global run_obj
     run_obj = None
 
 
@@ -73,6 +75,7 @@ def upload_value(title: str, value: float):
     :param title: title describing the value
     """
     wandb.log({title: value})
+    #TODO: test summary
     run_obj.summary[title] = value
 
 
@@ -87,6 +90,7 @@ def upload_histogram(title: str, columns_name: str, values: List):
     data = [[i] for i in values]
     table = wandb.Table(data=data, columns=[columns_name])
     wandb.log({columns_name + '_histogram': wandb.plot.histogram(table, columns_name, title=title)})
+    # TODO: test summary for wandb table
     run_obj.summary["histogram"] = wandb.plot.histogram(table, columns_name, title=title)
     run_obj.summary["hist_table"] = table
 
