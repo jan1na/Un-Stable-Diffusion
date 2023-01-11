@@ -1,14 +1,17 @@
 import wandb
 from typing import List
 
+run_obj = None
 
-def start(name: str):
+
+def start(name: str) -> wandb.Run:
     """
     Init wandb.
 
     :param name: name of wandb upload
+    :return run object
     """
-    wandb.init(project="stable-diffusion", name=name)
+    run_obj = wandb.init(project="stable-diffusion", name=name)
 
 
 def end():
@@ -17,6 +20,7 @@ def end():
 
     """
     wandb.finish()
+    run_obj = None
 
 
 def upload_images(title: str, images: List, prompts: List[str]):
@@ -69,6 +73,7 @@ def upload_value(title: str, value: float):
     :param title: title describing the value
     """
     wandb.log({title: value})
+    run_obj.summary[title] = value
 
 
 def upload_histogram(title: str, columns_name: str, values: List):
@@ -82,6 +87,8 @@ def upload_histogram(title: str, columns_name: str, values: List):
     data = [[i] for i in values]
     table = wandb.Table(data=data, columns=[columns_name])
     wandb.log({columns_name + '_histogram': wandb.plot.histogram(table, columns_name, title=title)})
+    run_obj.summary["histogram"] = wandb.plot.histogram(table, columns_name, title=title)
+    run_obj.summary["hist_table"] = table
 
 
 
