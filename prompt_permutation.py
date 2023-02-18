@@ -9,7 +9,7 @@ from pydictionary import Dictionary
 from similar_sounding_words import index as homophone_dict
 from attack_types import file_names as attack_names, title_names
 
-PROMPT_NUMBER = 200
+PROMPT_NUMBER = 20
 
 tokenizer = CLIPTokenizer.from_pretrained("openai/clip-vit-large-patch14")
 text_encoder = CLIPTextModel.from_pretrained("openai/clip-vit-large-patch14").cuda()

@@ -5,7 +5,7 @@ from metrics.image_metrics import image_array_cosine_similarity, clean_fid_score
 from utils.wandb_utils import *
 from attack_types import file_names, run_names, title_names
 
-IMAGES_SAVED = 20
+IMAGES_SAVED = 10
 IMAGE_PATH = './image_outputs'
 PROMPT_PATH = './permutations'
 
@@ -32,13 +32,15 @@ def create_wandb_doc(run_name: str, attack_file_name: str, image_title: str, ori
     permutation_images = load_images_from_path(IMAGE_PATH + '/' + attack_file_name + '_images/')
 
     # Cosine Similarity
+    print("calc Cosine Similarity")
 
     mean_cos_sim, cos_sim_list = image_array_cosine_similarity(original_images, permutation_images)
     upload_value('Mean Cosine Similarity', mean_cos_sim)
     upload_histogram("Image Cosine Similarity", "cosine similarity", cos_sim_list)
 
     """
-    # CLIP FID
+    # Clean FID
+    print("calc Clean FID")
     upload_value("Clean FID Score", clean_fid_score(IMAGE_PATH + '/original_images/',
                                                     IMAGE_PATH + '/' + attack_file_name + '_images/'))
 
