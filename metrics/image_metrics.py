@@ -19,29 +19,19 @@ def image_cosine_similarity(image_0, image_1) -> float:
     :return: cosine similarity
     """
 
-    print("image_0", type(image_0))
-    print(image_0)
-
     image_input_0 = preprocess(image_0).unsqueeze(0).to(device)
     image_input_1 = preprocess(image_1).unsqueeze(0).to(device)
-
-    print("image_input_0", type(image_input_0))
-    print(image_input_0)
 
     # Calculate features
     with torch.no_grad():
         image_features_0 = model.encode_image(image_input_0)
         image_features_1 = model.encode_image(image_input_1)
 
-    print("image_features_0", type(image_features_0))
-    print(image_features_0)
     
     image_features_0 /= image_features_0.norm(dim=-1, keepdim=True)
     image_features_1 /= image_features_1.norm(dim=-1, keepdim=True)
     cosine_similarity = image_features_0 @ image_features_1.T
 
-    print("cosine_similarity", type(cosine_similarity))
-    print(cosine_similarity)
     return cosine_similarity
 
 
