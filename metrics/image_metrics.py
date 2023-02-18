@@ -35,7 +35,7 @@ def image_cosine_similarity(image_0, image_1) -> float:
     return cosine_similarity
 
 
-def image_array_cosine_similarity(image_list_0: List, image_list_1: List) -> Tuple[ndarray, List[np.ndarray]]:
+def image_array_cosine_similarity(image_list_0: List, image_list_1: List) -> [float, List[float]]:
     """
     Cosine similarity of two lists of images for each of the images in the two lists.
 
