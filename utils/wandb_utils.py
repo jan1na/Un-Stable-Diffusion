@@ -9,7 +9,6 @@ def start(name: str):
     Init wandb.
 
     :param name: name of wandb upload
-    :return run object
     """
     global run_obj
     run_obj = wandb.init(project="stable-diffusion", name=name)

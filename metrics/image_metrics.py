@@ -1,7 +1,7 @@
 import os
 import clip
 import torch
-from typing import List, Tuple, Any
+from typing import List, Tuple
 import numpy as np
 from numpy import ndarray
 
@@ -41,7 +41,7 @@ def image_cosine_similarity(image_0, image_1) -> float:
     return cosine_similarity
 
 
-def image_array_cosine_similarity(image_list_0: List, image_list_1: List) -> tuple[ndarray, list[np.ndarray]]:
+def image_array_cosine_similarity(image_list_0: List, image_list_1: List) -> Tuple[ndarray, List[np.ndarray]]:
     """
     Cosine similarity of two lists of images for each of the images in the two lists.
 
