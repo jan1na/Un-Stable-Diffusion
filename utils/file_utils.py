@@ -34,7 +34,7 @@ def load_images_from_path(path: str) -> List:
 
     :param path: path to the folder where the images are saved
     :return: list of the images
-    """ 
+    """
     image_list = []
     images = sorted(glob.glob(path + '*.png'))
     printProgressBar(0, len(images), prefix='Load images:')
