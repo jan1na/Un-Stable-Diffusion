@@ -1,8 +1,9 @@
 import os
 import clip
 import torch
-from typing import List
+from typing import List, Tuple, Any
 import numpy as np
+from numpy import ndarray
 
 # Load the model for cosine similarity
 device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -18,29 +19,29 @@ def image_cosine_similarity(image_0, image_1) -> float:
     :return: cosine similarity
     """
 
-    print("image_0", image_0)
+    print("image_0", image_0.shape)
 
     image_input_0 = preprocess(image_0).unsqueeze(0).to(device)
     image_input_1 = preprocess(image_1).unsqueeze(0).to(device)
 
-    print("image_input_0", image_input_0)
+    print("image_input_0", image_input_0.shape)
 
     # Calculate features
     with torch.no_grad():
         image_features_0 = model.encode_image(image_input_0)
         image_features_1 = model.encode_image(image_input_1)
 
-    print("image_features_0", image_features_0)
+    print("image_features_0", image_features_0.shape)
     
     image_features_0 /= image_features_0.norm(dim=-1, keepdim=True)
     image_features_1 /= image_features_1.norm(dim=-1, keepdim=True)
     cosine_similarity = image_features_0 @ image_features_1.T
 
-    print("cosine_similarity", cosine_similarity)
+    print("cosine_similarity", cosine_similarity.shape)
     return cosine_similarity
 
 
-def image_array_cosine_similarity(image_list_0: List, image_list_1: List) -> List[float]:
+def image_array_cosine_similarity(image_list_0: List, image_list_1: List) -> tuple[ndarray, list[np.ndarray]]:
     """
     Cosine similarity of two lists of images for each of the images in the two lists.
 

@@ -4,7 +4,7 @@ from typing import List
 run_obj = None
 
 
-def start(name: str) -> wandb.Run:
+def start(name: str):
     """
     Init wandb.
 
