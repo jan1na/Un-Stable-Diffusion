@@ -1,7 +1,7 @@
 from PIL import Image
 import glob
 from typing import List
-from progress_bar_utils import printProgressBar
+from utils.progress_bar_utils import printProgressBar
 
 
 def save_list_to_file(values: List, file_path: str):
