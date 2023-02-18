@@ -61,7 +61,9 @@ def image_array_cosine_similarity(image_list_0: List, image_list_1: List) -> Tup
 
 def clean_fid_score(image_folder_0, image_folder_1):
     from cleanfid import fid
-    score = fid.compute_fid(image_folder_0, image_folder_1)
+    score = fid.compute_fid(image_folder_0, image_folder_1, mode="clean", model_name="clip_vit_b_32")
+    print(score)
+    return score
 
 
 def perceptual_similarity():

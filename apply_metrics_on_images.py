@@ -34,11 +34,9 @@ def create_wandb_doc(run_name: str, attack_file_name: str, image_title: str, ori
     upload_value('Mean Cosine Similarity', mean_cos_sim)
     upload_histogram("Image Cosine Similarity", "cosine similarity", cos_sim_list)
 
-    # clean fid
-    # upload_value("Clean FID Score", clean_fid_score('./original_image_outputs',
-    #                                                 './' + attack_file_names + '_permutation_image_outputs/'))
-    # upload_value("Control: Clean FID Score", clean_fid_score('./original_image_outputs',
-    #                                                          './original_control_image_outputs'))
+    # CLIP FID
+    upload_value("Clean FID Score", clean_fid_score(IMAGE_PATH + '/original_images/',
+                                                    IMAGE_PATH + '/' + attack_file_name + '_images/'))
 
     # upload images to wandb sometimes sorted by a metric
 
