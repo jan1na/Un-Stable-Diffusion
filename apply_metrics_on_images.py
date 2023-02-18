@@ -60,6 +60,7 @@ def create_wandb_doc(run_name: str, attack_file_name: str, image_title: str, ori
 
 
 def main():
+    print("in main")
     original_prompts = load_list_from_file(PROMPT_PATH + '/original_prompts.txt')
     original_images = load_images_from_path(IMAGE_PATH + '/original_images/')
 
