@@ -1,7 +1,6 @@
 from PIL import Image
 import glob
 from typing import List
-from utils.progress_bar_utils import printProgressBar
 
 
 def save_list_to_file(values: List, file_path: str):
@@ -35,14 +34,5 @@ def load_images_from_path(path: str) -> List:
     :param path: path to the folder where the images are saved
     :return: list of the images
     """
-    image_list = []
-    images = sorted(glob.glob(path + '*.png'))
-    printProgressBar(0, len(images), prefix='Load images:')
-    for i, filename in enumerate(images):
-        image_list.append(Image.open(filename))
-        printProgressBar(i + 1, len(images), prefix='Load images:')
-
-    return image_list
-
-    # return [Image.open(filename) for filename in sorted(glob.glob(path + '*.png'))]
+    return [Image.open(filename) for filename in sorted(glob.glob(path + '*.png'))]
 
