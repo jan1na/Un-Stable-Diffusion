@@ -8,6 +8,9 @@ from magma.image_input import ImageInput
 from transformers import CLIPTextModel, CLIPTokenizer
 from torch.nn.functional import cosine_similarity
 import glob
+import lpips
+from cleanfid import fid
+from PIL import Image
 from numpy import ndarray
 
 # Load the model for cosine similarity
@@ -61,51 +64,31 @@ def clean_fid_score(image_folder_0: str, image_folder_1: str) -> float:
     :param image_folder_1: image directory 1
     :return:
     """
-    from cleanfid import fid
     score = fid.compute_fid(image_folder_0, image_folder_1, mode="clean")
     print("fid: ", score)
     return score
 
 
-def perceptual_similarity():
-    import lpips
+def perceptual_similarity(image_0, image_1):
     loss_fn_alex = lpips.LPIPS(net='alex')  # best forward scores
     loss_fn_vgg = lpips.LPIPS(net='vgg')  # closer to "traditional" perceptual loss, when used for optimization
 
-    # TODO: convert PNG to RGB 
+    # TODO: convert PNG to RGB
+    rgb_image_0 = image_0.convert('RGB')
+    rgb_image_1 = image_1.convert('RGB')
 
-    import torch
+    # normalize to [-1,1]
+    rgb_image_0 = np.array(rgb_image_0)
+    rgb_image_1 = np.array(rgb_image_1)
+
+    normalized_image_0 = (rgb_image_0.astype(np.float32) / 255.0) * 2.0 - 1.0
+    normalized_image_1 = (rgb_image_1.astype(np.float32) / 255.0) * 2.0 - 1.0
+
     img0 = torch.zeros(1, 3, 64, 64)  # image should be RGB, IMPORTANT: normalized to [-1,1]
     img1 = torch.zeros(1, 3, 64, 64)
-    d = loss_fn_alex(img0, img1)
-
-
-def get_aesthetic_model(clip_model="vit_l_14"):
-    import os
-    import torch
-    import torch.nn as nn
-    from os.path import expanduser  # pylint: disable=import-outside-toplevel
-    from urllib.request import urlretrieve  # pylint: disable=import-outside-toplevel
-    """load the aethetic model"""
-    home = expanduser("~")
-    cache_folder = home + "/.cache/emb_reader"
-    path_to_model = cache_folder + "/sa_0_4_" + clip_model + "_linear.pth"
-    if not os.path.exists(path_to_model):
-        os.makedirs(cache_folder, exist_ok=True)
-        url_model = (
-                "https://github.com/LAION-AI/aesthetic-predictor/blob/main/sa_0_4_" + clip_model + "_linear.pth?raw=true"
-        )
-        urlretrieve(url_model, path_to_model)
-    if clip_model == "vit_l_14":
-        m = nn.Linear(768, 1)
-    elif clip_model == "vit_b_32":
-        m = nn.Linear(512, 1)
-    else:
-        raise ValueError()
-    s = torch.load(path_to_model)
-    m.load_state_dict(s)
-    m.eval()
-    return m
+    d = loss_fn_alex(normalized_image_0, normalized_image_1)
+    print("perceptual similarity:", d)
+    return d
 
 
 magma_model = Magma.from_checkpoint(
@@ -119,7 +102,7 @@ def get_image_caption(image_path: str) -> str:
     inputs = [
         # supports urls and path/to/image
         ImageInput(image_path),
-        'Describe the painting:'
+        'Describe the image:'
     ]
 
     # returns a tensor of shape: (1, 149, 4096)
@@ -139,7 +122,7 @@ tokenizer = CLIPTokenizer.from_pretrained("openai/clip-vit-large-patch14")
 text_encoder = CLIPTextModel.from_pretrained("openai/clip-vit-large-patch14").cuda()
 
 
-def image_caption_similarity(image_folder_0: str, image_folder_1: str) -> [float, List[float]]:
+def image_content_similarity(image_folder_0: str, image_folder_1: str) -> [float, List[float]]:
     cos_sim = []
 
     for image_path_0, image_path_1 in zip(sorted(glob.glob(image_folder_0 + '*.png')),
