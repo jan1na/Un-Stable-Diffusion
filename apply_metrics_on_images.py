@@ -74,7 +74,7 @@ def main():
         create_wandb_doc(run_name, file_name, image_title, original_prompts, original_images, True)
 
 def test_FID():
-    score = clean_fid_score(PROMPT_PATH + '/original_prompts.txt', PROMPT_PATH + '/original_prompts.txt')
+    score = clean_fid_score(IMAGE_PATH + '/original_images/', IMAGE_PATH + '/original_images/')
     print("score: ", score)
 
 
