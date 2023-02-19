@@ -19,3 +19,4 @@ clean-fid
 Py-Dictionary
 similar-sounding-words
 git+https://github.com/Aleph-Alpha/magma.git
+mkdir configs; wget -O configs/MAGMA_v1.yml https://raw.githubusercontent.com/Aleph-Alpha/magma/master/configs/MAGMA_v1.yml
