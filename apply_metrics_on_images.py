@@ -1,7 +1,7 @@
 import numpy as np
 
 from utils.file_utils import load_list_from_file, load_images_from_path
-from metrics.image_metrics import image_array_cosine_similarity, clean_fid_score
+from metrics.image_metrics import image_array_cosine_similarity, clean_fid_score, image_caption_similarity
 from utils.wandb_utils import *
 from attack_types import file_names, run_names, title_names
 
@@ -26,6 +26,9 @@ def create_wandb_doc(run_name: str, attack_file_name: str, image_title: str, ori
     start(run_name)
     print("wandb started")
 
+    ORIGINAL_IMAGE_PATH = IMAGE_PATH + '/original_images/'
+    ATTACK_IMAGE_PATH = IMAGE_PATH + '/' + attack_file_name + '_images/'
+
     """
 
     permutation_prompts = load_list_from_file(PROMPT_PATH + '/' + attack_file_name + '_prompts.txt')
@@ -38,11 +41,18 @@ def create_wandb_doc(run_name: str, attack_file_name: str, image_title: str, ori
     upload_value('Mean Cosine Similarity', mean_cos_sim)
     upload_histogram("Image Cosine Similarity", "cosine similarity", cos_sim_list)
 
-    """
+    
     # Clean FID
     print("calc Clean FID")
-    upload_value("Clean FID Score", clean_fid_score(IMAGE_PATH + '/original_images/',
-                                                    IMAGE_PATH + '/' + attack_file_name + '_images/'))
+    upload_value("Clean FID Score", clean_fid_score(ORIGINAL_IMAGE_PATH, ATTACK_IMAGE_PATH))
+    
+    """
+
+    # Image Caption Similarity
+    print("calc image caption similarity")
+    mean_cos_sim, cos_sim_list = image_caption_similarity(ORIGINAL_IMAGE_PATH, ATTACK_IMAGE_PATH)
+    upload_value('Mean Cosine Similarity', mean_cos_sim)
+    upload_histogram("Image Cosine Similarity", "cosine similarity", cos_sim_list)
 
     # upload images to wandb sometimes sorted by a metric
     """
@@ -73,10 +83,6 @@ def main():
         print("filename", file_name)
         create_wandb_doc(run_name, file_name, image_title, original_prompts, original_images, True)
 
-def test_FID():
-    score = clean_fid_score(IMAGE_PATH + '/original_images/', IMAGE_PATH + '/original_images/')
-    print("score: ", score)
-
 
 if __name__ == '__main__':
-    test_FID()
+    main()
