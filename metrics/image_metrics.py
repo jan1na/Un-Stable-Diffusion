@@ -113,7 +113,7 @@ def image_content_similarity(captions_path_0: str, captions_path_1: str) -> [flo
         caption_0_feature = torch.flatten(text_embeddings[0].unsqueeze(0), start_dim=1)
         caption_1_feature = torch.flatten(text_embeddings[1].unsqueeze(0), start_dim=1)
         cos_sim.append(cosine_similarity(caption_0_feature, caption_1_feature))
-        cos_sim = np.asarray([x[0] for x in cos_sim])
+        cos_sim = np.asarray([x.item() for x in cos_sim])
         print(cos_sim)
     return np.mean(cos_sim), cos_sim
 
