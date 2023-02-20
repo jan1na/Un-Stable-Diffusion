@@ -39,7 +39,7 @@ def create_wandb_doc(run_name: str, attack_file_name: str, image_title: str, ori
     mean_cos_sim, cos_sim_list = image_array_cosine_similarity(original_images, permutation_images)
     print(type(cos_sim_list))
     upload_value('Mean Cosine Similarity', mean_cos_sim)
-    upload_histogram("Image Cosine Similarity", "cosine similarity", cos_sim_list)
+    # upload_histogram("Image Cosine Similarity", "cosine similarity", cos_sim_list)
     
     # Clean FID
     print("calc Clean FID")
@@ -51,7 +51,7 @@ def create_wandb_doc(run_name: str, attack_file_name: str, image_title: str, ori
                                                           CAPTION_PATH + '/' + attack_file_name)
     print(type(cos_sim_list))
     upload_value('Image Caption Similarity', mean_cos_sim)
-    upload_histogram("Image Caption Similarity", "cosine similarity", cos_sim_list)
+    # upload_histogram("Image Caption Similarity", "cosine similarity", cos_sim_list)
 
     # upload images to wandb sometimes sorted by a metric
     """
