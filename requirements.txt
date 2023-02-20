@@ -18,4 +18,3 @@ clip-retrieval
 clean-fid
 Py-Dictionary
 similar-sounding-words
-git+https://github.com/Aleph-Alpha/magma.git
