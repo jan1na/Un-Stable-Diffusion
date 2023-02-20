@@ -47,7 +47,8 @@ def get_image_captions(image_folder) -> List[str]:
 
 def main():
     print("in main")
-    get_image_captions(IMAGE_PATH + '/original_images/')
+    captions = get_image_captions(IMAGE_PATH + '/original_images/')
+    save_list_to_file(captions, CAPTION_PATH + '/original')
 
     for file_name, run_name in zip(file_names, run_names):
         print("filename", file_name)

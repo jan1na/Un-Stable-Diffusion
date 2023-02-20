@@ -8,6 +8,7 @@ from attack_types import file_names, run_names, title_names
 IMAGES_SAVED = 10
 IMAGE_PATH = './image_outputs'
 PROMPT_PATH = './permutations'
+CAPTION_PATH = './image_captions'
 
 
 def create_wandb_doc(run_name: str, attack_file_name: str, image_title: str, original_prompts: List[str],
@@ -50,7 +51,8 @@ def create_wandb_doc(run_name: str, attack_file_name: str, image_title: str, ori
 
     # Image Caption Similarity
     print("calc image caption similarity")
-    mean_cos_sim, cos_sim_list = image_content_similarity(ORIGINAL_IMAGE_PATH, ATTACK_IMAGE_PATH)
+    mean_cos_sim, cos_sim_list = image_content_similarity(CAPTION_PATH + '/original',
+                                                          CAPTION_PATH + attack_file_name)
     upload_value('Mean Cosine Similarity', mean_cos_sim)
     upload_histogram("Image Cosine Similarity", "cosine similarity", cos_sim_list)
 

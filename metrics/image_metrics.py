@@ -3,8 +3,6 @@ import clip
 import torch
 from typing import List, Tuple
 import numpy as np
-from magma import Magma
-from magma.image_input import ImageInput
 from transformers import CLIPTextModel, CLIPTokenizer
 from torch.nn.functional import cosine_similarity
 import glob
@@ -12,6 +10,7 @@ import lpips
 from cleanfid import fid
 from PIL import Image
 from numpy import ndarray
+from utils.file_utils import load_list_from_file
 
 # Load the model for cosine similarity
 device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -91,44 +90,17 @@ def perceptual_similarity(image_0, image_1):
     return d
 
 
-magma_model = Magma.from_checkpoint(
-    config_path="configs/MAGMA_v1.yml",
-    checkpoint_path="./mp_rank_00_model_states.pt",
-    device='cuda:0'
-)
-
-
-def get_image_caption(image_path: str) -> str:
-    inputs = [
-        # supports urls and path/to/image
-        ImageInput(image_path),
-        'Describe the image:'
-    ]
-
-    # returns a tensor of shape: (1, 149, 4096)
-    embeddings = magma_model.preprocess_inputs(inputs)
-
-    # returns a list of length embeddings.shape[0] (batch size)
-    output = magma_model.generate(
-        embeddings=embeddings,
-        max_steps=6,
-        temperature=0.7,
-        top_k=0,
-    )
-    return output[0]
-
-
 tokenizer = CLIPTokenizer.from_pretrained("openai/clip-vit-large-patch14")
 text_encoder = CLIPTextModel.from_pretrained("openai/clip-vit-large-patch14").cuda()
 
 
-def image_content_similarity(image_folder_0: str, image_folder_1: str) -> [float, List[float]]:
+def image_content_similarity(captions_path_0: str, captions_path_1: str) -> [float, List[float]]:
+    captions_0 = load_list_from_file(captions_path_0)
+    captions_1 = load_list_from_file(captions_path_1)
+
     cos_sim = []
 
-    for image_path_0, image_path_1 in zip(sorted(glob.glob(image_folder_0 + '*.png')),
-                                          sorted(glob.glob(image_folder_1 + '*.png'))):
-        caption_0 = get_image_caption(image_path_0)
-        caption_1 = get_image_caption(image_path_1)
+    for caption_0, caption_1 in zip(captions_0, captions_1):
 
         text_input = tokenizer([caption_0, caption_1],
                                padding="max_length",
