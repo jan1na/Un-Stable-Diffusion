@@ -32,5 +32,5 @@ load_results:
 
 magma:
 	@echo "Create image captions with MAGMA"
-    mkdir -p image_captions
-    python3 magma_caption_creation.py
+	mkdir -p image_captions
+	python3 magma_caption_creation.py
