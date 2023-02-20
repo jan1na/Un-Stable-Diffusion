@@ -1,4 +1,5 @@
-all: clean_img create_adv_attacks generate_images save_to_wandb
+all: clean_img create_adv_attacks generate_images
+metrics: save_to_wandb
 
 ATTACK_NAMES = "naive_char" "char" "delete_char" "duplicate_char" "synonym_word" "homophone_word"
 
@@ -6,6 +7,7 @@ clean_img:
 	@echo "Deleting image_outputs and permutations folder"
 	rm -r image_outputs  || true
 	rm -r permutations || true
+	rm -r image_captions || true
 
 create_adv_attacks:
 	@echo "Creating permutation files"
@@ -27,3 +29,8 @@ save_to_wandb:
 load_results:
 	@echo "Load results from wandb"
 	python3 plot_results.py --entity "janina" --project "stable-diffusion"
+
+magma:
+    @echo "Create image captions with MAGMA"
+    mkdir -p image_captions
+    python3 magma_caption_creation.py

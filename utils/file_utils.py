@@ -3,7 +3,7 @@ import glob
 from typing import List
 
 
-def save_list_to_file(values: List, file_path: str):
+def save_list_to_file(values: List[str], file_path: str):
     """
     Save list of strings into a file.
 

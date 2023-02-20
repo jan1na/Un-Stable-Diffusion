@@ -1,6 +1,1 @@
---extra-index-url https://download.pytorch.org/whl/cu113
-torch==1.12.1
-numpy==1.21.2
-transformers
-wandb==0.12.21
 git+https://github.com/Aleph-Alpha/magma.git
