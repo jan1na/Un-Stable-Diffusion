@@ -111,7 +111,7 @@ def image_content_similarity(captions_path_0: str, captions_path_1: str) -> [flo
         text_embeddings = text_encoder(text_input.input_ids.to('cuda'))[0]
 
         caption_0_feature = torch.flatten(text_embeddings[0].unsqueeze(0), start_dim=1)
-        caption_1_feature = torch.flatten(text_embeddings[1], start_dim=1)
+        caption_1_feature = torch.flatten(text_embeddings[1].unsqueeze(0), start_dim=1)
         cos_sim.append(cosine_similarity(caption_0_feature, caption_1_feature))
     return np.mean(cos_sim), cos_sim
 
