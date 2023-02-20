@@ -3,6 +3,7 @@ from magma import Magma
 from magma.image_input import ImageInput
 import glob
 from utils.file_utils import save_list_to_file
+from typing import List
 
 IMAGES_SAVED = 10
 IMAGE_PATH = './image_outputs'
