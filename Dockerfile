@@ -12,7 +12,7 @@ RUN apt-get update
 RUN apt-get -y upgrade
 RUN apt-get -y install git nano ffmpeg libsm6 libxext6 uuid-runtime
 RUN conda install --rev 1
-RUN conda install python=3.8
+RUN conda install python=3.9
 RUN conda install ipykernel ipywidgets pytorch torchvision cudatoolkit=11.3 -c pytorch
 
 COPY ./requirements.txt ./
