@@ -30,7 +30,7 @@ def get_image_caption(image_path: str) -> str:
     # returns a list of length embeddings.shape[0] (batch size)
     output = magma_model.generate(
         embeddings=embeddings,
-        max_steps=10,
+        max_steps=12,
         temperature=0.7,
         top_k=0,
     )
