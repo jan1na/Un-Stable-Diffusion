@@ -30,7 +30,6 @@ def create_wandb_doc(run_name: str, attack_file_name: str, image_title: str, ori
     ORIGINAL_IMAGE_PATH = IMAGE_PATH + '/original_images/'
     ATTACK_IMAGE_PATH = IMAGE_PATH + '/' + attack_file_name + '_images/'
 
-    """
 
     permutation_prompts = load_list_from_file(PROMPT_PATH + '/' + attack_file_name + '_prompts.txt')
     permutation_images = load_images_from_path(IMAGE_PATH + '/' + attack_file_name + '_images/')
@@ -47,7 +46,7 @@ def create_wandb_doc(run_name: str, attack_file_name: str, image_title: str, ori
     print("calc Clean FID")
     upload_value("Clean FID Score", clean_fid_score(ORIGINAL_IMAGE_PATH, ATTACK_IMAGE_PATH))
     
-    """
+
 
     # Image Caption Similarity
     print("calc image caption similarity")
@@ -67,8 +66,6 @@ def create_wandb_doc(run_name: str, attack_file_name: str, image_title: str, ori
     image_list = [sort_list_by_index(original_images, indexes), sort_list_by_index(permutation_images, indexes)]
     prompt_list = [sort_list_by_index(original_prompts, indexes), sort_list_by_index(permutation_prompts, indexes)]
     
-    
-
 
     upload_images(image_title, unite_lists(image_list, IMAGES_SAVED), unite_lists(prompt_list, IMAGES_SAVED))
     """

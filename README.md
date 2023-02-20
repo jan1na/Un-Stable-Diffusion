@@ -70,6 +70,54 @@ Have a look at [default_TPA.yaml](configs/default_TPA.yaml) and [default_TAA.yam
   <img src="images/taa_samples.jpg" alt="TAA Examples"  width=800>
   </center>
 
+
+### Apply Adversarial Text Attacks
+
+
+Create caption permutations with adversarial text attacks, 
+which are saved in ```./permuations```. Then in for each created
+caption an image is created with the Stable Diffusion model. Those images get stored in 
+```./image_outputs```.
+```bash
+make
+```
+or 
+```bash
+make clean_img create_adv_attacks generate_images
+```
+
+Now we compare the images, created by manipulated captions, with the images of the original caption.
+At first, we need to create image captions with MAGMA which are used in one metric. This needs to be
+done separately in different docker container which uses the ```requirements_magma.txt``` requirements, 
+because there is a python package conflict between the requirements of MAGMA and CLIP. 
+This MAGMA container also needs:
+```bash
+mkdir configs; wget -O configs/MAGMA_v1.yml https://raw.githubusercontent.com/Aleph-Alpha/magma/master/configs/MAGMA_v1.yml
+```
+To creat image captions with MAGMA, which get stored in ```./image_captions``` call:
+```bash
+make magma
+```
+
+Now everything is ready to apply all metrics on the created images. Therefore, you only need to switch back
+to the original docker container, which fulfills ```requirements.txt```. 
+```bash
+make metrics
+```
+or
+```bash
+python3 apply_metrics_on_images.py
+```
+This also upload the results to wandb. Therefore, you might be asked to log in to wandb with your API key.
+You can log in with: 
+```bash
+wandb login --relogin
+```
+
+
+
+
+
 ### Reproduce Paper Results
 We provide all the configuration files used to perform the experiments in our paper. We briefly describe the various settings.
 - [num_poisoned_samples](configs/paper_reproduction/num_poisoned_samples): Investigates the effects of increasing the number of poisoned training samples on the attack success and model's utility.
