@@ -34,7 +34,6 @@ def get_image_caption(image_path: str) -> str:
         temperature=0.7,
         top_k=0,
     )
-    print(output[0])
     return output[0]
 
 
