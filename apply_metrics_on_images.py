@@ -53,8 +53,8 @@ def create_wandb_doc(run_name: str, attack_file_name: str, image_title: str, ori
     print("calc image caption similarity")
     mean_cos_sim, cos_sim_list = image_content_similarity(CAPTION_PATH + '/original',
                                                           CAPTION_PATH + attack_file_name)
-    upload_value('Mean Cosine Similarity', mean_cos_sim)
-    upload_histogram("Image Cosine Similarity", "cosine similarity", cos_sim_list)
+    upload_value('Image Caption Similarity', mean_cos_sim)
+    upload_histogram("Image Caption Similarity", "cosine similarity", cos_sim_list)
 
     # upload images to wandb sometimes sorted by a metric
     """
