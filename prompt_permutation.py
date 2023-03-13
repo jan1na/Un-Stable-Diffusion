@@ -165,7 +165,8 @@ def homophone_word_2(prompt: str) -> str:
     words = prompt.split()
     for i in range(len(words)):
         try:
-            print(words[i] + ": " + Search.closeHomophones(words[i]))
+            print(words[i])
+            print(Search.closeHomophones(words[i]))
             for homophone in Search.closeHomophones(words[i]):
                 prompts.append(' '.join(words[:i] + [homophone] + words[i + 1:]))
         except ValueError:
