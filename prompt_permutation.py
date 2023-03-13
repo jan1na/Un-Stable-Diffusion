@@ -165,6 +165,7 @@ def homophone_word_2(prompt: str) -> str:
     words = prompt.split()
     for i in range(len(words)):
         try:
+            print(words[i] + ": " + Search.closeHomophones(words[i]))
             for homophone in Search.closeHomophones(words[i]):
                 prompts.append(' '.join(words[:i] + [homophone] + words[i + 1:]))
         except ValueError:
@@ -226,6 +227,8 @@ def main():
     for attack, title in zip(attack_names[1:], title_names[1:]):
         prompts = apply_permutation(original_prompts, globals()[attack], title)
         save_list_to_file(prompts, './permutations/' + attack + '_prompts.txt')
+
+    prompts = apply_permutation(original_prompts, homophone_word_2, "test")
 
     save_list_to_file(original_prompts, './permutations/original_prompts.txt')
     save_list_to_file(original_prompts, './permutations/original_control_prompts.txt')
