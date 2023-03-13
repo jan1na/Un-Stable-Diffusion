@@ -10,6 +10,9 @@ from similar_sounding_words import index as homophone_dict
 from attack_types import file_names as attack_names, title_names
 from SoundsLike.SoundsLike import Search
 import homoglyphs as hg
+import random
+
+random.seed(1)
 
 PROMPT_NUMBER = 20
 
@@ -113,6 +116,7 @@ def homoglyphs_char(prompt: str) -> str:
     prompts = [prompt]
     for i in range(len(prompt)):
         homoglyphs = list([x for x in hg.Homoglyphs().get_combinations(prompt[i]) if x.isalpha()])
+        random.shuffle(homoglyphs)
         for h in homoglyphs[:5]:
             prompts.append(prompt[:i] + h + prompt[i + 1:])
     print(len(prompts))
