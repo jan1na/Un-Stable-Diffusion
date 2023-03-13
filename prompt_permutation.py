@@ -103,6 +103,24 @@ def homophone_word(prompt: str) -> str:
     return prompts[0] if len(prompts) == 1 else get_best_permutation(prompts)
 
 
+def homophone_word_2(prompt: str) -> str:
+    """
+    Replace one word with a homophone.
+
+    :param prompt: input string that gets permuted
+    :return: permutation of the prompt that has the lowest cosine similarity to the original prompt
+    """
+    #TODO: use https://pypi.org/project/SoundsLike/
+
+    prompts = [prompt]
+    words = prompt.split()
+    for i in range(len(words)):
+        if words[i] in homophone_dict:
+            for homophone in homophone_dict[words[i]]:
+                prompts.append(' '.join(words[:i] + [homophone] + words[i + 1:]))
+    return prompts[0] if len(prompts) == 1 else get_best_permutation(prompts)
+
+
 def get_best_permutation(prompts: List[str]) -> str:
     """
     Create the text embeddings of the input strings using the CLIP encoder and calculate the string

@@ -19,3 +19,4 @@ clean-fid
 Py-Dictionary
 similar-sounding-words
 lpips
+SoundsLike
