@@ -8,6 +8,7 @@ from typing import List, Callable
 from pydictionary import Dictionary
 from similar_sounding_words import index as homophone_dict
 from attack_types import file_names as attack_names, title_names
+from SoundsLike.SoundsLike import Search
 
 PROMPT_NUMBER = 20
 
