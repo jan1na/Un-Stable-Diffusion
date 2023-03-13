@@ -89,9 +89,10 @@ def upload_histogram(title: str, columns_name: str, values: List):
     table = wandb.Table(data=data, columns=[columns_name])
     wandb.log({columns_name + '_histogram': wandb.plot.histogram(table, columns_name, title=title)})
     # TODO: test summary for wandb table
+    """
     run_obj.summary["histogram"] = wandb.plot.histogram(table, columns_name, title=title)
     run_obj.summary["hist_table"] = table
-
+    """
 
 
 
