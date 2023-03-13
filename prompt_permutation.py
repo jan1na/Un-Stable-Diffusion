@@ -38,7 +38,7 @@ def char(prompt: str) -> str:
     """
     prompts = [prompt]
     for i in range(len(prompt) - 1):
-        if prompt[i].isalpha() and prompt[i+1].isalpha():
+        if prompt[i].isalpha() and prompt[i + 1].isalpha():
             prompts.append(prompt[:i] + prompt[i:i + 2][::-1] + prompt[i + 2:])
     return get_best_permutation(prompts)
 
@@ -81,7 +81,7 @@ def synonym_word(prompt: str) -> str:
     words = prompt.split()
     for i in range(len(words)):
         for synonym in Dictionary(words[i], 10).synonyms():
-            prompts.append(' '.join(words[:i] + [synonym] + words[i+1:]))
+            prompts.append(' '.join(words[:i] + [synonym] + words[i + 1:]))
 
     return prompts[0] if len(prompts) == 1 else get_best_permutation(prompts)
 
@@ -93,7 +93,7 @@ def homophone_word(prompt: str) -> str:
     :param prompt: input string that gets permuted
     :return: permutation of the prompt that has the lowest cosine similarity to the original prompt
     """
-    #TODO: use https://pypi.org/project/SoundsLike/
+    # TODO: use https://pypi.org/project/SoundsLike/
 
     prompts = [prompt]
     words = prompt.split()
@@ -112,13 +112,17 @@ def homophone_word_2(prompt: str) -> str:
     :param prompt: input string that gets permuted
     :return: permutation of the prompt that has the lowest cosine similarity to the original prompt
     """
-    #TODO: use https://pypi.org/project/SoundsLike/
+    # TODO: use https://pypi.org/project/SoundsLike/
 
     prompts = [prompt]
     words = prompt.split()
     for i in range(len(words)):
-        for homophone in Search.closeHomophones(words[i]):
-            prompts.append(' '.join(words[:i] + [homophone] + words[i + 1:]))
+        try:
+            for homophone in Search.closeHomophones(words[i]):
+                prompts.append(' '.join(words[:i] + [homophone] + words[i + 1:]))
+        except ValueError:
+            print("no homophone found:", words[i])
+
     print("homophone 2: ", len(prompts))
     return prompts[0] if len(prompts) == 1 else get_best_permutation(prompts)
 
@@ -159,10 +163,10 @@ def apply_permutation(prompt_list: List[str], permutation: Callable, progress_ba
     :return: list of permutations of the prompts
     """
     prompts = []
-    printProgressBar(0, len(prompt_list), prefix=progress_bar_prefix+':')
+    printProgressBar(0, len(prompt_list), prefix=progress_bar_prefix + ':')
     for i in range(len(prompt_list)):
         prompts.append(permutation(prompt_list[i]))
-        printProgressBar(i + 1, len(prompt_list), prefix=progress_bar_prefix+':')
+        printProgressBar(i + 1, len(prompt_list), prefix=progress_bar_prefix + ':')
     return prompts
 
 
