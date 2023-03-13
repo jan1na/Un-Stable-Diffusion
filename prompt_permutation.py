@@ -112,8 +112,8 @@ def homoglyphs_char(prompt: str) -> str:
     """
     prompts = [prompt]
     for i in range(len(prompt)):
-        homoglyphs = [x for x in hg.Homoglyphs().get_combinations(prompt[i])
-        for h in hg.Homoglyphs().get_combinations(prompt[i])[:2]:
+        homoglyphs = list([x for x in hg.Homoglyphs().get_combinations(prompt[i]) if x.isapha()])
+        for h in homoglyphs[:2]:
             prompts.append(prompt[:i] + h + prompt[i + 1:])
     print(len(prompts))
     return get_best_permutation(prompts)
