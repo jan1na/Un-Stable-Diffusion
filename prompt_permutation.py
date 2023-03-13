@@ -112,7 +112,7 @@ def homoglyphs_char(prompt: str) -> str:
     """
     prompts = [prompt]
     for i in range(len(prompt)):
-        homoglyphs = list([x for x in hg.Homoglyphs().get_combinations(prompt[i]) if x.isapha()])
+        homoglyphs = list([x for x in hg.Homoglyphs().get_combinations(prompt[i]) if x.isalpha()])
         for h in homoglyphs[:2]:
             prompts.append(prompt[:i] + h + prompt[i + 1:])
     print(len(prompts))
