@@ -79,7 +79,7 @@ def main():
     original_prompts = load_list_from_file(PROMPT_PATH + '/original_prompts.txt')
     original_images = load_images_from_path(IMAGE_PATH + '/original_images/')
 
-    for file_name, run_name, image_title in zip(file_names, run_names, title_names):
+    for file_name, run_name, image_title in zip(file_names[:1], run_names[:1], title_names[:1]):
         create_wandb_doc(run_name, file_name, image_title, original_prompts, original_images, False, True)
 
 
