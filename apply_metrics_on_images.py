@@ -13,7 +13,8 @@ CAPTION_PATH = './image_captions'
 
 
 def create_wandb_doc(run_name: str, attack_file_name: str, image_title: str, original_prompts: List[str],
-                     original_images: List, sorted_by_cosine_similarity: bool = False):
+                     original_images: List, sorted_by_cosine_similarity: bool = False, sorted_by_fid: bool = False,
+                     sorted_by_caption_similarity: bool = False):
     """
     Upload the images and metric results as single values and histograms to wandb.
 
@@ -22,7 +23,9 @@ def create_wandb_doc(run_name: str, attack_file_name: str, image_title: str, ori
     :param image_title: title of uploaded images
     :param original_prompts: original prompts
     :param original_images: original images
-    :param sorted_by_cosine_similarity: sort the images from worst to best
+    :param sorted_by_cosine_similarity: sort the images by cosine similarity from worst to best
+    :param sorted_by_fid: sort the images by fid score from worst to best
+    :param sorted_by_caption_similarity: sort the images by caption similarity from worst to best
     """
 
     start(run_name)
@@ -77,9 +80,9 @@ def main():
     original_prompts = load_list_from_file(PROMPT_PATH + '/original_prompts.txt')
     original_images = load_images_from_path(IMAGE_PATH + '/original_images/')
 
-    for file_name, run_name, image_title in zip(file_names[5:], run_names[5:], title_names[5:]):
+    for file_name, run_name, image_title in zip(file_names, run_names, title_names):
         print("filename", file_name)
-        create_wandb_doc(run_name, file_name, image_title, original_prompts, original_images, True)
+        create_wandb_doc(run_name, file_name, image_title, original_prompts, original_images, True, False, False)
 
 
 if __name__ == '__main__':
