@@ -34,6 +34,8 @@ def read_csv_data() -> [np.ndarray, List[str]]:
     data, label = [], []
     for file in os.listdir(directory):
         filename = os.fsdecode(file)
+        if filename not in ['synonym-word', 'typo-char', 'naive-char', 'original-control']:
+            continue
         label.append(filename)
         with open(WANDB_DIR + filename) as f:
             data.append([float(v[1:-1]) for v in f.read().splitlines()[1:]])
@@ -48,7 +50,7 @@ def plot_histogram(data: np.ndarray, label: List[str], title: str):
     :param label: label for the data
     :param title: title for the whole plot
     """
-    plt.hist(data.T, 10, density=True, histtype='bar', label=label)
+    plt.hist(data.T, 7, density=True, histtype='bar', label=label)
     plt.legend(prop={'size': 10})
     plt.title(title)
     plt.savefig('./wandb/plots/' + title + '.png')

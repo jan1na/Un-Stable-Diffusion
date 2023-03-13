@@ -113,6 +113,7 @@ def homoglyphs_char(prompt: str) -> str:
     :param prompt: input string that gets permuted
     :return: permutation of the prompt that has the lowest cosine similarity to the original prompt
     """
+    #TODO: use specific languages
     prompts = [prompt]
     for i in range(len(prompt)):
         homoglyphs = list([x for x in hg.Homoglyphs().get_combinations(prompt[i]) if x.isalpha()])
