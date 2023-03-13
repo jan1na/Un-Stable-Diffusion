@@ -131,7 +131,6 @@ def synonym_word(prompt: str) -> str:
     for i in range(len(words)):
         for synonym in Dictionary(words[i], 10).synonyms():
             prompts.append(' '.join(words[:i] + [synonym] + words[i + 1:]))
-
     return prompts[0] if len(prompts) == 1 else get_best_permutation(prompts)
 
 
@@ -149,7 +148,6 @@ def homophone_word(prompt: str) -> str:
         if words[i] in homophone_dict:
             for homophone in homophone_dict[words[i]]:
                 prompts.append(' '.join(words[:i] + [homophone] + words[i + 1:]))
-    print("homophone 1: ", len(prompts))
     return prompts[0] if len(prompts) == 1 else get_best_permutation(prompts)
 
 
@@ -165,14 +163,10 @@ def homophone_word_2(prompt: str) -> str:
     words = prompt.split()
     for i in range(len(words)):
         try:
-            print(words[i])
-            print(Search.closeHomophones(words[i]))
             for homophone in Search.closeHomophones(words[i]):
-                prompts.append(' '.join(words[:i] + [homophone] + words[i + 1:]))
+                prompts.append(' '.join(words[:i] + [homophone.lower()] + words[i + 1:]))
         except ValueError:
-            print("no homophone found:", words[i])
-
-    print("homophone 2: ", len(prompts))
+            pass
     return prompts[0] if len(prompts) == 1 else get_best_permutation(prompts)
 
 
