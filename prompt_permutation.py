@@ -103,13 +103,6 @@ def typo_char(prompt: str) -> str:
     return get_best_permutation(prompts)
 
 
-homoglyphs = {'A': [0x0391, 0x0410, 0xA4EE, 0x00C5, 0x13AA],
-              'o': [0x03BF, 0x043E, 0x0585, 0x0647, 0x09E6],
-              'I': [0x3163, 0x2160, 0xA621, 0x2D4F, 0x04CF],
-              'l': [0x3163, 0x2160, 0xA621, 0x2D4F, 0x04CF],
-              }
-
-
 def homoglyphs_char(prompt: str) -> str:
     """
     Replace a char with a homoglyph.
@@ -119,6 +112,7 @@ def homoglyphs_char(prompt: str) -> str:
     """
     prompts = [prompt]
     for i in range(len(prompt)):
+        homoglyphs = [x for x in hg.Homoglyphs().get_combinations(prompt[i])
         for h in hg.Homoglyphs().get_combinations(prompt[i])[:2]:
             prompts.append(prompt[:i] + h + prompt[i + 1:])
     print(len(prompts))
@@ -236,7 +230,7 @@ def main():
         
     """
     prompts = apply_permutation(original_prompts, typo_char, "Typo Char Permutation")
-    save_list_to_file(prompts, './permutations/type_char_prompts.txt')
+    save_list_to_file(prompts, './permutations/typo_char_prompts.txt')
     prompts = apply_permutation(original_prompts, homoglyphs_char, "Homoglyphs Char Permutation")
     save_list_to_file(prompts, './permutations/homoglyphs_char_prompts.txt')
 
