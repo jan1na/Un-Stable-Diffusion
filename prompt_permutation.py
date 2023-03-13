@@ -226,6 +226,7 @@ def main():
     """
 
     prompts = apply_permutation(original_prompts, homophone_word_2, "test")
+    print(prompts)
 
     save_list_to_file(original_prompts, './permutations/original_prompts.txt')
     save_list_to_file(original_prompts, './permutations/original_control_prompts.txt')
