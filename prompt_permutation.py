@@ -229,8 +229,6 @@ def main():
         save_list_to_file(prompts, './permutations/' + attack + '_prompts.txt')
         
     """
-    prompts = apply_permutation(original_prompts, typo_char, "Typo Char Permutation")
-    save_list_to_file(prompts, './permutations/typo_char_prompts.txt')
     prompts = apply_permutation(original_prompts, homoglyphs_char, "Homoglyphs Char Permutation")
     save_list_to_file(prompts, './permutations/homoglyphs_char_prompts.txt')
 
