@@ -61,7 +61,7 @@ def clean_fid_score(image_folder_0: str, image_folder_1: str) -> float:
 
     :param image_folder_0: image directory 0
     :param image_folder_1: image directory 1
-    :return:
+    :return: fid score
     """
     score = fid.compute_fid(image_folder_0, image_folder_1, mode="clean")
     print("fid: ", score)

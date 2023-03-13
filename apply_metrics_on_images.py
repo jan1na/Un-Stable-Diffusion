@@ -13,7 +13,7 @@ CAPTION_PATH = './image_captions'
 
 
 def create_wandb_doc(run_name: str, attack_file_name: str, image_title: str, original_prompts: List[str],
-                     original_images: List, sorted_by_cosine_similarity: bool = False, sorted_by_fid: bool = False,
+                     original_images: List, sorted_by_cosine_similarity: bool = False,
                      sorted_by_caption_similarity: bool = False):
     """
     Upload the images and metric results as single values and histograms to wandb.
@@ -24,7 +24,6 @@ def create_wandb_doc(run_name: str, attack_file_name: str, image_title: str, ori
     :param original_prompts: original prompts
     :param original_images: original images
     :param sorted_by_cosine_similarity: sort the images by cosine similarity from worst to best
-    :param sorted_by_fid: sort the images by fid score from worst to best
     :param sorted_by_caption_similarity: sort the images by caption similarity from worst to best
     """
 
@@ -41,26 +40,26 @@ def create_wandb_doc(run_name: str, attack_file_name: str, image_title: str, ori
     print("calc Cosine Similarity")
 
     mean_cos_sim, cos_sim_list = image_array_cosine_similarity(original_images, permutation_images)
-    print(type(cos_sim_list))
     upload_value('Mean Cosine Similarity', mean_cos_sim)
     # upload_histogram("Image Cosine Similarity", "cosine similarity", cos_sim_list)
-    
+
     # Clean FID
     print("calc Clean FID")
     upload_value("Clean FID Score", clean_fid_score(ORIGINAL_IMAGE_PATH, ATTACK_IMAGE_PATH))
 
     # Image Caption Similarity
     print("calc image caption similarity")
-    mean_cos_sim, cos_sim_list = image_content_similarity(CAPTION_PATH + '/original',
-                                                          CAPTION_PATH + '/' + attack_file_name)
-    print(type(cos_sim_list))
-    upload_value('Image Caption Similarity', mean_cos_sim)
+    mean_img_cap_sim, img_cap_sim_list = image_content_similarity(CAPTION_PATH + '/original',
+                                                                  CAPTION_PATH + '/' + attack_file_name)
+    upload_value('Image Caption Similarity', mean_img_cap_sim)
     # upload_histogram("Image Caption Similarity", "cosine similarity", cos_sim_list)
 
     # upload images to wandb sometimes sorted by a metric
 
     if sorted_by_cosine_similarity:
         indexes = list(np.argsort(cos_sim_list))
+    elif sorted_by_caption_similarity:
+        indexes = list(np.argsort(img_cap_sim_list))
     else:
         indexes = list(np.arange(len(original_prompts)))
 
@@ -82,7 +81,7 @@ def main():
 
     for file_name, run_name, image_title in zip(file_names, run_names, title_names):
         print("filename", file_name)
-        create_wandb_doc(run_name, file_name, image_title, original_prompts, original_images, True, False, False)
+        create_wandb_doc(run_name, file_name, image_title, original_prompts, original_images, False, True)
 
 
 if __name__ == '__main__':
