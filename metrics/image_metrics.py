@@ -64,7 +64,6 @@ def clean_fid_score(image_folder_0: str, image_folder_1: str) -> float:
     :return: fid score
     """
     score = fid.compute_fid(image_folder_0, image_folder_1, mode="clean")
-    print("fid: ", score)
     return score
 
 
@@ -86,7 +85,6 @@ def perceptual_similarity(image_0, image_1):
     img0 = torch.zeros(1, 3, 64, 64)  # image should be RGB, IMPORTANT: normalized to [-1,1]
     img1 = torch.zeros(1, 3, 64, 64)
     d = loss_fn_alex(normalized_image_0, normalized_image_1)
-    print("perceptual similarity:", d)
     return d
 
 
@@ -114,6 +112,5 @@ def image_content_similarity(captions_path_0: str, captions_path_1: str) -> [flo
         caption_1_feature = torch.flatten(text_embeddings[1].unsqueeze(0), start_dim=1)
         cos_sim.append(cosine_similarity(caption_0_feature, caption_1_feature))
     cos_sim = [x.item() for x in cos_sim]
-    print(cos_sim)
     return np.mean(cos_sim), cos_sim
 

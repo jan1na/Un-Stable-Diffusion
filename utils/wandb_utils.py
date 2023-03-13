@@ -74,7 +74,6 @@ def upload_value(title: str, value: float):
     :param title: title describing the value
     """
     wandb.log({title: value})
-    #TODO: test summary
     run_obj.summary[title] = value
 
 

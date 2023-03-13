@@ -6,7 +6,7 @@ from utils.wandb_utils import *
 from attack_types import file_names, run_names, title_names
 from rtpt import RTPT
 
-IMAGES_SAVED = 10
+IMAGES_SAVED = 20
 IMAGE_PATH = './image_outputs'
 PROMPT_PATH = './permutations'
 CAPTION_PATH = './image_captions'
@@ -29,6 +29,7 @@ def create_wandb_doc(run_name: str, attack_file_name: str, image_title: str, ori
 
     start(run_name)
     print("wandb started")
+    print("run:", run_name)
 
     ORIGINAL_IMAGE_PATH = IMAGE_PATH + '/original_images/'
     ATTACK_IMAGE_PATH = IMAGE_PATH + '/' + attack_file_name + '_images/'
@@ -41,18 +42,18 @@ def create_wandb_doc(run_name: str, attack_file_name: str, image_title: str, ori
 
     mean_cos_sim, cos_sim_list = image_array_cosine_similarity(original_images, permutation_images)
     upload_value('Mean Cosine Similarity', mean_cos_sim)
-    # upload_histogram("Image Cosine Similarity", "cosine similarity", cos_sim_list)
+    upload_histogram("Image Cosine Similarity", "cosine similarity", cos_sim_list)
 
     # Clean FID
     print("calc Clean FID")
     upload_value("Clean FID Score", clean_fid_score(ORIGINAL_IMAGE_PATH, ATTACK_IMAGE_PATH))
 
     # Image Caption Similarity
-    print("calc image caption similarity")
+    print("calc Image Caption Similarity")
     mean_img_cap_sim, img_cap_sim_list = image_content_similarity(CAPTION_PATH + '/original',
                                                                   CAPTION_PATH + '/' + attack_file_name)
     upload_value('Image Caption Similarity', mean_img_cap_sim)
-    # upload_histogram("Image Caption Similarity", "cosine similarity", cos_sim_list)
+    upload_histogram("Image Caption Similarity", "cosine similarity", img_cap_sim_list)
 
     # upload images to wandb sometimes sorted by a metric
 
@@ -75,13 +76,11 @@ def main():
     rtpt = RTPT('JF', 'metric_application', 1)
     rtpt.start()
 
-    print("in main")
     original_prompts = load_list_from_file(PROMPT_PATH + '/original_prompts.txt')
     original_images = load_images_from_path(IMAGE_PATH + '/original_images/')
 
     for file_name, run_name, image_title in zip(file_names, run_names, title_names):
-        print("filename", file_name)
-        create_wandb_doc(run_name, file_name, image_title, original_prompts, original_images, True, False)
+        create_wandb_doc(run_name, file_name, image_title, original_prompts, original_images, False, True)
 
 
 if __name__ == '__main__':

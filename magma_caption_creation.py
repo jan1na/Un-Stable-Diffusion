@@ -6,9 +6,7 @@ from utils.file_utils import save_list_to_file
 from typing import List
 from rtpt import RTPT
 
-IMAGES_SAVED = 10
 IMAGE_PATH = './image_outputs'
-PROMPT_PATH = './permutations'
 CAPTION_PATH = './image_captions'
 
 magma_model = Magma.from_checkpoint(
@@ -50,14 +48,13 @@ def main():
     rtpt = RTPT('JF', 'caption_creation', 1)
     rtpt.start()
 
-    print("in main")
     captions = get_image_captions(IMAGE_PATH + '/original_images/')
     save_list_to_file(captions, CAPTION_PATH + '/original')
 
     for file_name, run_name in zip(file_names, run_names):
-        print("filename", file_name)
         captions = get_image_captions(IMAGE_PATH + '/' + file_name + '_images/')
         save_list_to_file(captions, CAPTION_PATH + '/' + file_name)
+        print("created file:", file_name)
 
 
 if __name__ == '__main__':

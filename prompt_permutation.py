@@ -14,7 +14,7 @@ import random
 
 random.seed(1)
 
-PROMPT_NUMBER = 20
+PROMPT_NUMBER = 10000
 
 tokenizer = CLIPTokenizer.from_pretrained("openai/clip-vit-large-patch14")
 text_encoder = CLIPTextModel.from_pretrained("openai/clip-vit-large-patch14").cuda()
@@ -119,7 +119,6 @@ def homoglyphs_char(prompt: str) -> str:
         random.shuffle(homoglyphs)
         for h in homoglyphs[:5]:
             prompts.append(prompt[:i] + h + prompt[i + 1:])
-    print(len(prompts))
     return get_best_permutation(prompts)
 
 
@@ -223,14 +222,9 @@ def main():
 
     original_prompts = load_list_from_file('./metrics/captions_10000.txt')[:PROMPT_NUMBER]
 
-    """
     for attack, title in zip(attack_names[1:], title_names[1:]):
         prompts = apply_permutation(original_prompts, globals()[attack], title)
         save_list_to_file(prompts, './permutations/' + attack + '_prompts.txt')
-    """
-
-    prompts = apply_permutation(original_prompts, homoglyphs_char, "test")
-    print(prompts)
 
     save_list_to_file(original_prompts, './permutations/original_prompts.txt')
     save_list_to_file(original_prompts, './permutations/original_control_prompts.txt')
