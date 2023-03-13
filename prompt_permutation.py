@@ -9,6 +9,7 @@ from pydictionary import Dictionary
 from similar_sounding_words import index as homophone_dict
 from attack_types import file_names as attack_names, title_names
 from SoundsLike.SoundsLike import Search
+import homoglyphs as hg
 
 PROMPT_NUMBER = 20
 
@@ -67,6 +68,59 @@ def duplicate_char(prompt: str) -> str:
     for i in range(len(prompt)):
         if prompt[i].isalpha():
             prompts.append(prompt[:i] + prompt[i] + prompt[i] + prompt[i + 1:])
+    return get_best_permutation(prompts)
+
+
+keyboard_matrix = [['q', 'w', 'e', 'r', 't', 'z', 'u', 'i', 'o', 'p', 'ü'],
+                   ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'ö', 'ä'],
+                   ['-', 'y', 'x', 'c', 'v', 'b', 'n', 'm', '-', '-', '-']]
+
+
+keyboard_dict = {}
+for r, row in enumerate(keyboard_matrix):
+    for c, x in enumerate(row):
+        keyboard_dict[x] = (r, c)
+
+access_list = [(-1, -1), (-1, 0), (-1, 1),
+               (0, -1), (0, 1),
+               (1, -1), (1, 0), (1, 1)]
+
+
+def typo_char(prompt: str) -> str:
+    """
+    Exchange one char with a char next to it on the keyboard. Based on a German keyboard.
+
+    :param prompt: input string that gets permuted
+    :return: permutation of the prompt that has the lowest cosine similarity to the original prompt
+    """
+    prompts = [prompt]
+    for i in range(len(prompt)):
+        if prompt[i] in keyboard_dict:
+            r, c = keyboard_dict[prompt[i]]
+            for (rr, cc) in access_list:
+                if 0 <= r + rr < 3 and 0 <= c + cc < 11 and keyboard_matrix[r+rr][c+cc] != '-':
+                    prompts.append(prompt[:i] + keyboard_matrix[r+rr][c+cc] + prompt[i + 1:])
+    return get_best_permutation(prompts)
+
+
+homoglyphs = {'A': [0x0391, 0x0410, 0xA4EE, 0x00C5, 0x13AA],
+              'o': [0x03BF, 0x043E, 0x0585, 0x0647, 0x09E6],
+              'I': [0x3163, 0x2160, 0xA621, 0x2D4F, 0x04CF],
+              'l': [0x3163, 0x2160, 0xA621, 0x2D4F, 0x04CF],
+              }
+
+
+def homoglyphs_char(prompt: str) -> str:
+    """
+    Replace a char with a homoglyph.
+
+    :param prompt: input string that gets permuted
+    :return: permutation of the prompt that has the lowest cosine similarity to the original prompt
+    """
+    prompts = [prompt]
+    for i in range(len(prompt)):
+        for h in hg.Homoglyphs().get_combinations(prompt[i]):
+            prompts.append(prompt[:i] + h + prompt[i + 1:])
     return get_best_permutation(prompts)
 
 
@@ -182,8 +236,10 @@ def main():
         save_list_to_file(prompts, './permutations/' + attack + '_prompts.txt')
         
     """
-    prompts = apply_permutation(original_prompts, homophone_word_2, "Homophone Word Permutation 2")
-    save_list_to_file(prompts, './permutations/homophone_word_2_prompts.txt')
+    prompts = apply_permutation(original_prompts, typo_char, "Typo Char Permutation")
+    save_list_to_file(prompts, './permutations/type_char_prompts.txt')
+    prompts = apply_permutation(original_prompts, homoglyphs_char, "Homoglyphs Char Permutation")
+    save_list_to_file(prompts, './permutations/homoglyphs_char_prompts.txt')
 
     save_list_to_file(original_prompts, './permutations/original_prompts.txt')
     save_list_to_file(original_prompts, './permutations/original_control_prompts.txt')
@@ -191,3 +247,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
