@@ -4,6 +4,7 @@ from utils.file_utils import load_list_from_file, load_images_from_path
 from metrics.image_metrics import image_array_cosine_similarity, clean_fid_score, image_content_similarity
 from utils.wandb_utils import *
 from attack_types import file_names, run_names, title_names
+from rtpt import RTPT
 
 IMAGES_SAVED = 10
 IMAGE_PATH = './image_outputs'
@@ -72,6 +73,9 @@ def create_wandb_doc(run_name: str, attack_file_name: str, image_title: str, ori
 
 
 def main():
+    rtpt = RTPT('JF', 'metric_application', 1)
+    rtpt.start()
+
     print("in main")
     original_prompts = load_list_from_file(PROMPT_PATH + '/original_prompts.txt')
     original_images = load_images_from_path(IMAGE_PATH + '/original_images/')

@@ -218,7 +218,7 @@ def apply_permutation(prompt_list: List[str], permutation: Callable, progress_ba
 
 
 def main():
-    rtpt = RTPT('LS', 'Decoder', 1)
+    rtpt = RTPT('JF', 'prompt_permutation', 1)
     rtpt.start()
 
     original_prompts = load_list_from_file('./metrics/captions_10000.txt')[:PROMPT_NUMBER]

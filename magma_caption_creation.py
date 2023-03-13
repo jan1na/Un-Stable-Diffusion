@@ -4,6 +4,7 @@ from magma.image_input import ImageInput
 import glob
 from utils.file_utils import save_list_to_file
 from typing import List
+from rtpt import RTPT
 
 IMAGES_SAVED = 10
 IMAGE_PATH = './image_outputs'
@@ -46,6 +47,9 @@ def get_image_captions(image_folder) -> List[str]:
 
 
 def main():
+    rtpt = RTPT('JF', 'caption_creation', 1)
+    rtpt.start()
+
     print("in main")
     captions = get_image_captions(IMAGE_PATH + '/original_images/')
     save_list_to_file(captions, CAPTION_PATH + '/original')
