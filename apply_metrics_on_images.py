@@ -81,7 +81,7 @@ def main():
 
     for file_name, run_name, image_title in zip(file_names, run_names, title_names):
         print("filename", file_name)
-        create_wandb_doc(run_name, file_name, image_title, original_prompts, original_images, False, True)
+        create_wandb_doc(run_name, file_name, image_title, original_prompts, original_images, True, False)
 
 
 if __name__ == '__main__':
