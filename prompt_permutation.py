@@ -101,6 +101,7 @@ def homophone_word(prompt: str) -> str:
         if words[i] in homophone_dict:
             for homophone in homophone_dict[words[i]]:
                 prompts.append(' '.join(words[:i] + [homophone] + words[i + 1:]))
+    print("homophone 1: ", len(prompts))
     return prompts[0] if len(prompts) == 1 else get_best_permutation(prompts)
 
 
@@ -116,9 +117,9 @@ def homophone_word_2(prompt: str) -> str:
     prompts = [prompt]
     words = prompt.split()
     for i in range(len(words)):
-        if words[i] in homophone_dict:
-            for homophone in homophone_dict[words[i]]:
-                prompts.append(' '.join(words[:i] + [homophone] + words[i + 1:]))
+        for homophone in Search.closeHomophones(words[i]):
+            prompts.append(' '.join(words[:i] + [homophone] + words[i + 1:]))
+    print("homophone 2: ", len(prompts))
     return prompts[0] if len(prompts) == 1 else get_best_permutation(prompts)
 
 
