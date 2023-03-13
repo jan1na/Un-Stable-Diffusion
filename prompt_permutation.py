@@ -229,7 +229,7 @@ def main():
         save_list_to_file(prompts, './permutations/' + attack + '_prompts.txt')
     """
 
-    prompts = apply_permutation(original_prompts, homophone_word_2, "test")
+    prompts = apply_permutation(original_prompts, homoglyphs_char, "test")
     print(prompts)
 
     save_list_to_file(original_prompts, './permutations/original_prompts.txt')
