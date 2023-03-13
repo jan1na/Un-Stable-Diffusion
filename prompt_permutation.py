@@ -147,7 +147,6 @@ def homophone_word(prompt: str) -> str:
     :param prompt: input string that gets permuted
     :return: permutation of the prompt that has the lowest cosine similarity to the original prompt
     """
-    # TODO: use https://pypi.org/project/SoundsLike/
 
     prompts = [prompt]
     words = prompt.split()
@@ -166,7 +165,6 @@ def homophone_word_2(prompt: str) -> str:
     :param prompt: input string that gets permuted
     :return: permutation of the prompt that has the lowest cosine similarity to the original prompt
     """
-    # TODO: use https://pypi.org/project/SoundsLike/
 
     prompts = [prompt]
     words = prompt.split()
