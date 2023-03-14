@@ -175,7 +175,6 @@ def homophone_word_2(prompt: str) -> str:
 
 
 def calc_batch_result(original_prompt: str, batch: List[str]):
-    print("batch size:", len(batch))
     text_input = tokenizer([original_prompt] + batch,
                            padding="max_length",
                            max_length=tokenizer.model_max_length,
@@ -211,9 +210,7 @@ def get_best_permutation(original_prompt: str, prompts: List[str]) -> str:
     best_prompts = []
     iterations = len(prompts)//batch_size if len(prompts) % batch_size == 0 else len(prompts)//batch_size + 1
 
-    print("prompts:", len(prompts))
     for i in range(iterations):
-        print("iteration:", i)
         best_prompts.append(calc_batch_result(original_prompt, prompts[i*batch_size: (i+1)*batch_size]))
     return calc_batch_result(original_prompt, best_prompts) if iterations > 1 else best_prompts[0]
 
