@@ -122,10 +122,10 @@ def homoglyphs_char(prompt: str) -> str:
             prompts.append(prompt[:i] + h + prompt[i + 1:])
     best_prompts = []
     # divide prompts in batches of 100 prompts
-    batch_size = 100
+    batch_size = 50
     for i in range(len(prompts)//batch_size):
         best_prompts.append(get_best_permutation(prompts[i * batch_size: (i+1) * batch_size]))
-    return get_best_permutation(prompts)
+    return get_best_permutation(best_prompts)
 
 
 def synonym_word(prompt: str) -> str:
