@@ -7,14 +7,15 @@ from utils.progress_bar_utils import printProgressBar
 from typing import List, Callable
 from pydictionary import Dictionary
 from similar_sounding_words import index as homophone_dict
-from attack_types import file_names as attack_names, title_names
+from attack_types import file_names as attack_names, title_names, PROMPT_NUMBER, PROMPT_PATH, DATA
 from SoundsLike.SoundsLike import Search
 import homoglyphs as hg
 import random
 
 random.seed(1)
 
-PROMPT_NUMBER = 10000
+rtpt = RTPT('JF', 'prompt_permutation', PROMPT_NUMBER * 9)
+
 
 tokenizer = CLIPTokenizer.from_pretrained("openai/clip-vit-large-patch14")
 text_encoder = CLIPTextModel.from_pretrained("openai/clip-vit-large-patch14").cuda()
@@ -214,21 +215,21 @@ def apply_permutation(prompt_list: List[str], permutation: Callable, progress_ba
     for i in range(len(prompt_list)):
         prompts.append(permutation(prompt_list[i]))
         printProgressBar(i + 1, len(prompt_list), prefix=progress_bar_prefix + ':')
+        rtpt.step()
     return prompts
 
 
 def main():
-    rtpt = RTPT('JF', 'prompt_permutation', 1)
     rtpt.start()
 
-    original_prompts = load_list_from_file('./metrics/captions_10000.txt')[:PROMPT_NUMBER]
+    original_prompts = load_list_from_file(DATA)[:PROMPT_NUMBER]
 
     for attack, title in zip(attack_names[1:], title_names[1:]):
         prompts = apply_permutation(original_prompts, globals()[attack], title)
-        save_list_to_file(prompts, './permutations/' + attack + '_prompts.txt')
+        save_list_to_file(prompts, PROMPT_PATH + '/' + attack + '_prompts.txt')
 
-    save_list_to_file(original_prompts, './permutations/original_prompts.txt')
-    save_list_to_file(original_prompts, './permutations/original_control_prompts.txt')
+    save_list_to_file(original_prompts, PROMPT_PATH + '/original_prompts.txt')
+    save_list_to_file(original_prompts, PROMPT_PATH + '/original_control_prompts.txt')
 
 
 if __name__ == '__main__':

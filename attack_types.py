@@ -5,3 +5,9 @@ run_names = ["original-control", "naive-char", "char", "delete-char", "duplicate
 title_names = ['Original Control', 'Naive Char Permutation', 'Char Permutation', 'Delete Char Permutation',
                'Duplicate Char Permutation', 'Typo Char Permutation', 'Homoglyphs Char Permutation',
                'Synonym Word Permutation', 'Homophone Word Permutation', 'Homophone Word 2 Permutation']
+IMAGES_SAVED = 20
+PROMPT_NUMBER = 10000
+IMAGE_PATH = './image_outputs'
+PROMPT_PATH = './permutations'
+CAPTION_PATH = './image_captions'
+DATA = './metrics/captions_10000.txt'

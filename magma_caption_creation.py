@@ -1,4 +1,4 @@
-from attack_types import file_names, run_names
+from attack_types import file_names, run_names, PROMPT_NUMBER
 from magma import Magma
 from magma.image_input import ImageInput
 import glob
@@ -8,6 +8,8 @@ from rtpt import RTPT
 
 IMAGE_PATH = './image_outputs'
 CAPTION_PATH = './image_captions'
+
+rtpt = RTPT('JF', 'caption_creation', PROMPT_NUMBER * 11)
 
 magma_model = Magma.from_checkpoint(
     config_path="configs/MAGMA_v1.yml",
@@ -41,11 +43,11 @@ def get_image_captions(image_folder) -> List[str]:
 
     for image_path in sorted(glob.glob(image_folder + '*.png')):
         captions.append(get_image_caption(image_path))
+        rtpt.step()
     return captions
 
 
 def main():
-    rtpt = RTPT('JF', 'caption_creation', 1)
     rtpt.start()
 
     captions = get_image_captions(IMAGE_PATH + '/original_images/')
