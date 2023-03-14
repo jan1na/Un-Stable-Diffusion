@@ -188,7 +188,6 @@ def calc_batch_result(original_prompt: str, batch: List[str]):
     input = torch.flatten(text_embeddings[0].unsqueeze(0), start_dim=1)
     manipulated = torch.flatten(text_embeddings[1:], start_dim=1)
     cos = cosine_similarity(input, manipulated)
-    print(cos)
     ind = torch.argmin(cos)
     return batch[ind]
 
