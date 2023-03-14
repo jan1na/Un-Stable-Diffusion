@@ -6,7 +6,7 @@ title_names = ['Original Control', 'Naive Char Permutation', 'Char Permutation',
                'Duplicate Char Permutation', 'Typo Char Permutation', 'Homoglyphs Char Permutation',
                'Synonym Word Permutation', 'Homophone Word Permutation', 'Homophone Word 2 Permutation']
 IMAGES_SAVED = 1
-PROMPT_NUMBER = 10000
+PROMPT_NUMBER = 1
 IMAGE_PATH = './image_outputs'
 PROMPT_PATH = './permutations'
 CAPTION_PATH = './image_captions'
