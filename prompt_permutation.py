@@ -203,6 +203,8 @@ def get_best_permutation(original_prompt: str, prompts: List[str]) -> str:
     :return: prompt with the lowest cosine similarity to the original prompt
     """
 
+    if prompts
+
     batch_size = 50
     best_prompts = []
 
