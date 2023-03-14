@@ -120,12 +120,7 @@ def homoglyphs_char(prompt: str) -> str:
         homoglyphs = list([x for x in hg.Homoglyphs().get_combinations(prompt[i]) if x.isalpha()])
         for h in homoglyphs:
             prompts.append(prompt[:i] + h + prompt[i + 1:])
-    best_prompts = []
-    # divide prompts in batches of 100 prompts
-    batch_size = 50
-    for i in range(len(prompts)//batch_size):
-        best_prompts.append(get_best_permutation(prompts[i * batch_size: (i+1) * batch_size]))
-    return get_best_permutation(best_prompts)
+    return get_best_permutation(prompt, prompts)
 
 
 def synonym_word(prompt: str) -> str:
@@ -179,21 +174,9 @@ def homophone_word_2(prompt: str) -> str:
     return get_best_permutation(prompt, prompts)
 
 
-def get_best_permutation(original_prompt: str, prompts: List[str]) -> str:
-    """
-    Create the text embeddings of the input strings using the CLIP encoder and calculate the string
-    with the lowest cosine similarity between the original prompt and the altered prompts.
-
-    :param original_prompt: original prompts
-    :param prompts: list of  altered prompts
-    :return: prompt with the lowest cosine similarity to the original prompt
-    """
-
-    batch_size = 50
-
-    for i in range(len(prompts//ori))
-
-    text_input = tokenizer([original_prompt] + prompts,
+def calc_batch_result(original_prompt: str, batch: List[str]):
+    print("batch size:", len(batch))
+    text_input = tokenizer([original_prompt] + batch,
                            padding="max_length",
                            max_length=tokenizer.model_max_length,
                            truncation=True,
@@ -207,8 +190,26 @@ def get_best_permutation(original_prompt: str, prompts: List[str]) -> str:
     cos = cosine_similarity(input, manipulated)
     print(cos)
     ind = torch.argmin(cos)
-    print(prompts)
-    return prompts[ind]
+    return batch[ind]
+
+
+def get_best_permutation(original_prompt: str, prompts: List[str]) -> str:
+    """
+    Create the text embeddings of the input strings using the CLIP encoder and calculate the string
+    with the lowest cosine similarity between the original prompt and the altered prompts.
+
+    :param original_prompt: original prompts
+    :param prompts: list of  altered prompts
+    :return: prompt with the lowest cosine similarity to the original prompt
+    """
+
+    batch_size = 50
+    best_prompts = []
+
+    for i in range(len(prompts)//batch_size + 1):
+        print("iteration:", i)
+        best_prompts.append(calc_batch_result(original_prompt, prompts[i*batch_size: (i+1)*batch_size]))
+    return calc_batch_result(original_prompt, best_prompts)
 
 
 def apply_permutation(prompt_list: List[str], permutation: Callable, progress_bar_prefix: str) -> List[str]:
