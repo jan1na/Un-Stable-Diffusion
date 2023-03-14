@@ -97,6 +97,7 @@ def typo_char(prompt: str) -> str:
     :param prompt: input string that gets permuted
     :return: permutation of the prompt that has the lowest cosine similarity to the original prompt
     """
+    #TODO: deal with upper and lower case
     prompts = []
     for i in range(len(prompt)):
         if prompt[i] in keyboard_dict:
