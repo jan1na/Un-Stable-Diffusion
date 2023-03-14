@@ -188,6 +188,7 @@ def get_best_permutation(prompts: List[str]) -> str:
     prompts
     :return: prompt with the lowest cosine similarity to the original prompt
     """
+    print("prompt size:", len(prompts))
     text_input = tokenizer(prompts,
                            padding="max_length",
                            max_length=tokenizer.model_max_length,
