@@ -9,6 +9,7 @@ clean_img:
 	rm -r permutations || true
 	rm -r image_captions || true
 	rm -r logs || true
+	mkdir -p logs
 
 create_adv_attacks:
 	@echo "Creating permutation files"
