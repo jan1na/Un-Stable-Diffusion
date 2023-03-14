@@ -16,7 +16,6 @@ random.seed(1)
 
 rtpt = RTPT('JF', 'prompt_permutation', PROMPT_NUMBER * 9)
 
-
 tokenizer = CLIPTokenizer.from_pretrained("openai/clip-vit-large-patch14")
 text_encoder = CLIPTextModel.from_pretrained("openai/clip-vit-large-patch14").cuda()
 
@@ -79,7 +78,6 @@ keyboard_matrix = [['q', 'w', 'e', 'r', 't', 'z', 'u', 'i', 'o', 'p', 'ü'],
                    ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'ö', 'ä'],
                    ['-', 'y', 'x', 'c', 'v', 'b', 'n', 'm', '-', '-', '-']]
 
-
 keyboard_dict = {}
 for r, row in enumerate(keyboard_matrix):
     for c, x in enumerate(row):
@@ -97,14 +95,14 @@ def typo_char(prompt: str) -> str:
     :param prompt: input string that gets permuted
     :return: permutation of the prompt that has the lowest cosine similarity to the original prompt
     """
-    #TODO: deal with upper and lower case
+    # TODO: deal with upper and lower case
     prompts = []
     for i in range(len(prompt)):
         if prompt[i] in keyboard_dict:
             r, c = keyboard_dict[prompt[i]]
             for (rr, cc) in access_list:
-                if 0 <= r + rr < 3 and 0 <= c + cc < 11 and keyboard_matrix[r+rr][c+cc] != '-':
-                    prompts.append(prompt[:i] + keyboard_matrix[r+rr][c+cc] + prompt[i + 1:])
+                if 0 <= r + rr < 3 and 0 <= c + cc < 11 and keyboard_matrix[r + rr][c + cc] != '-':
+                    prompts.append(prompt[:i] + keyboard_matrix[r + rr][c + cc] + prompt[i + 1:])
     return get_best_permutation(prompt, prompts)
 
 
@@ -115,7 +113,7 @@ def homoglyphs_char(prompt: str) -> str:
     :param prompt: input string that gets permuted
     :return: permutation of the prompt that has the lowest cosine similarity to the original prompt
     """
-    #TODO: use specific languages
+    # TODO: use specific languages
     prompts = [prompt]
     for i in range(len(prompt)):
         homoglyphs = list([x for x in hg.Homoglyphs().get_combinations(prompt[i]) if x.isalpha()])
@@ -209,10 +207,10 @@ def get_best_permutation(original_prompt: str, prompts: List[str]) -> str:
         return calc_batch_result(original_prompt, prompts)
 
     best_prompts = []
-    iterations = len(prompts)//batch_size if len(prompts) % batch_size == 0 else len(prompts)//batch_size + 1
+    iterations = len(prompts) // batch_size if len(prompts) % batch_size == 0 else len(prompts) // batch_size + 1
 
     for i in range(iterations):
-        best_prompts.append(calc_batch_result(original_prompt, prompts[i*batch_size: (i+1)*batch_size]))
+        best_prompts.append(calc_batch_result(original_prompt, prompts[i * batch_size: (i + 1) * batch_size]))
     return calc_batch_result(original_prompt, best_prompts) if iterations > 1 else best_prompts[0]
 
 
@@ -250,4 +248,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
