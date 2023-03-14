@@ -215,7 +215,7 @@ def get_best_permutation(original_prompt: str, prompts: List[str]) -> str:
     for i in range(iterations):
         print("iteration:", i)
         best_prompts.append(calc_batch_result(original_prompt, prompts[i*batch_size: (i+1)*batch_size]))
-    return calc_batch_result(original_prompt, best_prompts)
+    return calc_batch_result(original_prompt, best_prompts) if iterations > 1 else best_prompts[0]
 
 
 def apply_permutation(prompt_list: List[str], permutation: Callable, progress_bar_prefix: str) -> List[str]:
