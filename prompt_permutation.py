@@ -209,10 +209,10 @@ def get_best_permutation(original_prompt: str, prompts: List[str]) -> str:
         return calc_batch_result(original_prompt, prompts)
 
     best_prompts = []
-    
+    iterations = len(prompts)//batch_size if len(prompts) % batch_size == 0 else len(prompts)//batch_size + 1
 
     print("prompts:", len(prompts))
-    for i in range(len(prompts)//batch_size + 1):
+    for i in range(iterations):
         print("iteration:", i)
         best_prompts.append(calc_batch_result(original_prompt, prompts[i*batch_size: (i+1)*batch_size]))
     return calc_batch_result(original_prompt, best_prompts)
