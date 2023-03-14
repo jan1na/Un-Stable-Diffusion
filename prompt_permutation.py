@@ -28,10 +28,10 @@ def naive_char(prompt: str) -> str:
     :param prompt: input string that gets permuted
     :return: permutation of the prompt that has the lowest cosine similarity to the original prompt
     """
-    prompts = [prompt]
+    prompts = []
     for i in range(len(prompt) - 1):
         prompts.append(prompt[:i] + prompt[i:i + 2][::-1] + prompt[i + 2:])
-    return get_best_permutation(prompts)
+    return get_best_permutation(prompt, prompts)
 
 
 def char(prompt: str) -> str:
@@ -41,11 +41,11 @@ def char(prompt: str) -> str:
     :param prompt: input string that gets permuted
     :return: permutation of the prompt that has the lowest cosine similarity to the original prompt
     """
-    prompts = [prompt]
+    prompts = []
     for i in range(len(prompt) - 1):
         if prompt[i].isalpha() and prompt[i + 1].isalpha():
             prompts.append(prompt[:i] + prompt[i:i + 2][::-1] + prompt[i + 2:])
-    return get_best_permutation(prompts)
+    return get_best_permutation(prompt, prompts)
 
 
 def delete_char(prompt: str) -> str:
@@ -55,10 +55,10 @@ def delete_char(prompt: str) -> str:
     :param prompt: input string that gets permuted
     :return: permutation of the prompt that has the lowest cosine similarity to the original prompt
     """
-    prompts = [prompt]
+    prompts = []
     for i in range(len(prompt)):
         prompts.append(prompt[:i] + prompt[i + 1:])
-    return get_best_permutation(prompts)
+    return get_best_permutation(prompt, prompts)
 
 
 def duplicate_char(prompt: str) -> str:
@@ -68,11 +68,11 @@ def duplicate_char(prompt: str) -> str:
     :param prompt: input string that gets permuted
     :return: permutation of the prompt that has the lowest cosine similarity to the original prompt
     """
-    prompts = [prompt]
+    prompts = []
     for i in range(len(prompt)):
         if prompt[i].isalpha():
             prompts.append(prompt[:i] + prompt[i] + prompt[i] + prompt[i + 1:])
-    return get_best_permutation(prompts)
+    return get_best_permutation(prompt, prompts)
 
 
 keyboard_matrix = [['q', 'w', 'e', 'r', 't', 'z', 'u', 'i', 'o', 'p', 'ü'],
@@ -97,14 +97,14 @@ def typo_char(prompt: str) -> str:
     :param prompt: input string that gets permuted
     :return: permutation of the prompt that has the lowest cosine similarity to the original prompt
     """
-    prompts = [prompt]
+    prompts = []
     for i in range(len(prompt)):
         if prompt[i] in keyboard_dict:
             r, c = keyboard_dict[prompt[i]]
             for (rr, cc) in access_list:
                 if 0 <= r + rr < 3 and 0 <= c + cc < 11 and keyboard_matrix[r+rr][c+cc] != '-':
                     prompts.append(prompt[:i] + keyboard_matrix[r+rr][c+cc] + prompt[i + 1:])
-    return get_best_permutation(prompts)
+    return get_best_permutation(prompt, prompts)
 
 
 def homoglyphs_char(prompt: str) -> str:
@@ -135,12 +135,12 @@ def synonym_word(prompt: str) -> str:
     :param prompt: input string that gets permuted
     :return: permutation of the prompt that has the lowest cosine similarity to the original prompt
     """
-    prompts = [prompt]
+    prompts = []
     words = prompt.split()
     for i in range(len(words)):
         for synonym in Dictionary(words[i], 10).synonyms():
             prompts.append(' '.join(words[:i] + [synonym] + words[i + 1:]))
-    return prompts[0] if len(prompts) == 1 else get_best_permutation(prompts)
+    return get_best_permutation(prompt, prompts)
 
 
 def homophone_word(prompt: str) -> str:
@@ -151,13 +151,13 @@ def homophone_word(prompt: str) -> str:
     :return: permutation of the prompt that has the lowest cosine similarity to the original prompt
     """
 
-    prompts = [prompt]
+    prompts = []
     words = prompt.split()
     for i in range(len(words)):
         if words[i] in homophone_dict:
             for homophone in homophone_dict[words[i]]:
                 prompts.append(' '.join(words[:i] + [homophone] + words[i + 1:]))
-    return prompts[0] if len(prompts) == 1 else get_best_permutation(prompts)
+    return get_best_permutation(prompt, prompts)
 
 
 def homophone_word_2(prompt: str) -> str:
@@ -168,7 +168,7 @@ def homophone_word_2(prompt: str) -> str:
     :return: permutation of the prompt that has the lowest cosine similarity to the original prompt
     """
 
-    prompts = [prompt]
+    prompts = []
     words = prompt.split()
     for i in range(len(words)):
         try:
@@ -176,20 +176,24 @@ def homophone_word_2(prompt: str) -> str:
                 prompts.append(' '.join(words[:i] + [homophone.lower()] + words[i + 1:]))
         except ValueError:
             pass
-    return prompts[0] if len(prompts) == 1 else get_best_permutation(prompts)
+    return get_best_permutation(prompt, prompts)
 
 
-def get_best_permutation(prompts: List[str]) -> str:
+def get_best_permutation(original_prompt: str, prompts: List[str]) -> str:
     """
     Create the text embeddings of the input strings using the CLIP encoder and calculate the string
-    with the lowest cosine similarity between the first string (original prompt) and the rest of the strings.
+    with the lowest cosine similarity between the original prompt and the altered prompts.
 
-    :param prompts: list of prompts, where the first prompt is the original prompts and the rest are the altered
-    prompts
+    :param original_prompt: original prompts
+    :param prompts: list of  altered prompts
     :return: prompt with the lowest cosine similarity to the original prompt
     """
-    print("prompt size:", len(prompts))
-    text_input = tokenizer(prompts,
+
+    batch_size = 50
+
+    for i in range(len(prompts//ori))
+
+    text_input = tokenizer([original_prompt] + prompts,
                            padding="max_length",
                            max_length=tokenizer.model_max_length,
                            truncation=True,
@@ -201,8 +205,10 @@ def get_best_permutation(prompts: List[str]) -> str:
     input = torch.flatten(text_embeddings[0].unsqueeze(0), start_dim=1)
     manipulated = torch.flatten(text_embeddings[1:], start_dim=1)
     cos = cosine_similarity(input, manipulated)
+    print(cos)
     ind = torch.argmin(cos)
-    return prompts[ind + 1]
+    print(prompts)
+    return prompts[ind]
 
 
 def apply_permutation(prompt_list: List[str], permutation: Callable, progress_bar_prefix: str) -> List[str]:
