@@ -12,6 +12,14 @@ from SoundsLike.SoundsLike import Search
 import homoglyphs as hg
 import random
 
+
+"""
+
+DELETE !!!! ONLY FOR TYPO PERMUTATION FIXING
+
+
+"""
+
 random.seed(1)
 
 rtpt = RTPT('JF', 'prompt_permutation', PROMPT_NUMBER * 9)
