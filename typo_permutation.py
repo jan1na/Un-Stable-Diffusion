@@ -22,7 +22,7 @@ DELETE !!!! ONLY FOR TYPO PERMUTATION FIXING
 
 random.seed(1)
 
-rtpt = RTPT('JF', 'prompt_permutation', PROMPT_NUMBER * 9)
+rtpt = RTPT('JF', 'prompt_permutation', PROMPT_NUMBER)
 
 tokenizer = CLIPTokenizer.from_pretrained("openai/clip-vit-large-patch14")
 text_encoder = CLIPTextModel.from_pretrained("openai/clip-vit-large-patch14").cuda()
@@ -116,7 +116,6 @@ def typo_char(prompt: str) -> str:
                     typo_char_ = keyboard_matrix[r + rr][c + cc]
                     if upper_case:
                         typo_char_ = typo_char_.upper()
-                        print(prompt[:i] + typo_char_ + prompt[i + 1:])
                     prompts.append(prompt[:i] + typo_char_ + prompt[i + 1:])
     return get_best_permutation(prompt, prompts)
 
