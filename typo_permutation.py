@@ -244,12 +244,8 @@ def main():
 
     original_prompts = load_list_from_file(DATA)[:PROMPT_NUMBER]
 
-    for attack, title in zip(attack_names[1:], title_names[1:]):
-        prompts = apply_permutation(original_prompts, globals()[attack], title)
-        save_list_to_file(prompts, PROMPT_PATH + '/' + attack + '_prompts.txt')
-
-    save_list_to_file(original_prompts, PROMPT_PATH + '/original_prompts.txt')
-    save_list_to_file(original_prompts, PROMPT_PATH + '/original_control_prompts.txt')
+    prompts = apply_permutation(original_prompts, typo_char, 'Typo Char Permutation')
+    save_list_to_file(prompts, PROMPT_PATH + '/typo_prompts.txt')
 
 
 if __name__ == '__main__':
