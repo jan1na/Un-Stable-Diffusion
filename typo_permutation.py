@@ -108,6 +108,7 @@ def typo_char(prompt: str) -> str:
                     typo_char_ = keyboard_matrix[r + rr][c + cc]
                     if upper_case:
                         typo_char_ = typo_char_.upper()
+                        print(prompt[:i] + typo_char_ + prompt[i + 1:])
                     prompts.append(prompt[:i] + typo_char_ + prompt[i + 1:])
     return get_best_permutation(prompt, prompts)
 
