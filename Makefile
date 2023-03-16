@@ -37,7 +37,7 @@ generate_images_1:
 	for i in $(ATTACK_NAMES_1); do \
 	    echo $$i | xargs -I '{}' python3 generate_images.py -f permutations/'{}'_prompts.txt -o ./image_outputs/'{}'_images -t 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 2>> ./logs/image_1_log.txt ;\
     done
-    
+
 generate_images_2:
 	@echo "Generate images for attacks 5 - 9"
 	for i in $(ATTACK_NAMES_2); do \
