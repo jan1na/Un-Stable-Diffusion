@@ -245,7 +245,7 @@ def main():
     original_prompts = load_list_from_file(DATA)[:PROMPT_NUMBER]
 
     prompts = apply_permutation(original_prompts, typo_char, 'Typo Char Permutation')
-    save_list_to_file(prompts, PROMPT_PATH + '/typo_prompts.txt')
+    save_list_to_file(prompts, PROMPT_PATH + '/typo_char_prompts.txt')
 
 
 if __name__ == '__main__':
