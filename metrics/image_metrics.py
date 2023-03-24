@@ -96,7 +96,11 @@ def image_content_similarity(captions_path_0: str, captions_path_1: str) -> [flo
     captions_0 = load_list_from_file(captions_path_0)
     captions_1 = load_list_from_file(captions_path_1)
 
+    batch_size = 40
+    iterations = len(captions_0)//batch_size
     cos_sim = []
+
+    for i in range()
 
     for caption_0, caption_1 in zip(captions_0, captions_1):
 
