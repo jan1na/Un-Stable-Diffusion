@@ -101,7 +101,7 @@ def image_content_similarity(captions_path_0: str, captions_path_1: str) -> [flo
     cos_sim = []
 
     for i in range(iterations):
-        for caption_0, caption_1 in zip(captions_0[:i * batch_size], captions_1[:i * batch_size]):
+        for caption_0, caption_1 in zip(captions_0[i * batch_size: (i + 1) * batch_size], captions_1[i * batch_size: (i + 1) * batch_size]):
             text_input = tokenizer([caption_0, caption_1],
                                    padding="max_length",
                                    max_length=tokenizer.model_max_length,
