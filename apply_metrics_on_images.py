@@ -1,7 +1,7 @@
 import numpy as np
 
 from utils.file_utils import load_list_from_file, load_images_from_path
-from metrics.image_metrics import image_array_cosine_similarity, clean_fid_score, image_content_similarity
+from metrics.image_metrics import image_array_cosine_similarity, clean_fid_score, image_content_similarity, ics
 from utils.wandb_utils import *
 from attack_types import file_names, run_names, title_names, IMAGES_SAVED, IMAGE_PATH, PROMPT_PATH, CAPTION_PATH
 from rtpt import RTPT
@@ -50,7 +50,7 @@ def create_wandb_doc(run_name: str, attack_file_name: str, image_title: str, ori
     """
     # Image Caption Similarity
     print("calc Image Caption Similarity")
-    mean_img_cap_sim, img_cap_sim_list = image_content_similarity(CAPTION_PATH + '/original',
+    mean_img_cap_sim, img_cap_sim_list = ics(CAPTION_PATH + '/original',
                                                                   CAPTION_PATH + '/' + attack_file_name)
     upload_value('Image Caption Similarity', mean_img_cap_sim)
     upload_histogram("Image Caption Similarity", "image caption cosine similarity", img_cap_sim_list)

@@ -105,12 +105,12 @@ def ics(captions_path_0: str, captions_path_1: str) -> [float, List[float]]:
     batch_size = 50
     iterations = len(captions_0) // batch_size if len(captions_0) % batch_size == 0 else len(captions_0) // batch_size + 1
     for i in range(iterations):
-        cos_sim += 
+        cos_sim += ics_batch(captions_0[i * batch_size: (i+1) * batch_size], captions_1[i * batch_size: (i+1) * batch_size])
+    return np.mean(cos_sim), cos_sim
 
 
 def ics_batch(captions_0, captions_1):
     cos_sim = []
-
     i = 0
     for caption_0, caption_1 in zip(captions_0, captions_1):
         print("iteration:", i)
