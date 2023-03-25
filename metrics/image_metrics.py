@@ -121,6 +121,7 @@ def image_content_similarity(captions_path_0: str, captions_path_1: str) -> [flo
         # Clear GPU memory
         del text_embeddings, caption_0_feature, caption_1_feature, text_input
         torch.cuda.empty_cache()
+        gc.collect()
     cos_sim = [x.item() for x in cos_sim]
     return np.mean(cos_sim), cos_sim
 
