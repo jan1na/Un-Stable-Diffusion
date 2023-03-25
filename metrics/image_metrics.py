@@ -16,6 +16,9 @@ from utils.file_utils import load_list_from_file
 device = "cuda" if torch.cuda.is_available() else "cpu"
 clip_model, preprocess = clip.load('ViT-B/32', device)
 
+import gc
+
+
 
 def image_cosine_similarity(image_0, image_1) -> float:
     """
@@ -114,6 +117,11 @@ def image_content_similarity(captions_path_0: str, captions_path_1: str) -> [flo
         caption_0_feature = torch.flatten(text_embeddings[0].unsqueeze(0), start_dim=1)
         caption_1_feature = torch.flatten(text_embeddings[1].unsqueeze(0), start_dim=1)
         cos_sim.append(cosine_similarity(caption_0_feature, caption_1_feature))
+        del text_input
+        del text_embeddings
+        del caption_0_feature
+        del caption_1_feature
+        
     cos_sim = [x.item() for x in cos_sim]
     return np.mean(cos_sim), cos_sim
 
