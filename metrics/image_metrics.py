@@ -96,23 +96,21 @@ def image_content_similarity(captions_path_0: str, captions_path_1: str) -> [flo
     captions_0 = load_list_from_file(captions_path_0)
     captions_1 = load_list_from_file(captions_path_1)
 
-    batch_size = 40
-    iterations = len(captions_0) // batch_size if len(captions_0) % batch_size == 0 else len(captions_0) // batch_size + 1
     cos_sim = []
 
-    for i in range(iterations):
-        for caption_0, caption_1 in zip(captions_0[i * batch_size: (i + 1) * batch_size], captions_1[i * batch_size: (i + 1) * batch_size]):
-            text_input = tokenizer([caption_0, caption_1],
-                                   padding="max_length",
-                                   max_length=tokenizer.model_max_length,
-                                   truncation=True,
-                                   return_tensors="pt")
+    for caption_0, caption_1 in zip(captions_0, captions_1):
 
-            text_embeddings = text_encoder(text_input.input_ids.to('cuda'))[0]
+        text_input = tokenizer([caption_0, caption_1],
+                               padding="max_length",
+                               max_length=tokenizer.model_max_length,
+                               truncation=True,
+                               return_tensors="pt")
 
-            caption_0_feature = torch.flatten(text_embeddings[0].unsqueeze(0), start_dim=1)
-            caption_1_feature = torch.flatten(text_embeddings[1].unsqueeze(0), start_dim=1)
-            cos_sim.append(cosine_similarity(caption_0_feature, caption_1_feature))
+        text_embeddings = text_encoder(text_input.input_ids.to('cuda'))[0]
+
+        caption_0_feature = torch.flatten(text_embeddings[0].unsqueeze(0), start_dim=1)
+        caption_1_feature = torch.flatten(text_embeddings[1].unsqueeze(0), start_dim=1)
+        cos_sim.append(cosine_similarity(caption_0_feature, caption_1_feature))
     cos_sim = [x.item() for x in cos_sim]
     return np.mean(cos_sim), cos_sim
 
