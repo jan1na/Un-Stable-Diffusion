@@ -115,6 +115,7 @@ def image_content_similarity(captions_path_0: str, captions_path_1: str) -> [flo
         text_embeddings = text_encoder(text_input.input_ids.to('cuda'))[0]
         del text_input
         torch.cuda.empty_cache()
+        gc.collect()
 
         caption_0_feature = torch.flatten(text_embeddings[0].unsqueeze(0), start_dim=1)
         caption_1_feature = torch.flatten(text_embeddings[1].unsqueeze(0), start_dim=1)
