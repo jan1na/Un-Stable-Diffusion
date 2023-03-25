@@ -121,7 +121,7 @@ def image_content_similarity(captions_path_0: str, captions_path_1: str) -> [flo
         del text_embeddings
         del caption_0_feature
         del caption_1_feature
-        
+        gc.collect()
     cos_sim = [x.item() for x in cos_sim]
     return np.mean(cos_sim), cos_sim
 
