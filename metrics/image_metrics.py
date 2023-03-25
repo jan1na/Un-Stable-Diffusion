@@ -96,7 +96,7 @@ tokenizer = CLIPTokenizer.from_pretrained("openai/clip-vit-large-patch14")
 text_encoder = CLIPTextModel.from_pretrained("openai/clip-vit-large-patch14").cuda()
 
 
-def ics(captions_path_0: str, captions_path_1: str) -> [float, List[float]]:
+def image_content_similarity(captions_path_0: str, captions_path_1: str) -> [float, List[float]]:
     captions_0 = load_list_from_file(captions_path_0)
     captions_1 = load_list_from_file(captions_path_1)
 
@@ -105,17 +105,13 @@ def ics(captions_path_0: str, captions_path_1: str) -> [float, List[float]]:
     batch_size = 50
     iterations = len(captions_0) // batch_size if len(captions_0) % batch_size == 0 else len(captions_0) // batch_size + 1
     for i in range(iterations):
-        print("batch:", i)
         cos_sim += ics_batch(captions_0[i * batch_size: (i+1) * batch_size], captions_1[i * batch_size: (i+1) * batch_size])
     return np.mean(cos_sim), cos_sim
 
 
 def ics_batch(captions_0, captions_1):
     cos_sim = []
-    i = 0
     for caption_0, caption_1 in zip(captions_0, captions_1):
-        print("iteration:", i)
-        i += 1
 
         text_input = tokenizer([caption_0, caption_1],
                                padding="max_length",
@@ -128,15 +124,11 @@ def ics_batch(captions_0, captions_1):
         caption_1_feature = torch.flatten(text_embeddings[1].unsqueeze(0), start_dim=1)
         cos_sim.append(cosine_similarity(caption_0_feature, caption_1_feature))
 
-        # Clear GPU memory
-        # del text_embeddings, caption_0_feature, caption_1_feature, text_input
-        # torch.cuda.empty_cache()
-        # gc.collect()
     cos_sim = [x.item() for x in cos_sim]
     return cos_sim
 
 
-def image_content_similarity(captions_path_0: str, captions_path_1: str) -> [float, List[float]]:
+def image_content_similarity_old(captions_path_0: str, captions_path_1: str) -> [float, List[float]]:
     captions_0 = load_list_from_file(captions_path_0)
     captions_1 = load_list_from_file(captions_path_1)
 
