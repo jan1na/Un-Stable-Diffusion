@@ -17,6 +17,7 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 clip_model, preprocess = clip.load('ViT-B/32', device)
 
 import gc
+from numba import cuda
 
 
 
@@ -112,6 +113,9 @@ def image_content_similarity(captions_path_0: str, captions_path_1: str) -> [flo
                                truncation=True,
                                return_tensors="pt")
 
+        if not torch.cuda.is_available():
+            device = cuda.get_current_device()
+            device.reset()
         text_embeddings = text_encoder(text_input.input_ids.to('cuda'))[0]
         del text_input
         torch.cuda.empty_cache()
