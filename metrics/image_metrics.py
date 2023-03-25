@@ -129,8 +129,8 @@ def ics_batch(captions_0, captions_1):
         cos_sim.append(cosine_similarity(caption_0_feature, caption_1_feature))
 
         # Clear GPU memory
-        del text_embeddings, caption_0_feature, caption_1_feature, text_input
-        torch.cuda.empty_cache()
+        # del text_embeddings, caption_0_feature, caption_1_feature, text_input
+        # torch.cuda.empty_cache()
         # gc.collect()
     cos_sim = [x.item() for x in cos_sim]
     return cos_sim
