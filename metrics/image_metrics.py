@@ -113,7 +113,7 @@ def image_content_similarity(captions_path_0: str, captions_path_1: str) -> [flo
                                truncation=True,
                                return_tensors="pt")
 
-        if i % 20 == 0:
+        if i % 100 == 0:
             device = cuda.get_current_device()
             device.reset()
         text_embeddings = text_encoder(text_input.input_ids.to('cuda'))[0]
