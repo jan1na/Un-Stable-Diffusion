@@ -101,9 +101,10 @@ def image_content_similarity(captions_path_0: str, captions_path_1: str) -> [flo
 
     cos_sim = []
 
+    i=0
     for caption_0, caption_1 in zip(captions_0, captions_1):
-        print("caption_0", caption_0)
-        print("caption_1", caption_1)
+        print("iteration:", i)
+        i+=1
 
         text_input = tokenizer([caption_0, caption_1],
                                padding="max_length",
