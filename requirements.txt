@@ -21,3 +21,4 @@ similar-sounding-words
 lpips
 SoundsLike
 homoglyphs
+numba
