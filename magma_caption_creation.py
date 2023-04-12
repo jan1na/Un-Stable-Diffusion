@@ -41,9 +41,12 @@ def get_image_caption(image_path: str) -> str:
 def get_image_captions(image_folder) -> List[str]:
     captions = []
 
+    images = sorted(glob.glob(image_folder + '*.png'))
+    print("images:", len(images))
     for image_path in sorted(glob.glob(image_folder + '*.png')):
         captions.append(get_image_caption(image_path))
         rtpt.step()
+    print("captions:", len(captions))
     return captions
 
 
