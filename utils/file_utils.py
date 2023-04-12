@@ -36,3 +36,14 @@ def load_images_from_path(path: str) -> List:
     """
     return [Image.open(filename) for filename in sorted(glob.glob(path + '*.png'))]
 
+
+def delete_empty_lines(path: str):
+    """
+    Delete all empty lines in text file.
+
+    :param path: path to text file
+    """
+    with open(path, 'rw') as file:
+        for line in file:
+            if not line.isspace():
+                file.write(line)
