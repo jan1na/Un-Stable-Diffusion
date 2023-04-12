@@ -46,6 +46,6 @@ def delete_empty_lines(path: str):
     lst = []
     for line in load_list_from_file(path):
         lst.append(line.strip())
-        if line:
+        if line == "\n":
             print("space")
     save_list_to_file(lst, path)
