@@ -43,7 +43,9 @@ def delete_empty_lines(path: str):
 
     :param path: path to text file
     """
-    with open(path, 'r+') as file:
+    lst = []
+    with open(path, 'r') as file:
         for line in file:
             if not line.isspace():
-                file.write(line)
+                lst.append(line)
+    save_list_to_file(lst, path)
