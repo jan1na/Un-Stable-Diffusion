@@ -1,7 +1,8 @@
 import numpy as np
 
 from utils.file_utils import load_list_from_file, load_images_from_path
-from metrics.image_metrics import image_array_cosine_similarity, clean_fid_score, image_content_similarity
+from metrics.image_metrics import image_array_cosine_similarity, clean_fid_score, image_content_similarity, \
+    image_prompt_similarity
 from utils.wandb_utils import *
 from attack_types import file_names, run_names, title_names, IMAGES_SAVED, IMAGE_PATH, PROMPT_PATH, CAPTION_PATH
 from rtpt import RTPT
@@ -12,7 +13,7 @@ rtpt = RTPT('JF', 'metric_application', 10)
 
 def create_wandb_doc(run_name: str, attack_file_name: str, image_title: str, original_prompts: List[str],
                      original_images: List, sorted_by_cosine_similarity: bool = False,
-                     sorted_by_caption_similarity: bool = False):
+                     sorted_by_caption_similarity: bool = False, sorted_by_img_prompt_similarity: bool = False):
     """
     Upload the images and metric results as single values and histograms to wandb.
 
@@ -23,6 +24,7 @@ def create_wandb_doc(run_name: str, attack_file_name: str, image_title: str, ori
     :param original_images: original images
     :param sorted_by_cosine_similarity: sort the images by cosine similarity from worst to best
     :param sorted_by_caption_similarity: sort the images by caption similarity from worst to best
+    :param sorted_by_img_prompt_similarity: sort the images by image prompt similarity from worst to best
     """
 
     start(run_name)
@@ -54,13 +56,21 @@ def create_wandb_doc(run_name: str, attack_file_name: str, image_title: str, ori
     #upload_value('Image Caption Similarity', mean_img_cap_sim)
     #upload_histogram("Image Caption Similarity", "image caption cosine similarity", img_cap_sim_list)
 
-    # upload images to wandb sometimes sorted by a metric
 
+    # Image Text Similarity
+    mean_img_prompt_sim, img_prompt_sim_list = image_prompt_similarity(permutation_images, original_prompts)
+    upload_value('Mean Image Text Similarity', mean_img_prompt_sim)
+    upload_histogram("Image Text Similarity", "cosine similarity", img_prompt_sim_list)
+
+
+    # upload images to wandb sometimes sorted by a metric
     if sorted_by_cosine_similarity:
         #indexes = list(np.argsort(cos_sim_list))
         pass
     elif sorted_by_caption_similarity:
         indexes = list(np.argsort(img_cap_sim_list))
+    elif sorted_by_img_prompt_similarity:
+        indexes = list(np.argsort(img_prompt_sim_list))
     else:
         indexes = list(np.arange(len(original_prompts)))
 
@@ -83,7 +93,8 @@ def main():
     original_images = load_images_from_path(IMAGE_PATH + '/original_images/')
 
     for file_name, run_name, image_title in zip(file_names, run_names, title_names):
-        create_wandb_doc(run_name, file_name, image_title, original_prompts, original_images, False, True)
+        create_wandb_doc(run_name, file_name, image_title, original_prompts, original_images,
+                         sorted_by_caption_similarity=True)
         rtpt.step()
 
 
