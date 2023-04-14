@@ -58,6 +58,6 @@ magma:
 	python3 magma_caption_creation.py 2> ./logs/magma_log.txt
 
 captions:
-    @echo "Create image captions with BLIP-2"
-    mkdir -p image_captions
+	@echo "Create image captions with BLIP-2"
+	mkdir -p image_captions
 	python3 create_image_captions.py 2> ./logs/captions_log.txt
