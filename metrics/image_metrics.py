@@ -164,11 +164,13 @@ def image_prompt_similarity(images: List, prompts: List[str]) -> [float, List[fl
 
     for img, prompt in zip(images[:100], prompts[:100]):
         image = preprocess(img).unsqueeze(0).to(device)
-        text = clip.tokenize(["house"]).to(device)
+        text = clip.tokenize([prompt]).to(device)
 
         with torch.no_grad():
             image_features = clip_model.encode_image(image)
             text_features = clip_model.encode_text(text)
+            print("img feature:", image_features)
+            print("text feature:", image_features)
 
             logits_per_image, logits_per_text = clip_model(image, text)
             print("image:", logits_per_image)
