@@ -36,52 +36,48 @@ def create_wandb_doc(run_name: str, attack_file_name: str, image_title: str, ori
 
     permutation_prompts = load_list_from_file(PROMPT_PATH + '/' + attack_file_name + '_prompts.txt')
     permutation_images = load_images_from_path(IMAGE_PATH + '/' + attack_file_name + '_images/')
-
+    """
     # Cosine Similarity
     print("calc Cosine Similarity")
-
-    #mean_cos_sim, cos_sim_list = image_array_cosine_similarity(original_images, permutation_images)
-    #upload_value('Mean Cosine Similarity', mean_cos_sim)
-    #upload_histogram("Image Cosine Similarity", "cosine similarity", cos_sim_list)
+    mean_cos_sim, cos_sim_list = image_array_cosine_similarity(original_images, permutation_images)
+    upload_value('Mean Cosine Similarity', mean_cos_sim)
+    upload_histogram("Image Cosine Similarity", "cosine similarity", cos_sim_list)
 
     # Clean FID
-    #print("calc Clean FID")
-    #upload_value("Clean FID Score", clean_fid_score(ORIGINAL_IMAGE_PATH, ATTACK_IMAGE_PATH))
-
+    print("calc Clean FID")
+    upload_value("Clean FID Score", clean_fid_score(ORIGINAL_IMAGE_PATH, ATTACK_IMAGE_PATH))
 
     # Image Caption Similarity
     print("calc Image Caption Similarity")
     mean_img_cap_sim, img_cap_sim_list = image_content_similarity(CAPTION_PATH + '/original',
                                                                   CAPTION_PATH + '/' + attack_file_name)
-    #upload_value('Image Caption Similarity', mean_img_cap_sim)
-    #upload_histogram("Image Caption Similarity", "image caption cosine similarity", img_cap_sim_list)
-
-
+    upload_value('Image Caption Similarity', mean_img_cap_sim)
+    upload_histogram("Image Caption Similarity", "image caption cosine similarity", img_cap_sim_list)
+    
+    """
     # Image Text Similarity
+    print("calc Image Text Similarity")
     mean_img_prompt_sim, img_prompt_sim_list = image_prompt_similarity(permutation_images, original_prompts)
     upload_value('Mean Image Text Similarity', mean_img_prompt_sim)
     upload_histogram("Image Text Similarity", "cosine similarity", img_prompt_sim_list)
 
-
+    """
     # upload images to wandb sometimes sorted by a metric
     if sorted_by_cosine_similarity:
-        #indexes = list(np.argsort(cos_sim_list))
-        pass
+        indexes = list(np.argsort(cos_sim_list))
     elif sorted_by_caption_similarity:
         indexes = list(np.argsort(img_cap_sim_list))
     elif sorted_by_img_prompt_similarity:
         indexes = list(np.argsort(img_prompt_sim_list))
     else:
         indexes = list(np.arange(len(original_prompts)))
-
-    print("indexes:", len(indexes))
-    print("original_images:", len(original_images))
+    """
+    indexes = list(np.arange(len(original_prompts)))  # DELETE
 
     image_list = [sort_list_by_index(original_images, indexes), sort_list_by_index(permutation_images, indexes)]
     prompt_list = [sort_list_by_index(original_prompts, indexes), sort_list_by_index(permutation_prompts, indexes)]
 
     upload_images(image_title, unite_lists(image_list, IMAGES_SAVED), unite_lists(prompt_list, IMAGES_SAVED))
-
 
     end()
 

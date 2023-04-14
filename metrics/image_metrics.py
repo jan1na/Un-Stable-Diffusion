@@ -162,7 +162,7 @@ def image_content_similarity_old(captions_path_0: str, captions_path_1: str) -> 
 def image_prompt_similarity(images: List, prompts: List[str]) -> [float, List[float]]:
     cos_sim = []
 
-    for img, prompt in zip(images, prompts):
+    for img, prompt in zip(images[:10], prompts[:10]):
         image = preprocess(img).unsqueeze(0).to(device)
         text = clip.tokenize([prompt]).to(device)
 
