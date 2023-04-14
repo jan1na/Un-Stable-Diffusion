@@ -22,4 +22,3 @@ lpips
 SoundsLike
 homoglyphs
 numba
-git+https://github.com/huggingface/transformers.git
