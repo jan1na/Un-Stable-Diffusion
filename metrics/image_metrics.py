@@ -169,13 +169,5 @@ def image_prompt_similarity(images: List, prompts: List[str]) -> [float, List[fl
         with torch.no_grad():
             image_features = clip_model.encode_image(image)
             text_features = clip_model.encode_text(text)
-            print("cos sim:", cosine_similarity(image_features, text_features))
-
-            logits_per_image, logits_per_text = clip_model(image, text)
-            print("image:", logits_per_image)
-            print("text:", logits_per_text)
-            probs = logits_per_image.softmax(dim=-1).cpu().numpy()
-            cos_sim.append(logits_per_image)
-
-            print("Label probs:", probs)  # prints: [[0.9927937  0.00421068 0.00299572]]
+            cos_sim.append(cosine_similarity(image_features, text_features)[0])
     return np.mean(cos_sim), cos_sim
