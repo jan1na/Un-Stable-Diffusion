@@ -167,10 +167,10 @@ def image_prompt_similarity(images: List, prompts: List[str]) -> [float, List[fl
         text = clip.tokenize([prompt]).to(device)
 
         with torch.no_grad():
-            # image_features = clip_model.encode_image(image)
-            # text_features = clip_model.encode_text(text)
+            image_features = clip_model.encode_image(image)
+            text_features = clip_model.encode_text(text)
 
-            logits_per_image, logits_per_text = clip_model(image, text)
+            logits_per_image, logits_per_text = clip_model(image_features, text_features)
             print("image:", logits_per_image)
             print("text:", logits_per_text)
             probs = logits_per_image.softmax(dim=-1).cpu().numpy()
