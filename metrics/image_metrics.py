@@ -171,6 +171,7 @@ def image_prompt_similarity(images: List, prompts: List[str]) -> [float, List[fl
             text_features = clip_model.encode_text(text)
             print("img feature:", image_features)
             print("text feature:", image_features)
+            print("cos sim:", cosine_similarity(image_features, text_features))
 
             logits_per_image, logits_per_text = clip_model(image, text)
             print("image:", logits_per_image)
