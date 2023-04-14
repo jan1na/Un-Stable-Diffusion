@@ -2,6 +2,7 @@ all: create_adv_attacks generate_images
 gpu_1: generate_images_1
 gpu_2: generate_images_2
 metrics: save_to_wandb
+captions: create_image_captions
 
 ATTACK_NAMES = "naive_char" "char" "delete_char" "duplicate_char" "typo_char" "homoglyphs_char" "synonym_word" "homophone_word" "homophone_word_2"
 
@@ -56,3 +57,6 @@ magma:
 	@echo "Create image captions with MAGMA"
 	mkdir -p image_captions
 	python3 magma_caption_creation.py 2> ./logs/magma_log.txt
+
+create_image_captions:
+    @echo "Create image captions with MAGMA"
