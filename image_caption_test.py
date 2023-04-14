@@ -9,8 +9,8 @@ model = Blip2ForConditionalGeneration.from_pretrained("Salesforce/blip2-opt-2.7b
 device = "cuda" if torch.cuda.is_available() else "cpu"
 model.to(device)
 
-images = load_images_from_path("./image_outputs/char_images")
-
+images = load_images_from_path("./image_outputs/char_images/")
+print(len(images))
 
 inputs = processor(images[0], return_tensors="pt").to(device, torch.float16)
 
