@@ -158,3 +158,23 @@ def image_content_similarity_old(captions_path_0: str, captions_path_1: str) -> 
     cos_sim = [x.item() for x in cos_sim]
     return np.mean(cos_sim), cos_sim
 
+
+def image_prompt_similarity(images: List, prompts: List[str]) -> [float, List[float]]:
+    cos_sim = []
+
+    for img, prompt in zip(images, prompts):
+        image = preprocess(img).unsqueeze(0).to(device)
+        text = clip.tokenize([prompt]).to(device)
+
+        with torch.no_grad():
+            # image_features = clip_model.encode_image(image)
+            # text_features = clip_model.encode_text(text)
+
+            logits_per_image, logits_per_text = clip_model(image, text)
+            print("image:", logits_per_image)
+            print("text:", logits_per_text)
+            probs = logits_per_image.softmax(dim=-1).cpu().numpy()
+            cos_sim.append(logits_per_image)
+
+            print("Label probs:", probs)  # prints: [[0.9927937  0.00421068 0.00299572]]
+    return np.mean(cos_sim), cos_sim
