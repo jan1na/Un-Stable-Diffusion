@@ -170,7 +170,7 @@ def image_prompt_similarity(images: List, prompts: List[str]) -> [float, List[fl
             image_features = clip_model.encode_image(image)
             text_features = clip_model.encode_text(text)
 
-            logits_per_image, logits_per_text = clip_model(image_features, text_features)
+            logits_per_image, logits_per_text = clip_model(image, text)
             print("image:", logits_per_image)
             print("text:", logits_per_text)
             probs = logits_per_image.softmax(dim=-1).cpu().numpy()
