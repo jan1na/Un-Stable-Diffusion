@@ -164,10 +164,11 @@ def image_prompt_similarity(images: List, prompts: List[str]) -> [float, List[fl
 
     for img, prompt in zip(images, prompts):
         image = preprocess(img).unsqueeze(0).to(device)
-        text = clip.tokenize([prompt]).to(device)
+        text = clip.tokenize(["house"]).to(device)
 
         with torch.no_grad():
             image_features = clip_model.encode_image(image)
             text_features = clip_model.encode_text(text)
             cos_sim.append(cosine_similarity(image_features, text_features).item())
+            print(cosine_similarity(image_features, text_features).item())
     return np.mean(cos_sim), cos_sim

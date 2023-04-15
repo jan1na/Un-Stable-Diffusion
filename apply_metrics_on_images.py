@@ -37,6 +37,7 @@ def create_wandb_doc(run_name: str, attack_file_name: str, image_title: str, ori
     permutation_prompts = load_list_from_file(PROMPT_PATH + '/' + attack_file_name + '_prompts.txt')
     permutation_images = load_images_from_path(IMAGE_PATH + '/' + attack_file_name + '_images/')
 
+    """
     # Cosine Similarity
     print("calc Cosine Similarity")
     mean_cos_sim, cos_sim_list = image_array_cosine_similarity(original_images, permutation_images)
@@ -53,6 +54,7 @@ def create_wandb_doc(run_name: str, attack_file_name: str, image_title: str, ori
                                                                   CAPTION_PATH + '/' + attack_file_name)
     upload_value('Image Caption Similarity', mean_img_cap_sim)
     upload_histogram("Image Caption Similarity", "image caption cosine similarity", img_cap_sim_list)
+    """
 
     # Image Text Similarity
     print("calc Image Text Similarity")
@@ -60,6 +62,7 @@ def create_wandb_doc(run_name: str, attack_file_name: str, image_title: str, ori
     upload_value('Mean Image Text Similarity', mean_img_prompt_sim)
     upload_histogram("Image Text Similarity", "cosine similarity", img_prompt_sim_list)
 
+    """
     # upload images to wandb sometimes sorted by a metric
     if sorted_by_cosine_similarity:
         indexes = list(np.argsort(cos_sim_list))
@@ -74,6 +77,7 @@ def create_wandb_doc(run_name: str, attack_file_name: str, image_title: str, ori
     prompt_list = [sort_list_by_index(original_prompts, indexes), sort_list_by_index(permutation_prompts, indexes)]
 
     upload_images(image_title, unite_lists(image_list, IMAGES_SAVED), unite_lists(prompt_list, IMAGES_SAVED))
+    """
 
     end()
 
