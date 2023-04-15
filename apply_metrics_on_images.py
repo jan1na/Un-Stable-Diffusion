@@ -40,7 +40,7 @@ def create_wandb_doc(run_name: str, attack_file_name: str, image_title: str, ori
     print("calc Cosine Similarity")
     mean_cos_sim, cos_sim_list = image_array_cosine_similarity(original_images, permutation_images)
     upload_value('Mean Cosine Similarity', mean_cos_sim)
-    upload_histogram("Image Cosine Similarity", "cosine similarity", cos_sim_list)
+    upload_histogram("Image Cosine Similarity", "image cosine similarity", cos_sim_list)
 
     # Clean FID
     print("calc Clean FID")
@@ -57,7 +57,7 @@ def create_wandb_doc(run_name: str, attack_file_name: str, image_title: str, ori
     print("calc Image Text Similarity")
     mean_img_prompt_sim, img_prompt_sim_list = image_prompt_similarity(permutation_images, original_prompts)
     upload_value('Mean Image Text Similarity', mean_img_prompt_sim)
-    upload_histogram("Image Text Similarity", "cosine similarity", img_prompt_sim_list)
+    upload_histogram("Image Text Similarity", "image text cosine similarity", img_prompt_sim_list)
 
     # upload images to wandb sometimes sorted by a metric
     if sorted_by_cosine_similarity:
