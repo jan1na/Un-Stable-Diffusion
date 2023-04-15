@@ -78,10 +78,12 @@ def image_content_similarity(captions_path_0: str, captions_path_1: str) -> [flo
     cos_sim = []
 
     batch_size = 50
-    iterations = len(captions_0) // batch_size if len(captions_0) % batch_size == 0 else len(captions_0) // batch_size + 1
+    iterations = len(captions_0) // batch_size if len(captions_0) % batch_size == 0 else len(
+        captions_0) // batch_size + 1
     printProgressBar(0, iterations, prefix='Image Content Sim:')
     for i in range(iterations):
-        cos_sim += ics_batch(captions_0[i * batch_size: (i+1) * batch_size], captions_1[i * batch_size: (i+1) * batch_size])
+        cos_sim += ics_batch(captions_0[i * batch_size: (i + 1) * batch_size],
+                             captions_1[i * batch_size: (i + 1) * batch_size])
         printProgressBar(i + 1, iterations, prefix='Image Content Sim:')
     return np.mean(cos_sim), cos_sim
 
@@ -89,7 +91,6 @@ def image_content_similarity(captions_path_0: str, captions_path_1: str) -> [flo
 def ics_batch(captions_0, captions_1):
     cos_sim = []
     for caption_0, caption_1 in zip(captions_0, captions_1):
-
         text_input = tokenizer([caption_0, caption_1],
                                padding="max_length",
                                max_length=tokenizer.model_max_length,
