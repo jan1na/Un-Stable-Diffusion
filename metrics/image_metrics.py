@@ -1,24 +1,16 @@
-import os
 import clip
 import torch
-from typing import List, Tuple
+from typing import List
 import numpy as np
 from transformers import CLIPTextModel, CLIPTokenizer
 from torch.nn.functional import cosine_similarity
-import glob
-import lpips
 from cleanfid import fid
-from PIL import Image
-from numpy import ndarray
 from utils.file_utils import load_list_from_file
+from utils.progress_bar_utils import printProgressBar
 
 # Load the model for cosine similarity
 device = "cuda" if torch.cuda.is_available() else "cpu"
 clip_model, preprocess = clip.load('ViT-B/32', device)
-
-import gc
-from numba import cuda
-
 
 
 def image_cosine_similarity(image_0, image_1) -> float:
@@ -40,9 +32,9 @@ def image_cosine_similarity(image_0, image_1) -> float:
 
     image_features_0 /= image_features_0.norm(dim=-1, keepdim=True)
     image_features_1 /= image_features_1.norm(dim=-1, keepdim=True)
-    cosine_similarity = image_features_0 @ image_features_1.T
+    cos_sim = image_features_0 @ image_features_1.T
 
-    return cosine_similarity
+    return cos_sim
 
 
 def image_array_cosine_similarity(image_list_0: List, image_list_1: List) -> [float, List[float]]:
@@ -54,8 +46,12 @@ def image_array_cosine_similarity(image_list_0: List, image_list_1: List) -> [fl
     :return: list of cosine similarities between every element in the image lists
     """
     cos_sim_list = []
+    printProgressBar(0, len(image_list_0), prefix='Image Cosine Sim:')
+    i = 0
     for img_0, img_1 in zip(image_list_0, image_list_1):
         cos_sim_list.append(image_cosine_similarity(img_0, img_1)[0][0].item())
+        printProgressBar(i + 1, len(image_list_0), prefix='Image Cosine Sim:')
+        i += 1
     return np.mean(cos_sim_list), cos_sim_list
 
 
@@ -71,27 +67,6 @@ def clean_fid_score(image_folder_0: str, image_folder_1: str) -> float:
     return score
 
 
-def perceptual_similarity(image_0, image_1):
-    loss_fn_alex = lpips.LPIPS(net='alex')  # best forward scores
-    loss_fn_vgg = lpips.LPIPS(net='vgg')  # closer to "traditional" perceptual loss, when used for optimization
-
-    # TODO: convert PNG to RGB
-    rgb_image_0 = image_0.convert('RGB')
-    rgb_image_1 = image_1.convert('RGB')
-
-    # normalize to [-1,1]
-    rgb_image_0 = np.array(rgb_image_0)
-    rgb_image_1 = np.array(rgb_image_1)
-
-    normalized_image_0 = (rgb_image_0.astype(np.float32) / 255.0) * 2.0 - 1.0
-    normalized_image_1 = (rgb_image_1.astype(np.float32) / 255.0) * 2.0 - 1.0
-
-    img0 = torch.zeros(1, 3, 64, 64)  # image should be RGB, IMPORTANT: normalized to [-1,1]
-    img1 = torch.zeros(1, 3, 64, 64)
-    d = loss_fn_alex(normalized_image_0, normalized_image_1)
-    return d
-
-
 tokenizer = CLIPTokenizer.from_pretrained("openai/clip-vit-large-patch14")
 text_encoder = CLIPTextModel.from_pretrained("openai/clip-vit-large-patch14").cuda()
 
@@ -101,12 +76,13 @@ def image_content_similarity(captions_path_0: str, captions_path_1: str) -> [flo
     captions_1 = load_list_from_file(captions_path_1)
 
     cos_sim = []
-    print(len(captions_0))
 
     batch_size = 50
     iterations = len(captions_0) // batch_size if len(captions_0) % batch_size == 0 else len(captions_0) // batch_size + 1
+    printProgressBar(0, iterations, prefix='Image Content Sim:')
     for i in range(iterations):
         cos_sim += ics_batch(captions_0[i * batch_size: (i+1) * batch_size], captions_1[i * batch_size: (i+1) * batch_size])
+        printProgressBar(i + 1, iterations, prefix='Image Content Sim:')
     return np.mean(cos_sim), cos_sim
 
 
@@ -129,38 +105,10 @@ def ics_batch(captions_0, captions_1):
     return cos_sim
 
 
-def image_content_similarity_old(captions_path_0: str, captions_path_1: str) -> [float, List[float]]:
-    captions_0 = load_list_from_file(captions_path_0)
-    captions_1 = load_list_from_file(captions_path_1)
-
-    cos_sim = []
-
-    i=0
-    for caption_0, caption_1 in zip(captions_0, captions_1):
-        print("iteration:", i)
-        i+=1
-
-        text_input = tokenizer([caption_0, caption_1],
-                               padding="max_length",
-                               max_length=tokenizer.model_max_length,
-                               truncation=True,
-                               return_tensors="pt")
-        text_embeddings = text_encoder(text_input.input_ids.to('cuda'))[0]
-
-        caption_0_feature = torch.flatten(text_embeddings[0].unsqueeze(0), start_dim=1)
-        caption_1_feature = torch.flatten(text_embeddings[1].unsqueeze(0), start_dim=1)
-        cos_sim.append(cosine_similarity(caption_0_feature, caption_1_feature))
-
-        # Clear GPU memory
-        del text_embeddings, caption_0_feature, caption_1_feature, text_input
-        torch.cuda.empty_cache()
-        gc.collect()
-    cos_sim = [x.item() for x in cos_sim]
-    return np.mean(cos_sim), cos_sim
-
-
 def image_prompt_similarity(images: List, prompts: List[str]) -> [float, List[float]]:
     cos_sim = []
+    printProgressBar(0, len(images), prefix='Image Prompt Sim:')
+    i = 0
 
     for img, prompt in zip(images, prompts):
         image = preprocess(img).unsqueeze(0).to(device)
@@ -170,5 +118,6 @@ def image_prompt_similarity(images: List, prompts: List[str]) -> [float, List[fl
             image_features = clip_model.encode_image(image)
             text_features = clip_model.encode_text(text)
             cos_sim.append(cosine_similarity(image_features, text_features).item())
-            print(cosine_similarity(image_features, text_features).item())
+        printProgressBar(i + 1, len(images), prefix='Image Prompt Sim:')
+        i += 1
     return np.mean(cos_sim), cos_sim
