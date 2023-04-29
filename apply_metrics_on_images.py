@@ -1,6 +1,6 @@
 import numpy as np
 
-from utils.file_utils import load_list_from_file, load_images_from_path
+from utils.file_utils import load_list_from_file, load_images_from_path, save_list_to_file
 from metrics.image_metrics import image_array_cosine_similarity, clean_fid_score, image_content_similarity, \
     image_prompt_similarity
 from utils.wandb_utils import *
@@ -12,7 +12,8 @@ rtpt = RTPT('JF', 'metric_application', 10)
 
 def create_wandb_doc(run_name: str, attack_file_name: str, image_title: str, original_prompts: List[str],
                      original_images: List, sorted_by_cosine_similarity: bool = False,
-                     sorted_by_caption_similarity: bool = False, sorted_by_img_prompt_similarity: bool = False):
+                     sorted_by_caption_similarity: bool = False, sorted_by_img_prompt_similarity: bool = False,
+                     random_prompts: bool = False):
     """
     Upload the images and metric results as single values and histograms to wandb.
 
@@ -33,8 +34,13 @@ def create_wandb_doc(run_name: str, attack_file_name: str, image_title: str, ori
     ORIGINAL_IMAGE_PATH = IMAGE_PATH + '/original_images/'
     ATTACK_IMAGE_PATH = IMAGE_PATH + '/' + attack_file_name + '_images/'
 
-    permutation_prompts = load_list_from_file(PROMPT_PATH + '/' + attack_file_name + '_prompts.txt')
-    permutation_images = load_images_from_path(IMAGE_PATH + '/' + attack_file_name + '_images/')
+    if random_prompts:
+        permutation_prompts = original_prompts[1:] + list(original_prompts[0])
+        permutation_images = original_images[1:] + list(original_images[0])
+        save_list_to_file(permutation_prompts, CAPTION_PATH + '/' + attack_file_name)
+    else:
+        permutation_prompts = load_list_from_file(PROMPT_PATH + '/' + attack_file_name + '_prompts.txt')
+        permutation_images = load_images_from_path(IMAGE_PATH + '/' + attack_file_name + '_images/')
 
     # Cosine Similarity
     print("calc Cosine Similarity")
@@ -43,8 +49,9 @@ def create_wandb_doc(run_name: str, attack_file_name: str, image_title: str, ori
     upload_histogram("Image Cosine Similarity", "image cosine similarity", cos_sim_list)
 
     # Clean FID
-    print("calc Clean FID")
-    upload_value("Clean FID Score", clean_fid_score(ORIGINAL_IMAGE_PATH, ATTACK_IMAGE_PATH))
+    if not random_prompts:
+        print("calc Clean FID")
+        upload_value("Clean FID Score", clean_fid_score(ORIGINAL_IMAGE_PATH, ATTACK_IMAGE_PATH))
 
     # Image Caption Similarity
     print("calc Image Caption Similarity")
@@ -60,19 +67,20 @@ def create_wandb_doc(run_name: str, attack_file_name: str, image_title: str, ori
     upload_histogram("Image Text Similarity", "image text cosine similarity", img_prompt_sim_list)
 
     # upload images to wandb sometimes sorted by a metric
-    if sorted_by_cosine_similarity:
-        indexes = list(np.argsort(cos_sim_list))
-    elif sorted_by_caption_similarity:
-        indexes = list(np.argsort(img_cap_sim_list))
-    elif sorted_by_img_prompt_similarity:
-        indexes = list(np.argsort(img_prompt_sim_list))
-    else:
-        indexes = list(np.arange(len(original_prompts)))
+    if not random_prompts:
+        if sorted_by_cosine_similarity:
+            indexes = list(np.argsort(cos_sim_list))
+        elif sorted_by_caption_similarity:
+            indexes = list(np.argsort(img_cap_sim_list))
+        elif sorted_by_img_prompt_similarity:
+            indexes = list(np.argsort(img_prompt_sim_list))
+        else:
+            indexes = list(np.arange(len(original_prompts)))
 
-    image_list = [sort_list_by_index(original_images, indexes), sort_list_by_index(permutation_images, indexes)]
-    prompt_list = [sort_list_by_index(original_prompts, indexes), sort_list_by_index(permutation_prompts, indexes)]
+        image_list = [sort_list_by_index(original_images, indexes), sort_list_by_index(permutation_images, indexes)]
+        prompt_list = [sort_list_by_index(original_prompts, indexes), sort_list_by_index(permutation_prompts, indexes)]
 
-    upload_images(image_title, unite_lists(image_list, IMAGES_SAVED), unite_lists(prompt_list, IMAGES_SAVED))
+        upload_images(image_title, unite_lists(image_list, IMAGES_SAVED), unite_lists(prompt_list, IMAGES_SAVED))
 
     end()
 
@@ -83,12 +91,14 @@ def main():
     original_prompts = load_list_from_file(PROMPT_PATH + '/original_prompts.txt')
     original_images = load_images_from_path(IMAGE_PATH + '/original_images/')
 
-    for file_name, run_name, image_title in zip(file_names, run_names, title_names):
-        create_wandb_doc(run_name, file_name, image_title, original_prompts, original_images,
-                         sorted_by_caption_similarity=True)
-        rtpt.step()
+    #for file_name, run_name, image_title in zip(file_names, run_names, title_names):
+    #    create_wandb_doc(run_name, file_name, image_title, original_prompts, original_images,
+    #                     sorted_by_caption_similarity=True)
+    #    rtpt.step()
 
-    shifted_prompts = 
+    create_wandb_doc("random", "random", "Random", original_prompts, original_images,
+                         sorted_by_caption_similarity=True, random_prompts=True)
+    rtpt.step()
 
 
 if __name__ == '__main__':
