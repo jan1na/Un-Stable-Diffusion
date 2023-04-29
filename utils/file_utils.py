@@ -34,7 +34,7 @@ def load_images_from_path(path: str) -> List:
     :param path: path to the folder where the images are saved
     :return: list of the images
     """
-    return [Image.open(filename) for filename in sorted(glob.glob(path + '*.png'))]
+    return list([Image.open(filename) for filename in sorted(glob.glob(path + '*.png'))])
 
 
 def delete_empty_lines(path: str):
