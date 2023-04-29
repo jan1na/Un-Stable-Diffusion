@@ -88,6 +88,8 @@ def main():
                          sorted_by_caption_similarity=True)
         rtpt.step()
 
+    shifted_prompts = 
+
 
 if __name__ == '__main__':
     main()

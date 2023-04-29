@@ -48,10 +48,6 @@ save_to_wandb:
 	@echo "Save images to wandb"
 	python3 apply_metrics_on_images.py 2> ./logs/metrics_log.txt
 
-load_results:
-	@echo "Save images to wandb"
-	python3 plot_results.py --entity "janina" --project "stable-diffusion"
-
 magma:
 	@echo "Create image captions with MAGMA"
 	mkdir -p image_captions
