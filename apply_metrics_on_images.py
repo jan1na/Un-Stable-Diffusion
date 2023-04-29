@@ -37,9 +37,11 @@ def create_wandb_doc(run_name: str, attack_file_name: str, image_title: str, ori
     if random_prompts:
         print(type(original_images))
         print(original_images[1:])
-        permutation_images = original_images[1:] + list(original_images[0])
+        permutation_images = original_images[1:]
+        permutation_images.append(original_images[0])
         captions = load_list_from_file(CAPTION_PATH + '/original')
-        captions = captions[1:] + list(captions[0])
+        captions = captions[1:]
+        captions.append(captions[0])
         save_list_to_file(captions, CAPTION_PATH + '/' + attack_file_name)
     else:
         permutation_prompts = load_list_from_file(PROMPT_PATH + '/' + attack_file_name + '_prompts.txt')
