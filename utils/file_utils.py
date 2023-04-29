@@ -36,17 +36,3 @@ def load_images_from_path(path: str) -> List:
     """
     return list([Image.open(filename) for filename in sorted(glob.glob(path + '*.png'))])
 
-
-def delete_empty_lines(path: str):
-    """
-    Delete all empty lines in text file.
-
-    :param path: path to text file
-    """
-    lst = []
-    print("----------------------------------------------------------")
-    for line in load_list_from_file(path)[10000:10010]:
-        lst.append(line.strip())
-        print("'" + line + "'")
-
-    # save_list_to_file(lst, path)
