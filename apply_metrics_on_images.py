@@ -94,10 +94,10 @@ def main():
     original_prompts = load_list_from_file(PROMPT_PATH + '/original_prompts.txt')
     original_images = load_images_from_path(IMAGE_PATH + '/original_images/')
 
-    #for file_name, run_name, image_title in zip(file_names, run_names, title_names):
-    #    create_wandb_doc(run_name, file_name, image_title, original_prompts, original_images,
-    #                     sorted_by_caption_similarity=True)
-    #    rtpt.step()
+    for file_name, run_name, image_title in zip(file_names, run_names, title_names):
+        create_wandb_doc(run_name, file_name, image_title, original_prompts, original_images,
+                         sorted_by_caption_similarity=True)
+        rtpt.step()
 
     create_wandb_doc("random", "random", "Random", original_prompts, original_images,
                          sorted_by_caption_similarity=True, random_prompts=True)

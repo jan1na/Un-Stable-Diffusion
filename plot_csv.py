@@ -7,7 +7,8 @@ from attack_types import file_names
 
 WANDB_DIR = "./wandb/"
 
-COLORS = ['#332288', '#117733', '#44AA99', '#88CCEE', '#DDCC77', '#CC6677', '#D879D4', '#AA4499', '#882255', '#37001C']
+COLORS = ['#332288', '#117733', '#44AA99', '#88CCEE', '#DDCC77', '#CC6677', '#D879D4', '#AA4499', '#882255',
+          '#37001C', '#A26F85']
 
 FID_VALUES = [5.52843996652564, 13.5188010775728, 14.4754941578319, 13.0412494709869, 10.5513145035911,
               15.0473063432149, 14.1113076272244, 10.6831156682874, 4.60950168091205, 6.7844135449148]
@@ -60,19 +61,16 @@ def plot_histogram(data: np.ndarray, label: List[str], title: str, directory: st
 
     fig, axs = plt.subplots(5, 2, figsize=(10, 16))
     y, x = 0, 0
-    for i in range(len(label)):
-        """
-        plt.hist(data[i].T, bins, color=COLORS[i], histtype='bar', label=label[i], rwidth=0.8)
-        plt.legend(prop={'size': 20})
-        plt.title(title)
-        plt.ylim([0, y_max])
-        plt.xlim([x_min, x_max])
-        plt.savefig('./wandb/plots/' + directory + '/' + label[i] + '.pdf')
-        plt.show()
-        plt.close()
-        """
-
-        axs[y, x].hist(data[i].T, bins, color=COLORS[i], histtype='bar', label=label[i], rwidth=0.8)
+    for i in range(len(label)-1):
+        if x == 0 and y == 0:
+            d = np.vstack((data[i], data[len(label)-1])).T
+            l = [label[i], label[-1]]
+            c = [COLORS[i], COLORS[-1]]
+        else:
+            d = data[i].T
+            l = label[i]
+            c = COLORS[i]
+        axs[y, x].hist(d, bins, color=c, histtype='bar', label=l, rwidth=0.8)
         axs[y, x].legend(prop={'size': 12})
         axs[y, x].set_ylim([0, y_max])
         axs[y, x].set_xlim([x_min, x_max])
@@ -123,11 +121,12 @@ def plot_chart(data: np.ndarray, label: List[str], title: str):
 def plot_fid_chart(title: str):
     plt.figure(constrained_layout=True)
 
-    y_pos = np.arange(len(file_names))
-    means = FID_VALUES
+    labels = file_names + ["random"]
+    y_pos = np.arange(len(labels))
+    means = FID_VALUES + [FID_VALUES[0]]
 
     plt.barh(y_pos, means, align='center', color=COLORS)
-    plt.yticks(y_pos, labels=file_names)
+    plt.yticks(y_pos, labels=labels)
     plt.gca().invert_yaxis()
     plt.xlabel("Cosine Similarity")
     plt.title(title)
@@ -152,7 +151,7 @@ def main():
     plot_chart(data, label, "Mean Image Text Similarity")
 
     data, label = read_csv_data("csv-files-image-caption-sim/")
-    plot_histogram(data, label, "Image Caption Similarity", "image_caption_sim", 2700)
+    plot_histogram(data, label, "Image Caption Similarity", "image_caption_sim", 5200)
     plot_chart(data, label, "Mean Image Caption Similarity")
 
     plot_fid_chart("Clean FID Score")
