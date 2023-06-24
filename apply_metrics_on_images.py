@@ -103,6 +103,24 @@ def main():
                          sorted_by_caption_similarity=True, random_prompts=True)
     rtpt.step()
 
+def homophone_test():
+    rtpt.start()
+
+    original_prompts = load_list_from_file(PROMPT_PATH + '/original_prompts.txt')
+    original_images = load_images_from_path(IMAGE_PATH + '/original_images/')
+
+    for file_name, run_name, image_title in zip(["original_control", "homophone_word"],
+                                                ["homophone-test-0", "homophone-test-0"],
+                                                ['Original Control', 'Homophone Word Permutation']):
+        create_wandb_doc(run_name, file_name, image_title, original_prompts, original_images,
+                         sorted_by_caption_similarity=True)
+        rtpt.step()
+
+    create_wandb_doc("random", "random", "Random", original_prompts, original_images,
+                         sorted_by_caption_similarity=True, random_prompts=True)
+    rtpt.step()
+
+
 
 if __name__ == '__main__':
     main()
