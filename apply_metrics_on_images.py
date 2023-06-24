@@ -47,10 +47,11 @@ def create_wandb_doc(run_name: str, attack_file_name: str, image_title: str, ori
 
     # Cosine Similarity
     print("calc Cosine Similarity")
-    mean_cos_sim, cos_sim_list = image_array_cosine_similarity(original_images, permutation_images)
+    mean_cos_sim, cos_sim_list = image_array_cosine_similarity(original_images[0], permutation_images[0])
     upload_value('Mean Cosine Similarity', mean_cos_sim)
     upload_histogram("Image Cosine Similarity", "image cosine similarity", cos_sim_list)
 
+    """
     # Clean FID
     if not random_prompts:
         print("calc Clean FID")
@@ -69,16 +70,18 @@ def create_wandb_doc(run_name: str, attack_file_name: str, image_title: str, ori
     upload_value('Mean Image Text Similarity', mean_img_prompt_sim)
     upload_histogram("Image Text Similarity", "image text cosine similarity", img_prompt_sim_list)
 
+    """
+
     # upload images to wandb sometimes sorted by a metric
     if not random_prompts:
-        if sorted_by_cosine_similarity:
-            indexes = list(np.argsort(cos_sim_list))
-        elif sorted_by_caption_similarity:
-            indexes = list(np.argsort(img_cap_sim_list))
-        elif sorted_by_img_prompt_similarity:
-            indexes = list(np.argsort(img_prompt_sim_list))
-        else:
-            indexes = list(np.arange(len(original_prompts)))
+        #if sorted_by_cosine_similarity:
+        #    indexes = list(np.argsort(cos_sim_list))
+        #elif sorted_by_caption_similarity:
+        #    indexes = list(np.argsort(img_cap_sim_list))
+        #elif sorted_by_img_prompt_similarity:
+        #    indexes = list(np.argsort(img_prompt_sim_list))
+        #else:
+        indexes = list(np.arange(len(original_prompts)))
 
         image_list = [sort_list_by_index(original_images, indexes), sort_list_by_index(permutation_images, indexes)]
         prompt_list = [sort_list_by_index(original_prompts, indexes), sort_list_by_index(permutation_prompts, indexes)]
@@ -110,15 +113,11 @@ def homophone_test():
     original_images = load_images_from_path(IMAGE_PATH + '/original_images/')
 
     for file_name, run_name, image_title in zip(["original_control", "homophone_word"],
-                                                ["homophone-test-0", "homophone-test-0"],
+                                                ["homophone-test-0", "homophone-test-1"],
                                                 ['Original Control', 'Homophone Word Permutation']):
         create_wandb_doc(run_name, file_name, image_title, original_prompts, original_images,
                          sorted_by_caption_similarity=True)
         rtpt.step()
-
-    create_wandb_doc("random", "random", "Random", original_prompts, original_images,
-                         sorted_by_caption_similarity=True, random_prompts=True)
-    rtpt.step()
 
 
 
