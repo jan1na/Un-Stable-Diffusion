@@ -47,10 +47,10 @@ def create_wandb_doc(run_name: str, attack_file_name: str, image_title: str, ori
 
 
     ######test
-    original_images = original_images[0:1]
-    original_prompts = original_prompts[0:1]
-    permutation_images = permutation_images[0:1]
-    permutation_prompts = permutation_prompts[0:1]
+    original_images = original_images[0:10]
+    original_prompts = original_prompts[0:10]
+    permutation_images = permutation_images[0:10]
+    permutation_prompts = permutation_prompts[0:10]
     ######
 
     # Cosine Similarity
@@ -121,7 +121,7 @@ def homophone_test():
     original_images = load_images_from_path(IMAGE_PATH + '/original_images/')
 
     for file_name, run_name, image_title in zip(["original_control", "homophone_word"],
-                                                ["homophone-test-0", "homophone-test-1"],
+                                                ["original-control-test", "homophone-word-test"],
                                                 ['Original Control', 'Homophone Word Permutation']):
         create_wandb_doc(run_name, file_name, image_title, original_prompts, original_images,
                          sorted_by_caption_similarity=True)
