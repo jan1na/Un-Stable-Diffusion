@@ -3,7 +3,7 @@ import glob
 import numpy as np
 from matplotlib import pyplot as plt
 from typing import List
-from attack_types import file_names
+from attack_types import run_names
 
 WANDB_DIR = "./wandb/"
 
@@ -121,7 +121,7 @@ def plot_chart(data: np.ndarray, label: List[str], title: str):
 def plot_fid_chart(title: str):
     plt.figure(constrained_layout=True)
 
-    labels = file_names + ["random"]
+    labels = run_names + ["random"]
     y_pos = np.arange(len(labels))
     means = FID_VALUES + [FID_VALUES[0]]
 
