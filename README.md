@@ -73,7 +73,7 @@ Have a look at [default_TPA.yaml](configs/default_TPA.yaml) and [default_TAA.yam
   </center>
 
 
-### Apply Adversarial Text Attacks
+## Apply Adversarial Text Attacks
 
 
 Create caption permutations with adversarial text attacks, 
@@ -95,7 +95,7 @@ because there is a python package conflict between the requirements of BLIP-2 an
 
 To creat image captions with BLIP-2, which get stored in ```./image_captions``` call:
 ```bash
-make magma
+make captions
 ```
 
 Now everything is ready to apply all metrics on the created images. Therefore, you only need to switch back
@@ -112,8 +112,6 @@ You can log in with:
 ```bash
 wandb login --relogin
 ```
-
-
 
 
 
