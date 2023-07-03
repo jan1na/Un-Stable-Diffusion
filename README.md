@@ -90,13 +90,10 @@ make clean_img create_adv_attacks generate_images
 
 Now we compare the images, created by manipulated captions, with the images of the original caption.
 At first, we need to create image captions with BLIP-2 which are used in one metric. This needs to be
-done separately in different docker container which uses the ```requirements_magma.txt``` requirements, 
-because there is a python package conflict between the requirements of MAGMA and CLIP. 
-This MAGMA container also needs:
-```bash
-mkdir configs; wget -O configs/MAGMA_v1.yml https://raw.githubusercontent.com/Aleph-Alpha/magma/master/configs/MAGMA_v1.yml
-```
-To creat image captions with MAGMA, which get stored in ```./image_captions``` call:
+done separately in different docker container which uses the ```requirements_captions.txt``` requirements, 
+because there is a python package conflict between the requirements of BLIP-2 and CLIP. 
+
+To creat image captions with BLIP-2, which get stored in ```./image_captions``` call:
 ```bash
 make magma
 ```
