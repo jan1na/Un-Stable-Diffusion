@@ -10,6 +10,8 @@ images with several metrics. Using Stable Diffusion, we can visually check wheth
 CLIP model created reasonable embeddings and is thus robust against adversarial text
 attacks.
 
+### Code is based on [Rickrolling-the-Artist](https://github.com/LukasStruppek/Rickrolling-the-Artist)
+
 ## Changelog
 - **November 8, 2022** Adding support for image generation with Stable Diffusion v1-1, v1-2, v1-3, v1-5. Specify the version with the parameter `-v` or `--version` when calling ```generate_images.py```. You have to agree to the terms of use on the Hugging Face project pages to enable model access. We also improved the output file naming with leading zeros.
 
