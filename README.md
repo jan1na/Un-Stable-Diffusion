@@ -1,12 +1,14 @@
-# Rickrolling the Artist: Injecting Invisible Backdoors into Text-Guided Image Generation Models
+# Investigating the Robustness of CLIP To Adversarial Text Attacks in the Context of Text-To-Image Synthesis
 
-  <center>
-  <img src="images/concept.jpg" alt="Concept"  height=300>
-  </center>
-
-> **Abstract:**
-> *While text-to-image synthesis currently enjoys great popularity among researchers and the general public, the security of these models has been neglected so far. Many text-guided image generation models rely on pre-trained text encoders from external sources, and their users trust that the retrieved models will behave as promised. Unfortunately, this might not be the case. We introduce backdoor attacks against text-guided generative models and demonstrate that their text encoders pose a major tampering risk. Our attacks only slightly alter an encoder so that no suspicious model behavior is apparent for image generations with clean prompts. By then inserting a single non-Latin character into the prompt, the adversary can trigger the model to either generate images with pre-defined attributes or images following a hidden, potentially malicious description. We empirically demonstrate the high effectiveness of our attacks on Stable Diffusion and highlight that the injection process of a single backdoor takes less than two minutes. Besides phrasing our approach solely as an attack, it can also force an encoder to forget phrases related to certain concepts, such as nudity or violence, and help to make image generation safer.*  
-[Full Paper](https://arxiv.org/abs/2211.02408)
+## Abstract
+CLIP is a multi-modal model for zero-shot prediction. It contains a text and image encoder.
+We are the first ones to test the robustness of a contrastive learned text encoder like CLIP
+against adversarial text attacks. For testing, we will be using the text-to-image synthesis
+model Stable Diffusion, which uses CLIP as an input text encoder. We extensively evaluated
+by generating multiple permutations of text prompts and checking the similarity of the
+images with several metrics. Using Stable Diffusion, we can visually check whether the
+CLIP model created reasonable embeddings and is thus robust against adversarial text
+attacks.
 
 ## Changelog
 - **November 8, 2022** Adding support for image generation with Stable Diffusion v1-1, v1-2, v1-3, v1-5. Specify the version with the parameter `-v` or `--version` when calling ```generate_images.py```. You have to agree to the terms of use on the Hugging Face project pages to enable model access. We also improved the output file naming with leading zeros.
@@ -87,7 +89,7 @@ make clean_img create_adv_attacks generate_images
 ```
 
 Now we compare the images, created by manipulated captions, with the images of the original caption.
-At first, we need to create image captions with MAGMA which are used in one metric. This needs to be
+At first, we need to create image captions with BLIP-2 which are used in one metric. This needs to be
 done separately in different docker container which uses the ```requirements_magma.txt``` requirements, 
 because there is a python package conflict between the requirements of MAGMA and CLIP. 
 This MAGMA container also needs:
