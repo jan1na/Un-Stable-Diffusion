@@ -48,11 +48,6 @@ save_to_wandb:
 	@echo "Save images to wandb"
 	python3 apply_metrics_on_images.py 2> ./logs/metrics_log.txt
 
-magma:
-	@echo "Create image captions with MAGMA"
-	mkdir -p image_captions
-	python3 magma_caption_creation.py 2> ./logs/magma_log.txt
-
 captions:
 	@echo "Create image captions with BLIP-2"
 	mkdir -p image_captions
