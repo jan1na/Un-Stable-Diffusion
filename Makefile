@@ -1,3 +1,5 @@
+include config.py
+
 all: create_adv_attacks generate_images
 gpu_1: generate_images_1
 gpu_2: generate_images_2
@@ -24,24 +26,24 @@ create_adv_attacks:
 
 generate_images:
 	@echo "Generate images for the original and permutation prompts"
-	python3 generate_images.py -f permutations/original_prompts.txt -o ./image_outputs/original_images -t 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 2>> ./logs/image_log.txt
-	python3 generate_images.py -f permutations/original_prompts.txt -o ./image_outputs/original_control_images -t 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  -s 1 2>> ./logs/image_log.txt
+	python3 generate_images.py -f permutations/original_prompts.txt -o ./image_outputs/original_images -t $(hf_acc_token) 2>> ./logs/image_log.txt
+	python3 generate_images.py -f permutations/original_prompts.txt -o ./image_outputs/original_control_images -t $(hf_acc_token)  -s 1 2>> ./logs/image_log.txt
 	for i in $(ATTACK_NAMES); do \
-	    echo $$i | xargs -I '{}' python3 generate_images.py -f permutations/'{}'_prompts.txt -o ./image_outputs/'{}'_images -t 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 2>> ./logs/image_log.txt ;\
+	    echo $$i | xargs -I '{}' python3 generate_images.py -f permutations/'{}'_prompts.txt -o ./image_outputs/'{}'_images -t $(hf_acc_token) 2>> ./logs/image_log.txt ;\
     done
 
 generate_images_1:
 	@echo "Generate images for the original prompts and attacks 1 - 4"
-	python3 generate_images.py -f permutations/original_prompts.txt -o ./image_outputs/original_images -t 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 2>> ./logs/image_1_log.txt
-	python3 generate_images.py -f permutations/original_prompts.txt -o ./image_outputs/original_control_images -t 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  -s 1 2>> ./logs/image_1_log.txt
+	python3 generate_images.py -f permutations/original_prompts.txt -o ./image_outputs/original_images -t $(hf_acc_token) 2>> ./logs/image_1_log.txt
+	python3 generate_images.py -f permutations/original_prompts.txt -o ./image_outputs/original_control_images -t $(hf_acc_token)  -s 1 2>> ./logs/image_1_log.txt
 	for i in $(ATTACK_NAMES_1); do \
-	    echo $$i | xargs -I '{}' python3 generate_images.py -f permutations/'{}'_prompts.txt -o ./image_outputs/'{}'_images -t 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 2>> ./logs/image_1_log.txt ;\
+	    echo $$i | xargs -I '{}' python3 generate_images.py -f permutations/'{}'_prompts.txt -o ./image_outputs/'{}'_images -t $(hf_acc_token) 2>> ./logs/image_1_log.txt ;\
     done
 
 generate_images_2:
 	@echo "Generate images for attacks 5 - 9"
 	for i in $(ATTACK_NAMES_2); do \
-	    echo $$i | xargs -I '{}' python3 generate_images.py -f permutations/'{}'_prompts.txt -o ./image_outputs/'{}'_images -t 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 2>> ./logs/image_2_log.txt ;\
+	    echo $$i | xargs -I '{}' python3 generate_images.py -f permutations/'{}'_prompts.txt -o ./image_outputs/'{}'_images -t $(hf_acc_token) 2>> ./logs/image_2_log.txt ;\
     done
 
 save_to_wandb:

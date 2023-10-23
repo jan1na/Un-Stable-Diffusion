@@ -144,3 +144,6 @@ dmypy.json
 
 # misc
 .vscode/launch.json
+
+# keys
+config.py
